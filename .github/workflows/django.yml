@@ -33,7 +33,7 @@ jobs:
         pylint $(git ls-files '*.py')
     - name: Run tests with coverage
       run: |
-        pytest --cov=your_package_name --cov-report=xml
+        pytest --cov=CS2340_Project2 --cov-report=xml
 
     - name: Verify code coverage
       run: |
