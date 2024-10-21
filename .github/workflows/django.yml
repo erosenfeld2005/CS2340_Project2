@@ -25,15 +25,15 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Run Tests
-      run: |
-        python manage.py test
+#    - name: Run Tests
+#      run: |
+#        python manage.py test
     - name: Analyzing code with pylint
       run: |
         pylint $(git ls-files '*.py')
     - name: Run tests with coverage
       run: |
-        pytest --cov=CS2340_Project2 --cov-report=xml
+        pytest tests/ --cov=spotifywrapped --cov-report=xml
 
     - name: Verify code coverage
       run: |
