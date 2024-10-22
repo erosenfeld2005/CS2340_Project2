@@ -7,6 +7,7 @@ from requests import Request, post
 from django.http import HttpResponse, HttpResponseRedirect
 from .credentials import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
 from .extras import *
+import requests
 
 
 # Create your views here.
@@ -85,12 +86,15 @@ class CurrentSong(APIView):
     kwarg = 'key'
     def get(self, request, format = None):
         key = request.GET.get(self.kwarg)
-        token = Token.objects.filter(user = key)
+        token = Token.objects.filter(user = key).first()
         print(token)
 
         #Creating an endpoint
         endpoint = "player/currently-playing"
-        response = spotify_redirect(key, endpoint)
+
+        #CHAT_GPT EDITED OUT THIS LINE AND ADDED THE ONE BELOW
+        #response = spotify_redirect(key, endpoint)
+        response = self.get_current_song(token.access_token, endpoint)
 
         if "error" in response or "item" not in response:
             return Response({}, status = status.HTTP_204_NO_CONTENT)
@@ -121,3 +125,15 @@ class CurrentSong(APIView):
         }
         print(song)
         return Response(song, status = status.HTTP_200_OK)
+
+    def get_current_song(self, access_token, endpoint):
+        headers = {
+            "Authorization": f"Bearer {access_token}"
+        }
+        response = requests.get(f'https://api.spotify.com/v1/me/{endpoint}', headers=headers)
+
+        # Check for a successful response
+        if response.status_code != 200:
+            return None  # or handle errors appropriately
+
+        return response.json()
