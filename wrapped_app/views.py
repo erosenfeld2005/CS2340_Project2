@@ -16,8 +16,8 @@ class AuthenticationUrl(APIView):
         #Currently, I'm only putting in the scopes that this tutorial uses.
         #Later, we will need to change these to get whatever functionalities we actually need
         scopes = "user-read-currently-playing user-read-playback-state user-modify-playback-state"
-        url = Request('GET', 'http://accounts.spotify.com/authorize', params = {
-            'scopes': scopes,
+        url = Request('GET', 'https://accounts.spotify.com/authorize', params = {
+            'scope': scopes,
             'response_type': 'code',
             'redirect_uri': REDIRECT_URI,
             'client_id': CLIENT_ID,
@@ -94,10 +94,14 @@ class CurrentSong(APIView):
 
         #CHAT_GPT EDITED OUT THIS LINE AND ADDED THE ONE BELOW
         #response = spotify_redirect(key, endpoint)
+        print(token.access_token)
         response = self.get_current_song(token.access_token, endpoint)
 
+        if response is None:
+            return Response({"error": "Failed to get current song"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         if "error" in response or "item" not in response:
-            return Response({}, status = status.HTTP_204_NO_CONTENT)
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
 
         item = response.get('item')
         progress = response.get('progress_ms')
@@ -127,10 +131,15 @@ class CurrentSong(APIView):
         return Response(song, status = status.HTTP_200_OK)
 
     def get_current_song(self, access_token, endpoint):
-        headers = {
-            "Authorization": f"Bearer {access_token}"
-        }
+        # headers = {
+        #     "Authorization": f"Bearer {access_token}"
+        # }
+        headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + access_token}
         response = requests.get(f'https://api.spotify.com/v1/me/{endpoint}', headers=headers)
+
+        # Log the status code and response
+        print("Spotify API Response Status Code:", response.status_code)
+        print("Spotify API Response Text:", response.text)
 
         # Check for a successful response
         if response.status_code != 200:
