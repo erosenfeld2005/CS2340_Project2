@@ -1,5 +1,31 @@
-Django == 5.1
-django-debug-toolbar == 4.4.6
-virtualenv == 20.26.6
-python-decouple == 3.8
-psycopg2-binary == 2.9.10
+asgiref==3.8.1
+astroid==3.3.5
+certifi==2024.8.30
+charset-normalizer==3.4.0
+colorama==0.4.6
+coverage==7.6.3
+dill==0.3.9
+distlib==0.3.9
+Django==5.1
+django-debug-toolbar==4.4.6
+djangorestframework==3.15.2
+filelock==3.16.1
+idna==3.10
+iniconfig==2.0.0
+isort==5.13.2
+mccabe==0.7.0
+numpy==2.1.2
+packaging==24.1
+platformdirs==4.3.6
+pluggy==1.5.0
+pylint==3.3.1
+pytest==8.3.3
+pytest-cov==5.0.0
+python-decouple==3.8
+psycopg2-binary==2.9.10
+requests==2.32.2
+tk==0.1.0
+tomlkit==0.13.2
+tzdata==2024.2
+urllib3==2.2.3
+virtualenv==20.26.6
