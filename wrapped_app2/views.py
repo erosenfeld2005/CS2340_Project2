@@ -1,6 +1,6 @@
 #from django.shortcuts import render
 import base64
-from requests import post
+from requests import post, get
 import json
 
 
@@ -24,8 +24,23 @@ def get_token():
     token = json_result['access_token']
     return token
 
+def get_auth_header(token):
+    return {'Authorization': 'Bearer ' + token}
+
+def search_for_artist(token, artist_name):
+    url = "https://api.spotify.com/v1/search"
+    headers = get_auth_header(token)
+    query = f"?q={artist_name}&type=artist&limit=1"
+
+    query_url = url + query
+    result = get(query_url, headers=headers)
+    json_result = json.loads(result.content)["artists"]["items"]
+    return json_result[0]
 
 token = get_token()
-print(token)
+
+result = search_for_artist(token, "Taylor")
+print(result["name"])
+
 
 
