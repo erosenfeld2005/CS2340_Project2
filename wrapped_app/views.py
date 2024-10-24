@@ -15,7 +15,8 @@ class AuthenticationUrl(APIView):
     def get(self, request, format = None):
         #Currently, I'm only putting in the scopes that this tutorial uses.
         #Later, we will need to change these to get whatever functionalities we actually need
-        scopes = "user-read-currently-playing user-read-playback-state user-modify-playback-state"
+        scopes = "user-read-currently-playing"
+        #user-read-playback-state user-modify-playback-state"
         url = Request('GET', 'https://accounts.spotify.com/authorize', params = {
             'scope': scopes,
             'response_type': 'code',
