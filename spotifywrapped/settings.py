@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'wrapped_app2',
+    'userAuthentication.apps.UserauthenticationConfig'
 ]
 
 MIDDLEWARE = [
