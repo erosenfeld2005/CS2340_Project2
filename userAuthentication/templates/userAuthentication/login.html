@@ -6,23 +6,22 @@
 </head>
 <body>
     <div class="login-container">
-        <h1>LOGIN</h1>
-        <form method="POST">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username">
-            </div>
+    <h1>Log In</h1>
 
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password">
-            </div>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
-            <button type="submit">Login</button>
-        </form>
-        <p>Forgot your password? <a href="#" style="color: white; text-decoration: none;">Reset It</a></p>
-        <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
-    </div>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Log In</button>
+    </form>
+    <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
+</div>
 </body>
 </html>
