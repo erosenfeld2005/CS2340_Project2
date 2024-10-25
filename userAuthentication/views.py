@@ -13,8 +13,9 @@ def signup(request):
             login(request, user)
             return redirect('signup_success')
     else:
-        form = SignupForm()
+        form = SignupForm()  # Ensure this initializes a new form
     return render(request, 'userAuthentication/signup.html', {'form': form})
+
 
 
 
@@ -27,16 +28,16 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('signup_success')  # Redirect to a home page after successful login
+                return redirect('signup_success')  # Redirect after successful login
             else:
-                messages.error(request, "Invalid username or password.")  # Show error message
+                messages.error(request, "Invalid username or password.")
         else:
-            messages.error(request, "Invalid username or password.")  # Show error if form is invalid
+            # When form is invalid, we can add error messages and also return the form
+            messages.error(request, "Invalid username or password.")
     else:
-        form = AuthenticationForm()
+        form = AuthenticationForm()  # If it's a GET request, create a new form
 
-    return render(request, 'userAuthentication/login.html', {'form': form})
-
+    return render(request, 'userAuthentication/login.html', {'form': form})  # Ensure the form is passed back
 
 def signup_success(request):
     return render(request, 'signup_sucess.html')  # Ensure this matches the location
