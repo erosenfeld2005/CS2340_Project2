@@ -16,12 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from . import views
 from userAuthentication import views as accounts_views  # Import the views from the accounts app
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.landing_page, name='landing'),
     path('accounts/', include('userAuthentication.urls')),
-    path('signup-success/', accounts_views.signup_success, name='signup_success'),  # Root-level success URL
-
+    path('signup-success/', accounts_views.signup_success, name='signup_success')
 ]
