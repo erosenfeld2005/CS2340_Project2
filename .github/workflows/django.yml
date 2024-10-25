@@ -8,15 +8,30 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
       matrix:
         python-version: [3.12, 3.11]
 
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
     - uses: actions/checkout@v4
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
@@ -27,19 +42,24 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Set up environment variable
-      run: echo "TEST_DATABASE_NAME=test_postgres" >> $GITHUB_ENV
+    - name: Set up environment variables
+      run: |
+        echo "DATABASE_NAME=test_postgres" >> $GITHUB_ENV
+        echo "DATABASE_USER=postgres" >> $GITHUB_ENV
+        echo "DATABASE_PASSWORD=postgres" >> $GITHUB_ENV
+        echo "DATABASE_HOST=localhost" >> $GITHUB_ENV
+
+    - name: Wait for PostgreSQL
+      run: until pg_isready -h localhost -U postgres; do sleep 1; done
+
+    - name: Drop Test Database if it Exists
+      run: |
+        psql -h localhost -U postgres -c "DROP DATABASE IF EXISTS test_postgres;"
 
     - name: Run migrations
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
       run: python manage.py migrate
-
-    - name: Drop Test Database if it Exists
-      env:
-        DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      run: |
-        psql $DATABASE_URL -c "DROP DATABASE IF EXISTS test_postgres;"
 
     - name: Run Tests
       env:
