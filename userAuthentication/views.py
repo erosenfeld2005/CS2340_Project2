@@ -33,4 +33,5 @@ def login_view(request):
 
 
 def signup_success(request):
-    return render(request, 'signup_success.html')
+    return render(request, 'signup_sucess.html')  # Ensure this matches the location
+
