@@ -81,12 +81,8 @@ WSGI_APPLICATION = 'spotifywrapped.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'masteruser',
-        'PASSWORD': 'Il2340iitbce',
-        'HOST': 'project2-2340-spotifywrapped.c1u2ykquykhb.us-east-2.rds.amazonaws.com',
-        'PORT': '5432'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 

@@ -39,7 +39,7 @@ def search_for_artist(token, artist_name):
 
 token = get_token()
 
-result = search_for_artist(token, "Taylor")
+result = search_for_artist(token, "John")
 print(result["name"])
 
 
