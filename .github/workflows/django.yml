@@ -45,19 +45,9 @@ jobs:
     - name: Run migrations
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        DB_NAME: "local_db"
-        DB_USER: "postgres"
-        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        DB_HOST: "localhost"
-        DB_PORT: "5432"
       run: python manage.py migrate
 
     - name: Run Tests
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        DB_NAME: "local_db"
-        DB_USER: "postgres"
-        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        DB_HOST: "localhost"
-        DB_PORT: "5432"
       run: python manage.py test --keepdb
