@@ -6,7 +6,7 @@ from requests.auth import HTTPBasicAuth
 
 def spotify_login(request):
     # Step 1: Redirect to Spotify authorization page
-    scopes = 'user-top-read'
+    scopes = settings.SCOPES
     auth_url = (
         f"https://accounts.spotify.com/authorize?"
         f"client_id={settings.SPOTIFY_CLIENT_ID}&response_type=code"

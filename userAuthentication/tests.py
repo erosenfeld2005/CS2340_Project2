@@ -1,9 +1,11 @@
 from userAuthentication.models import CustomUser
 from django.test import TestCase
 from django.urls import reverse
+from django.shortcuts import redirect
 from django.contrib.auth import get_user_model
 from django.contrib.messages import get_messages
 from .forms import SignupForm
+from django.conf import settings
 
 User = get_user_model()
 
@@ -45,8 +47,13 @@ class UserAuthenticationTests(TestCase):
             'username': self.username,
             'password': self.password
         })
+        auth_url = (
+            f"https://accounts.spotify.com/authorize?"
+            f"client_id={settings.SPOTIFY_CLIENT_ID}&response_type=code"
+            f"&redirect_uri={settings.SPOTIFY_REDIRECT_URI}&scope={settings.SCOPES}"
+        )
         self.assertEqual(response.status_code, 302)  # Should redirect after successful login
-        self.assertRedirects(response, reverse('signup_success'))  # Check if redirected to success page
+        self.assertRedirects(response, auth_url)  # Check if redirected to success page
 
     def test_login_invalid(self):
         """Test if login fails with invalid credentials."""
