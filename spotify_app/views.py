@@ -5,7 +5,7 @@ from requests.auth import HTTPBasicAuth
 import logging
 
 logger = logging.getLogger(__name__)
-
+logging.disable(logging.CRITICAL)
 
 def spotify_login(request):
     # Step 1: Redirect to Spotify authorization page
