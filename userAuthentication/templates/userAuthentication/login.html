@@ -1,42 +1,58 @@
+{% load static%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
 </head>
 <body>
-    <div class="login-container">
-        <h1>Log In</h1>
 
-        <!-- Display messages -->
-        {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+    <!-- Header and Navbar -->
+    <header>
+        <nav class="navbar">
+            <a href="#">Spotify Wrapped</a>
+            <a href="#">Explore</a>
+            <a href="#">Contact</a>
+            <a href="/login" class="btn">Login</a>
+        </nav>
+    </header>
 
-        <form method="post">
-            {% csrf_token %}
 
-            <!-- Render form fields with individual error handling -->
-            {{ form.username.label }}<br>
-            {{ form.username }}<br>
-            {% if form.username.errors %}
-                <div class="alert alert-danger">{{ form.username.errors }}</div>
+    <div class="login">
+        <div class="login-contianer">
+            <h4>Welcome Back!</h4>
+
+            <!-- Display messages -->
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
             {% endif %}
 
-            {{ form.password.label }}<br>
-            {{ form.password }}<br>
-            {% if form.password.errors %}
-                <div class="alert alert-danger">{{ form.password.errors }}</div>
-            {% endif %}
+            <form method="post">
+                {% csrf_token %}
 
-            <button type="submit">Log In</button>
-        </form>
+                <!-- Render form fields with individual error handling -->
+                {{ form.username.label }}<br>
+                {{ form.username }}<br>
+                {% if form.username.errors %}
+                    <div class="alert alert-danger">{{ form.username.errors }}</div>
+                {% endif %}
 
-        <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
+                {{ form.password.label }}<br>
+                {{ form.password }}<br>
+                {% if form.password.errors %}
+                    <div class="alert alert-danger">{{ form.password.errors }}</div>
+                {% endif %}
+
+                <button type="submit">Log In</button>
+            </form>
+
+            <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
+        </div>
     </div>
 </body>
 </html>

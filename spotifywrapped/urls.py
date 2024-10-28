@@ -23,6 +23,7 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.landing_page, name='landing'),
+    path('login/', accounts_views.login_view, name='login'),
     path('accounts/', include('userAuthentication.urls')),
     path('signup-success/', accounts_views.signup_success, name='signup_success')
 ]
