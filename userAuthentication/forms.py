@@ -17,5 +17,8 @@ class SignupForm(UserCreationForm):
                            help_text='Required')  # Add name as required
 
     class Meta:
+        """
+        Creates the meta for the customUser
+        """
         model = CustomUser
         fields = ('username', 'name', 'email', 'password1', 'password2')
