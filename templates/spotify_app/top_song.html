@@ -1,3 +1,36 @@
-<h1>Your Most Listened-To Song</h1>
-<p><strong>Song:</strong> {{ song }}</p>
-<p><strong>Artist:</strong> {{ artist }}</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Top Songs</title>
+</head>
+<body>
+    <h1>Your Top 50 Most Listened-To Songs</h1>
+
+    {% if top_songs %}
+        <ul>
+            {% for song in top_songs %}
+                <li>
+                    <p><strong>Song:</strong> {{ song.name }}</p>
+                    <p><strong>Artist:</strong> {{ song.artist }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No top songs found.</p>
+    {% endif %}
+
+    <!-- Link to the top artists page -->
+    <h2><a href="{% url 'display_top_artists' %}">View Your Top Artists</a></h2>
+
+    <!-- Optional: Add a link to determine top genres -->
+    <h2><a href="{% url 'top_genres' %}">View Your Top Genres</a></h2>
+
+    <!-- Optional: Add a logout or clear session link if needed -->
+
+    <footer>
+        <p>&copy; {{ current_year }} Your Application Name</p> <!-- Display current year -->
+    </footer>
+</body>
+</html>
