@@ -51,3 +51,7 @@ jobs:
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
       run: python manage.py test --keepdb
+
+    - name: Analyzing code with pylint
+      run: |
+        pylint $(git ls-files '*.py')
