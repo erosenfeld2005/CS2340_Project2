@@ -30,7 +30,8 @@ jobs:
           --health-retries=5
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout Action
+      uses: actions/checkout@v4
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
@@ -59,3 +60,9 @@ jobs:
     - name: Analyzing code with pylint
       run: |
         pylint $(git ls-files '*.py')
+
+    - name: Run Django Coverage Action
+      uses: actions/python-django-coverage-gitHub-action@0.9
+      with:
+        django-app: 'userAuthentication'  # Replace with your Django app name
+        minimum-coverage: 80  # Example minimum coverage percentage
