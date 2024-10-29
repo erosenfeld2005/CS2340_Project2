@@ -1,0 +1,14 @@
+<h1>Your Top 5 Genres</h1>
+
+{% if top_genres %}
+    <ul>
+        {% for genre, count in top_genres %}
+            <li>
+                <p><strong>Genre:</strong> {{ genre }} (Count: {{ count }})</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No genres found.</p>
+{% endif %}
+<h2><a href="{% url 'display_top_songs' %}">Back to Your Top Songs</a></h2>

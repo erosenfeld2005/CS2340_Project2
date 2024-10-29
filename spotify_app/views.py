@@ -1,10 +1,10 @@
 """
 Python file that controls redirects and functionality
 """
-import requests
 from django.conf import settings
 from django.shortcuts import redirect, render
 from requests.auth import HTTPBasicAuth
+import requests
 
 def spotify_login(request): # pylint: disable=unused-argument
     """
@@ -20,7 +20,6 @@ def spotify_login(request): # pylint: disable=unused-argument
         f"&redirect_uri={settings.SPOTIFY_REDIRECT_URI}&scope={scopes}"
     )
     return redirect(auth_url)
-
 
 def spotify_callback(request):
     """
@@ -42,11 +41,9 @@ def spotify_callback(request):
 
     # Store tokens in session
     request.session['access_token'] = access_token
-    request.session['refresh_token'] = refresh_token  # Optional, for token refresh later
+    request.session['refresh_token'] = refresh_token
 
-    # Fetch user's top tracks
-    return fetch_user_top_tracks(request)
-
+    return fetch_user_top_data(request)
 
 def exchange_code_for_token(code):
     """
@@ -68,12 +65,12 @@ def exchange_code_for_token(code):
 
     response_data = response.json()
     access_token = response_data.get("access_token")
-    refresh_token = response_data.get("refresh_token")  # Get refresh token if available
+    refresh_token = response_data.get("refresh_token")
 
     return access_token, refresh_token
 
 
-def fetch_user_top_tracks(request):
+def fetch_user_top_data(request):
     """
     This function fetches the top track of the user
     :param request: Request is used to access the API
@@ -84,25 +81,94 @@ def fetch_user_top_tracks(request):
     if not access_token:
         return render(request, 'spotify_app/error.html', {"message": "No access token available."})
 
-    # Request to get the user's top tracks
-    top_tracks_url = "https://api.spotify.com/v1/me/top/tracks"
     headers = {"Authorization": f"Bearer {access_token}", "Content-Type": "application/json"}
-    top_tracks_response = requests.get(top_tracks_url, headers=headers, timeout = 15)
 
-
+    # Fetch top 50 tracks
+    top_tracks_url = "https://api.spotify.com/v1/me/top/tracks"
+    top_tracks_response = requests.get(top_tracks_url, headers=headers, params={"limit": 50},
+                                       timeout = 15)
     if top_tracks_response.status_code != 200:
         return render(request, 'spotify_app/error.html',
                       {"message": "Could not retrieve top track."})
 
     top_tracks_data = top_tracks_response.json()
 
-    # Extract the most listened-to song
-    if "items" in top_tracks_data and top_tracks_data["items"]:
-        most_listened_song = top_tracks_data["items"][0]["name"]
-        artist = top_tracks_data["items"][0]["artists"][0]["name"]
-        return render(request, 'spotify_app/top_song.html', {
-            "song": most_listened_song,
-            "artist": artist,
-        })
-    return render(request, 'spotify_app/error.html',
-                    {"message": "Could not retrieve top track."})
+    # Extract top songs
+    top_songs = [
+        {"name": track["name"], "artist": track["artists"][0]["name"]}
+        for track in top_tracks_data.get("items", [])
+    ]
+
+    # Fetch top 50 artists
+    top_artists_url = "https://api.spotify.com/v1/me/top/artists"
+    top_artists_response = requests.get(top_artists_url, headers=headers, params={"limit": 50},
+                                        timeout=15)
+    top_artists_data = top_artists_response.json()
+
+    # Extract top artists
+    top_artists = [
+        {"name": artist["name"], "genres": artist["genres"]}
+        for artist in top_artists_data.get("items", [])
+    ]
+
+    # Store top songs and artists in session
+    request.session['top_songs'] = top_songs
+    request.session['top_artists'] = top_artists
+
+    return redirect('display_top_songs')  # Redirect to the display songs view
+
+def display_top_songs(request):
+    """
+    Method to display the top 50 songs of the current user
+    :param request: user request
+    :return: the top songs html page
+    """
+    top_songs = request.session.get('top_songs')
+
+    if not top_songs:
+        return render(request, 'spotify_app/error.html',
+                      {"message": "No top songs found in session."})
+
+    return render(request, 'spotify_app/top_song.html', {
+        "top_songs": top_songs
+    })
+
+def display_top_artists(request):
+    """
+    Method to display the top 50 artists of the current user
+    :param request: user request
+    :return: the top artists html page
+    """
+    top_artists = request.session.get('top_artists')
+
+    if not top_artists:
+        return render(request, 'spotify_app/error.html',
+                      {"message": "No top artists found in session."})
+
+    return render(request, 'spotify_app/top_artists.html', {
+        "top_artists": top_artists
+    })
+
+def determine_top_genre(request):
+    """
+    Method to display the top 5 genres of the current user
+    :param request: user request
+    :return: the top genres html page
+    """
+    top_artists = request.session.get('top_artists', [])
+    top_genres = {}
+
+    # Count occurrences of each genre
+    for artist in top_artists:
+        curr_genres = artist.get("genres", [])
+        for genre in curr_genres:
+            top_genres[genre] = top_genres.get(genre, 0) + 1
+
+    # Sort genres by count and get the top 5
+    sorted_genres = sorted(top_genres.items(), key=lambda x: x[1], reverse=True)
+    top_5_genres = sorted_genres[:5]
+
+    # Return or render the result
+    return render(request, 'spotify_app/top_genres.html', {
+        "top_genres": top_5_genres
+    })

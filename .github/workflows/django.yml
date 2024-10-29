@@ -45,11 +45,15 @@ jobs:
     - name: Run migrations
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        SPOTIFY_CLIENT_ID: ${{secrets.SPOTIFY_CLIENT_ID}}
+        SPOTIFY_CLIENT_SECRET: ${{secrets.SPOTIFY_CLIENT_SECRET}}
       run: python manage.py migrate
 
     - name: Run Tests
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        SPOTIFY_CLIENT_ID: ${{secrets.SPOTIFY_CLIENT_ID}}
+        SPOTIFY_CLIENT_SECRET: ${{secrets.SPOTIFY_CLIENT_SECRET}}
       run: python manage.py test --keepdb
 
     - name: Analyzing code with pylint
