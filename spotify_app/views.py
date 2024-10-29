@@ -1,3 +1,6 @@
+"""
+Python file that controls redirects and functionality
+"""
 import requests
 from django.conf import settings
 from django.shortcuts import redirect, render
