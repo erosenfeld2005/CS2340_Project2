@@ -1,3 +1,6 @@
+"""
+Python file that stores the different url paths that our website can access
+"""
 from django.urls import path
 from . import views
 

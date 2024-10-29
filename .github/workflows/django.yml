@@ -55,3 +55,7 @@ jobs:
         SPOTIFY_CLIENT_ID: ${{secrets.SPOTIFY_CLIENT_ID}}
         SPOTIFY_CLIENT_SECRET: ${{secrets.SPOTIFY_CLIENT_SECRET}}
       run: python manage.py test --keepdb
+
+    - name: Analyzing code with pylint
+      run: |
+        pylint $(git ls-files '*.py')

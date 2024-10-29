@@ -9,11 +9,11 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 from decouple import config
-import os
-import logging
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -131,7 +131,8 @@ STATICFILES_DIRS = [
     BASE_DIR / 'spotifywrapped' / 'static',  # Static files location
 ]
 
-STATIC_ROOT = BASE_DIR / "staticfiles"  # Where static files will be collected when running `collectstatic` (for deployment)
+STATIC_ROOT = BASE_DIR / "staticfiles"
+# Where static files will be collected when running `collectstatic` (for deployment)
 
 
 # Default primary key field type
@@ -158,37 +159,3 @@ TEMPLATES = [
 ]
 
 AUTH_USER_MODEL = 'userAuthentication.CustomUser'
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {message}',
-            'style': '{',
-        },
-        'simple': {
-            'format': '{levelname} {message}',
-            'style': '{',
-        },
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
-        },
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'debug.log',
-            'formatter': 'verbose',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
-}
