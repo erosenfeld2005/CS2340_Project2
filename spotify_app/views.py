@@ -85,7 +85,8 @@ def fetch_user_top_data(request):
 
     # Fetch top 50 tracks
     top_tracks_url = "https://api.spotify.com/v1/me/top/tracks"
-    top_tracks_response = requests.get(top_tracks_url, headers=headers, params={"limit": 50}, timeout = 15)
+    top_tracks_response = requests.get(top_tracks_url, headers=headers, params={"limit": 50},
+                                       timeout = 15)
     if top_tracks_response.status_code != 200:
         return render(request, 'spotify_app/error.html',
                       {"message": "Could not retrieve top track."})
@@ -100,7 +101,8 @@ def fetch_user_top_data(request):
 
     # Fetch top 50 artists
     top_artists_url = "https://api.spotify.com/v1/me/top/artists"
-    top_artists_response = requests.get(top_artists_url, headers=headers, params={"limit": 50})
+    top_artists_response = requests.get(top_artists_url, headers=headers, params={"limit": 50},
+                                        timeout=15)
     top_artists_data = top_artists_response.json()
 
     # Extract top artists
