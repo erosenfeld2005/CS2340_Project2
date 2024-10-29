@@ -4,10 +4,10 @@ Tests for UserAuthentication
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+from userAuthentication.models import CustomUser
 from .forms import SignupForm
 #from django.contrib.messages import get_messages
 
-from userAuthentication.models import CustomUser
 
 User = get_user_model()
 
@@ -100,7 +100,7 @@ class SignupFormTests(TestCase):
     def test_email_required(self):
         """
         test for the email
-        :return:
+        :return: If the email works
         """
         form_data = {
             'Name': "name",
@@ -116,7 +116,7 @@ class SignupFormTests(TestCase):
     def test_passwords_match(self):
         """
         test that the passwords match
-        :return:
+        :return: If the passwords match
         """
         form_data = {
             'Name': "name",
@@ -132,7 +132,7 @@ class SignupFormTests(TestCase):
     def test_username_unique(self):
         """
         Tests that the username is unique
-        :return:
+        :return: If the username is unique
         """
         # First, create a user with the same username
         CustomUser.objects.create_user(username='newuser',
@@ -152,7 +152,7 @@ class SignupFormTests(TestCase):
     def test_email_validity(self):
         """
         test that the email is valid
-        :return:
+        :return: if the email is valid
         """
         form_data = {
             'Name': "name",
