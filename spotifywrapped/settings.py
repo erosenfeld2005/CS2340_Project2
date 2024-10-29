@@ -45,8 +45,8 @@ INSTALLED_APPS = [
     'userAuthentication',
     'spotify_app',
 ]
-SPOTIFY_CLIENT_ID = 'defb4c242b7247529ae6409bc5ab3a7f'
-SPOTIFY_CLIENT_SECRET = 'f32301833f4a4f85b2cf4caed8bd4f7d'
+SPOTIFY_CLIENT_ID = config('SPOTIFY_CLIENT_ID')
+SPOTIFY_CLIENT_SECRET = config('SPOTIFY_CLIENT_SECRET')
 SPOTIFY_REDIRECT_URI = 'http://127.0.0.1:8000/spotify/callback'
 
 MIDDLEWARE = [
