@@ -61,7 +61,7 @@ def exchange_code_for_token(code):
         "redirect_uri": settings.SPOTIFY_REDIRECT_URI,
     }
     auth = HTTPBasicAuth(settings.SPOTIFY_CLIENT_ID, settings.SPOTIFY_CLIENT_SECRET)
-    response = requests.post(token_url, data=payload, auth=auth)
+    response = requests.post(token_url, data=payload, auth=auth, timeout = 15)
 
     if response.status_code != 200:
         return None, None
