@@ -1,19 +1,26 @@
-from userAuthentication.models import CustomUser
+"""
+Tests for UserAuthentication
+"""
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from django.contrib.messages import get_messages
+from userAuthentication.models import CustomUser
 from .forms import SignupForm
+#from django.contrib.messages import get_messages
+
 
 User = get_user_model()
 
 class UserAuthenticationTests(TestCase):
-
+    """
+    Tests for UserAuthentication
+    """
     def setUp(self):
         self.username = 'testuser'
         self.email = 'testuser@example.com'
         self.password = 'ppppp123444455555*******'
-        self.user = User.objects.create_user(username=self.username, email=self.email, password=self.password)
+        self.user = User.objects.create_user(username=self.username,
+                                             email=self.email, password=self.password)
 
     # def test_signup_valid(self):
     #     """Test if a new user can sign up successfully."""
@@ -26,6 +33,7 @@ class UserAuthenticationTests(TestCase):
     #     })
     #     self.assertEqual(response.status_code, 302)  # Check if redirected
     #     self.assertTrue(User.objects.filter(username='newuser').exists())  # Check if user exists
+
     def test_signup_invalid(self):
         """Test if signup fails with invalid data."""
         response = self.client.post(reverse('signup'), {
@@ -48,7 +56,8 @@ class UserAuthenticationTests(TestCase):
     #         'password': self.password
     #     })
     #     self.assertEqual(response.status_code, 302)  # Should redirect after successful login
-    #     #self.assertRedirects(response, reverse('signup_success'))  # Check if redirected to success page
+    #     #self.assertRedirects(response,
+    #                       reverse('signup_success'))  # Check if redirected to success page
 
     def test_login_invalid(self):
         """Test if login fails with invalid credentials."""
@@ -71,6 +80,9 @@ class UserAuthenticationTests(TestCase):
         self.assertFormError(form,'password', 'This field is required.')
 
 class SignupFormTests(TestCase):
+    """
+    Tests for SignUp Form
+    """
 
     # def test_signup_form_valid(self):
     #     form_data = {
@@ -86,6 +98,10 @@ class SignupFormTests(TestCase):
     #     self.assertEqual(form.cleaned_data['email'], 'newuser@example.com')
 
     def test_email_required(self):
+        """
+        test for the email
+        :return: If the email works
+        """
         form_data = {
             'Name': "name",
             'username': 'newuser',
@@ -98,6 +114,10 @@ class SignupFormTests(TestCase):
         self.assertIn('email', form.errors)
 
     def test_passwords_match(self):
+        """
+        test that the passwords match
+        :return: If the passwords match
+        """
         form_data = {
             'Name': "name",
             'username': 'newuser',
@@ -110,8 +130,13 @@ class SignupFormTests(TestCase):
         self.assertIn('password2', form.errors)
 
     def test_username_unique(self):
+        """
+        Tests that the username is unique
+        :return: If the username is unique
+        """
         # First, create a user with the same username
-        CustomUser.objects.create_user(username='newuser', email='existinguser@example.com', password='password123')
+        CustomUser.objects.create_user(username='newuser',
+                                       email='existinguser@example.com', password='password123')
 
         form_data = {
             'Name': "name",
@@ -125,6 +150,10 @@ class SignupFormTests(TestCase):
         self.assertIn('username', form.errors)
 
     def test_email_validity(self):
+        """
+        test that the email is valid
+        :return: if the email is valid
+        """
         form_data = {
             'Name': "name",
             'username': 'newuser',

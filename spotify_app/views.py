@@ -1,13 +1,17 @@
+"""
+Python file that controls redirects and functionality
+"""
 import requests
 from django.conf import settings
 from django.shortcuts import redirect, render
 from requests.auth import HTTPBasicAuth
-import logging
 
-logger = logging.getLogger(__name__)
-logging.disable(logging.CRITICAL)
-
-def spotify_login(request):
+def spotify_login(request): # pylint: disable=unused-argument
+    """
+    This method redirects login to the authorization page
+    :param request: access the spotify API key
+    :return: the redirect url
+    """
     # Step 1: Redirect to Spotify authorization page
     scopes = 'user-top-read'
     auth_url = (
@@ -19,6 +23,12 @@ def spotify_login(request):
 
 
 def spotify_callback(request):
+    """
+    This method gets the users authorization code, then uses that to get their access token.
+    Then it calls the fetch top songs method
+    :param request: Used to access the API
+    :return: the call to the fetch top songs method
+    """
     # Step 2: Get the authorization code from Spotify
     code = request.GET.get("code")
     if not code:
@@ -39,6 +49,11 @@ def spotify_callback(request):
 
 
 def exchange_code_for_token(code):
+    """
+    Exchanges the user's code for an access token to use the Spotify API
+    :param code: Their code
+    :return: Their access token and refresh token
+    """
     token_url = "https://accounts.spotify.com/api/token"
     payload = {
         "grant_type": "authorization_code",
@@ -46,10 +61,9 @@ def exchange_code_for_token(code):
         "redirect_uri": settings.SPOTIFY_REDIRECT_URI,
     }
     auth = HTTPBasicAuth(settings.SPOTIFY_CLIENT_ID, settings.SPOTIFY_CLIENT_SECRET)
-    response = requests.post(token_url, data=payload, auth=auth)
+    response = requests.post(token_url, data=payload, auth=auth, timeout = 15)
 
     if response.status_code != 200:
-        logger.error(f"Token request failed: {response.text}")
         return None, None
 
     response_data = response.json()
@@ -60,6 +74,11 @@ def exchange_code_for_token(code):
 
 
 def fetch_user_top_tracks(request):
+    """
+    This function fetches the top track of the user
+    :param request: Request is used to access the API
+    :return: Either an error page or the user's top song and its artist
+    """
     access_token = request.session.get('access_token')
 
     if not access_token:
@@ -68,13 +87,12 @@ def fetch_user_top_tracks(request):
     # Request to get the user's top tracks
     top_tracks_url = "https://api.spotify.com/v1/me/top/tracks"
     headers = {"Authorization": f"Bearer {access_token}", "Content-Type": "application/json"}
-    top_tracks_response = requests.get(top_tracks_url, headers=headers)
+    top_tracks_response = requests.get(top_tracks_url, headers=headers, timeout = 15)
 
-    logger.info(f"Top tracks response status code: {top_tracks_response.status_code}")
 
     if top_tracks_response.status_code != 200:
-        logger.error(f"Failed to retrieve top tracks: {top_tracks_response.text}")
-        return render(request, 'spotify_app/error.html', {"message": "Could not retrieve top track."})
+        return render(request, 'spotify_app/error.html',
+                      {"message": "Could not retrieve top track."})
 
     top_tracks_data = top_tracks_response.json()
 
@@ -86,6 +104,5 @@ def fetch_user_top_tracks(request):
             "song": most_listened_song,
             "artist": artist,
         })
-    else:
-        logger.warning("No top tracks found or response format unexpected.")
-        return render(request, 'spotify_app/error.html', {"message": "Could not retrieve top track."})
+    return render(request, 'spotify_app/error.html',
+                    {"message": "Could not retrieve top track."})
