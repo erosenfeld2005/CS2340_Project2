@@ -11,7 +11,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('signup_success')
+            return redirect('spotify_login')
     else:
         form = SignupForm()  # Ensure this initializes a new form
     return render(request, 'userAuthentication/signup.html', {'form': form})
@@ -28,7 +28,7 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('signup_success')  # Redirect after successful login
+                return redirect('spotify_login')
             else:
                 messages.error(request, "Invalid username or password.")
         else:
@@ -39,6 +39,6 @@ def login_view(request):
 
     return render(request, 'userAuthentication/login.html', {'form': form})  # Ensure the form is passed back
 
-def signup_success(request):
-    return render(request, 'signup_sucess.html')  # Ensure this matches the location
+def spotify_login(request):
+    return render(request, 'spotify_callback')  # Ensure this matches the location
 

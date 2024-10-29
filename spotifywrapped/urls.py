@@ -24,5 +24,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.landing_page, name='landing'),
     path('accounts/', include('userAuthentication.urls')),
-    path('signup-success/', accounts_views.signup_success, name='signup_success')
+    path('spotify_login/', accounts_views.spotify_login, name='spotify_login'),
+    path("spotify/", include("spotify_app.urls")),
 ]

@@ -23,6 +23,8 @@
             <!-- Render form fields with individual error handling -->
             {{ form.username.label }}<br>
             {{ form.username }}<br>
+            {{ form.name.label }}<br>
+            {{ form.name }}<br>
             {% if form.username.errors %}
                 <div class="alert alert-danger">{{ form.username.errors }}</div>
             {% endif %}
