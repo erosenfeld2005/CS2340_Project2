@@ -8,6 +8,11 @@ logger = logging.getLogger(__name__)
 logging.disable(logging.CRITICAL)
 
 def spotify_login(request):
+    """
+
+    :param request:
+    :return:
+    """
     # Step 1: Redirect to Spotify authorization page
     scopes = 'user-top-read'
     auth_url = (
