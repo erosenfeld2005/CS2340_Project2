@@ -6,7 +6,7 @@ from django.shortcuts import redirect, render
 from requests.auth import HTTPBasicAuth
 import requests
 
-def spotify_login(request): # pylint: disable=unused-argument
+def spotify_login(request):  # pylint: disable=unused-argument
     """
     This method redirects login to the authorization page
     :param request: access the spotify API key
@@ -23,7 +23,7 @@ def spotify_login(request): # pylint: disable=unused-argument
 
 def spotify_callback(request):
     """
-    This method gets the users authorization code, then uses that to get their access token.
+    This method gets the user's authorization code, then uses that to get their access token.
     Then it calls the fetch top songs method
     :param request: Used to access the API
     :return: the call to the fetch top songs method
@@ -58,7 +58,7 @@ def exchange_code_for_token(code):
         "redirect_uri": settings.SPOTIFY_REDIRECT_URI,
     }
     auth = HTTPBasicAuth(settings.SPOTIFY_CLIENT_ID, settings.SPOTIFY_CLIENT_SECRET)
-    response = requests.post(token_url, data=payload, auth=auth, timeout = 15)
+    response = requests.post(token_url, data=payload, auth=auth, timeout=15)
 
     if response.status_code != 200:
         return None, None
@@ -85,11 +85,9 @@ def fetch_user_top_data(request):
 
     # Fetch top 50 tracks
     top_tracks_url = "https://api.spotify.com/v1/me/top/tracks"
-    top_tracks_response = requests.get(top_tracks_url, headers=headers, params={"limit": 50},
-                                       timeout = 15)
+    top_tracks_response = requests.get(top_tracks_url, headers=headers, params={"limit": 50}, timeout=15)
     if top_tracks_response.status_code != 200:
-        return render(request, 'spotify_app/error.html',
-                      {"message": "Could not retrieve top track."})
+        return render(request, 'spotify_app/error.html', {"message": "Could not retrieve top track."})
 
     top_tracks_data = top_tracks_response.json()
 
@@ -101,13 +99,19 @@ def fetch_user_top_data(request):
 
     # Fetch top 50 artists
     top_artists_url = "https://api.spotify.com/v1/me/top/artists"
-    top_artists_response = requests.get(top_artists_url, headers=headers, params={"limit": 50},
-                                        timeout=15)
+    top_artists_response = requests.get(top_artists_url, headers=headers, params={"limit": 50}, timeout=15)
+    if top_artists_response.status_code != 200:
+        return render(request, 'spotify_app/error.html', {"message": "Could not retrieve top artists."})
+
     top_artists_data = top_artists_response.json()
 
-    # Extract top artists
+    # Extract top artists along with their images
     top_artists = [
-        {"name": artist["name"], "genres": artist["genres"]}
+        {
+            "name": artist["name"],
+            "genres": artist["genres"],
+            "image": artist["images"][0]["url"] if artist["images"] else None  # Get the first image if available
+        }
         for artist in top_artists_data.get("items", [])
     ]
 
@@ -126,8 +130,7 @@ def display_top_songs(request):
     top_songs = request.session.get('top_songs')
 
     if not top_songs:
-        return render(request, 'spotify_app/error.html',
-                      {"message": "No top songs found in session."})
+        return render(request, 'spotify_app/error.html', {"message": "No top songs found in session."})
 
     return render(request, 'spotify_app/top_song.html', {
         "top_songs": top_songs
@@ -142,8 +145,7 @@ def display_top_artists(request):
     top_artists = request.session.get('top_artists')
 
     if not top_artists:
-        return render(request, 'spotify_app/error.html',
-                      {"message": "No top artists found in session."})
+        return render(request, 'spotify_app/error.html', {"message": "No top artists found in session."})
 
     return render(request, 'spotify_app/top_artists.html', {
         "top_artists": top_artists
