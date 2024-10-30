@@ -42,27 +42,27 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        pip install coverage  # Install coverage.py
 
     - name: Run migrations
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        SPOTIFY_CLIENT_ID: ${{secrets.SPOTIFY_CLIENT_ID}}
-        SPOTIFY_CLIENT_SECRET: ${{secrets.SPOTIFY_CLIENT_SECRET}}
+        SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+        SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
       run: python manage.py migrate
 
-    - name: Run Tests
+    - name: Run Tests with Coverage
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        SPOTIFY_CLIENT_ID: ${{secrets.SPOTIFY_CLIENT_ID}}
-        SPOTIFY_CLIENT_SECRET: ${{secrets.SPOTIFY_CLIENT_SECRET}}
-      run: python manage.py test --keepdb
+        SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+        SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+      run: |
+        coverage run --source='.' manage.py test --keepdb
+        coverage report --fail-under=80  # Replace 80 with your minimum coverage percentage
+
+    - name: Generate Coverage Report
+      run: coverage html  # Generates an HTML report you can view locally
 
     - name: Analyzing code with pylint
       run: |
         pylint $(git ls-files '*.py')
-
-    - name: Run Django Coverage Action
-      uses: actions/python-django-coverage-gitHub-action@0.9
-      with:
-        django-app: 'userAuthentication'  # Replace with your Django app name
-        minimum-coverage: 80  # Example minimum coverage percentage
