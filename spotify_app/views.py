@@ -71,7 +71,8 @@ def exchange_code_for_token(code):
 
 def fetch_user_top_data(request):
     """
-    This function fetches the top tracks of the user and calculates average danceability, valence, and energy
+    This function fetches the top tracks of the user and calculates average
+    danceability, valence, and energy
     :param request: Request is used to access the API
     :return: Either an error page or the user's average music vibes
     """
@@ -84,36 +85,38 @@ def fetch_user_top_data(request):
 
     # Fetch top 50 tracks
     top_tracks_url = "https://api.spotify.com/v1/me/top/tracks"
-    top_tracks_response = requests.get(top_tracks_url, headers=headers, params={"limit": 50}, timeout=15)
+    top_tracks_response = requests.get(top_tracks_url, headers=headers, params={"limit": 50},
+                                       timeout=15)
     if top_tracks_response.status_code != 200:
-        return render(request, 'spotify_app/error.html', {"message": "Could not retrieve top tracks."})
+        return render(request, 'spotify_app/error.html',
+                      {"message": "Could not retrieve top tracks."})
 
     top_tracks_data = top_tracks_response.json()
 
     # Calculate average danceability, valence, and energy
-    total_danceability = 0
-    total_valence = 0
-    total_energy = 0
+    danceability = 0
+    valence = 0
+    energy = 0
     track_count = len(top_tracks_data.get("items", []))
 
     for track in top_tracks_data.get("items", []):
         audio_features_url = f"https://api.spotify.com/v1/audio-features/{track['id']}"
-        audio_features_response = requests.get(audio_features_url, headers=headers)
+        audio_features_response = requests.get(audio_features_url, headers=headers, timeout=15)
         if audio_features_response.status_code == 200:
             audio_features = audio_features_response.json()
-            total_danceability += audio_features.get("danceability", 0)
-            total_valence += audio_features.get("valence", 0)
-            total_energy += audio_features.get("energy", 0)
+            danceability += audio_features.get("danceability", 0)
+            valence += audio_features.get("valence", 0)
+            energy += audio_features.get("energy", 0)
 
-    average_danceability = total_danceability / track_count if track_count else 0
-    average_valence = total_valence / track_count if track_count else 0
-    average_energy = total_energy / track_count if track_count else 0
+    danceability = danceability / track_count if track_count else 0
+    valence = valence / track_count if track_count else 0
+    energy = energy / track_count if track_count else 0
 
     # Prepare vibe data for rendering
     request.session['vibe_data'] = {
-        "average_danceability": average_danceability,
-        "average_valence": average_valence,
-        "average_energy": average_energy
+        "average_danceability": danceability,
+        "average_valence": valence,
+        "average_energy": energy
     }
     return redirect('display_top_songs')
 def display_music_vibes(request):
@@ -125,7 +128,8 @@ def display_music_vibes(request):
     vibe_data = request.session.get('vibe_data')
 
     if not vibe_data:
-        return render(request, 'spotify_app/error.html', {"message": "No vibe data found in session."})
+        return render(request, 'spotify_app/error.html',
+                      {"message": "No vibe data found in session."})
 
     return render(request, 'spotify_app/music_vibes.html', {
         "vibe_data": vibe_data
@@ -140,7 +144,8 @@ def display_top_songs(request):
     top_songs = request.session.get('top_songs')
 
     if not top_songs:
-        return render(request, 'spotify_app/error.html', {"message": "No top songs found in session."})
+        return render(request, 'spotify_app/error.html',
+                      {"message": "No top songs found in session."})
 
     return render(request, 'spotify_app/top_song.html', {
         "top_songs": top_songs
@@ -155,7 +160,8 @@ def display_top_artists(request):
     top_artists = request.session.get('top_artists')
 
     if not top_artists:
-        return render(request, 'spotify_app/error.html', {"message": "No top artists found in session."})
+        return render(request, 'spotify_app/error.html',
+                      {"message": "No top artists found in session."})
 
     return render(request, 'spotify_app/top_artists.html', {
         "top_artists": top_artists
