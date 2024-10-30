@@ -69,6 +69,7 @@ def exchange_code_for_token(code):
 
     return access_token, refresh_token
 
+# pylint: disable=too-many-locals
 def fetch_user_top_data(request):
     """
     Fetch the user's top songs and artists, and store vibe data in the session
@@ -82,9 +83,11 @@ def fetch_user_top_data(request):
 
     # Fetch top 50 tracks
     top_tracks_url = "https://api.spotify.com/v1/me/top/tracks"
-    top_tracks_response = requests.get(top_tracks_url, headers=headers, params={"limit": 50}, timeout=15)
+    top_tracks_response = requests.get(top_tracks_url,
+                                       headers=headers, params={"limit": 50}, timeout=15)
     if top_tracks_response.status_code != 200:
-        return render(request, 'spotify_app/error.html', {"message": "Could not retrieve top tracks."})
+        return render(request, 'spotify_app/error.html',
+                      {"message": "Could not retrieve top tracks."})
 
     top_tracks_data = top_tracks_response.json()
 
@@ -119,16 +122,17 @@ def fetch_user_top_data(request):
     request.session['top_songs'] = top_songs_with_artists
     # Calculate averages
     danceability /= track_count if track_count else 1
-    danceability = (danceability * 100)
+    danceability = danceability * 100
     valence /= track_count if track_count else 1
-    valence = (valence * 100)
+    valence = valence * 100
     energy /= track_count if track_count else 1
-    energy = (energy * 100)
-    average_popularity_tracks = total_popularity_tracks / track_count if track_count else 0
+    energy = energy * 100
+    average_popularity_tracks = (
+            total_popularity_tracks / track_count) if track_count else 0
 
-    print("Danceability: {:.2f}%".format(danceability))
-    print("Valence: {:.2f}%".format(valence))
-    print("Energy: {:.2f}%".format(energy))
+    #print("Danceability: {:.2f}%".format(danceability))
+    #print("Valence: {:.2f}%".format(valence))
+    #print("Energy: {:.2f}%".format(energy))
     request.session['vibe_data'] = {
         "average_danceability": danceability,
         "average_valence": valence,
@@ -136,9 +140,11 @@ def fetch_user_top_data(request):
     }
 
     top_artists_url = "https://api.spotify.com/v1/me/top/artists"
-    top_artists_response = requests.get(top_artists_url, headers=headers, params={"limit": 50}, timeout=15)
+    top_artists_response = requests.get(top_artists_url,
+                                        headers=headers, params={"limit": 50}, timeout=15)
     if top_artists_response.status_code != 200:
-        return render(request, 'spotify_app/error.html', {"message": "Could not retrieve top artists."})
+        return render(request, 'spotify_app/error.html',
+                      {"message": "Could not retrieve top artists."})
 
     top_artists_data = top_artists_response.json()
 
@@ -149,7 +155,8 @@ def fetch_user_top_data(request):
             "name": artist.get("name"),
             "genres": artist.get("genres"),
             "popularity": artist.get("popularity"),
-            "image_url": artist["images"][0]["url"] if artist.get("images") else None  # Safely get the image URL
+            "image_url": artist["images"][0]["url"]
+                if artist.get("images") else None  # Safely get the image URL
         }
         artists_with_images.append(artist_info)
 
@@ -157,7 +164,8 @@ def fetch_user_top_data(request):
     request.session['top_artists_with_images'] = artists_with_images
 
     # Calculate average popularity for top artists
-    total_popularity_artists = sum(artist.get("popularity", 0) for artist in top_artists_data.get("items", []))
+    total_popularity_artists = sum(artist.get("popularity", 0)
+                                   for artist in top_artists_data.get("items", []))
     artist_count = len(top_artists_data.get("items", []))
     average_popularity_artists = total_popularity_artists / artist_count if artist_count else 0
 
