@@ -112,8 +112,9 @@ def fetch_user_top_data(request):
             "name": track.get("name"),
             "artist": track["artists"][0]["name"] if track.get("artists") else "Unknown Artist",
             "popularity": track.get("popularity"),
-            "image_url": track["album"]["images"][0]["url"] if track.get("album") and track["album"].get(
-                "images") else None  # Optional image
+            "image_url": track["album"]["images"][0]["url"] if track.get("album")
+                                                               and track["album"].get("images")
+                                                                else None
         }
 
 
