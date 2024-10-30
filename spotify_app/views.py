@@ -94,24 +94,25 @@ def fetch_user_top_data(request):
     # Calculate averages for top tracks
     danceability, valence, energy, total_popularity_tracks = 0, 0, 0, 0
     track_count = len(top_tracks_data.get("items", []))
-
+    print(track_count)
     top_songs_with_artists = []
     for track in top_tracks_data.get("items", []):
-        song_info = {
-            "name": track.get("name"),
-            "artist": track["artists"][0]["name"] if track.get("artists") else "Unknown Artist",
-            # Get the first artist's name
-            "popularity": track.get("popularity"),
-            "image_url": track["album"]["images"][0]["url"] if track.get("album") and track["album"].get(
-                "images") else None  # Optional image
-        }
         audio_features_url = f"https://api.spotify.com/v1/audio-features/{track['id']}"
         audio_features_response = requests.get(audio_features_url, headers=headers, timeout=15)
+        print(audio_features_response.status_code)
         if audio_features_response.status_code == 200:
             audio_features = audio_features_response.json()
             danceability += audio_features.get("danceability", 0)
             valence += audio_features.get("valence", 0)
             energy += audio_features.get("energy", 0)
+        song_info = {
+            "name": track.get("name"),
+            "artist": track["artists"][0]["name"] if track.get("artists") else "Unknown Artist",
+            "popularity": track.get("popularity"),
+            "image_url": track["album"]["images"][0]["url"] if track.get("album") and track["album"].get(
+                "images") else None  # Optional image
+        }
+
 
         total_popularity_tracks += track.get("popularity", 0)
         top_songs_with_artists.append(song_info)
@@ -125,6 +126,15 @@ def fetch_user_top_data(request):
     energy = (energy * 100)
     average_popularity_tracks = total_popularity_tracks / track_count if track_count else 0
 
+    print("Danceability: {:.2f}%".format(danceability))
+    print("Valence: {:.2f}%".format(valence))
+    print("Energy: {:.2f}%".format(energy))
+    request.session['vibe_data'] = {
+        "average_danceability": danceability,
+        "average_valence": valence,
+        "average_energy": energy,
+    }
+
     top_artists_url = "https://api.spotify.com/v1/me/top/artists"
     top_artists_response = requests.get(top_artists_url, headers=headers, params={"limit": 50}, timeout=15)
     if top_artists_response.status_code != 200:
@@ -137,6 +147,7 @@ def fetch_user_top_data(request):
     for artist in top_artists_data.get("items", []):
         artist_info = {
             "name": artist.get("name"),
+            "genres": artist.get("genres"),
             "popularity": artist.get("popularity"),
             "image_url": artist["images"][0]["url"] if artist.get("images") else None  # Safely get the image URL
         }
@@ -149,25 +160,6 @@ def fetch_user_top_data(request):
     total_popularity_artists = sum(artist.get("popularity", 0) for artist in top_artists_data.get("items", []))
     artist_count = len(top_artists_data.get("items", []))
     average_popularity_artists = total_popularity_artists / artist_count if artist_count else 0
-
-    # Store vibe and popularity data in session
-    request.session['vibe_data'] = {
-        "average_danceability": danceability,
-        "average_valence": valence,
-        "average_energy": energy,
-    }
-
-    request.session['popularity_data'] = {
-        "average_popularity_tracks": average_popularity_tracks,
-        "average_popularity_artists": average_popularity_artists
-    }
-
-    # Store vibe and popularity data in session
-    request.session["vibe_data"] = {
-        "average_danceability": danceability,
-        "average_valence": valence,
-        "average_energy": energy,
-    }
 
     request.session['popularity_data'] = {
         "average_popularity_tracks": average_popularity_tracks,
@@ -182,6 +174,7 @@ def display_music_vibes(request):
     :return: Render the music vibes HTML page
     """
     vibe_data = request.session.get('vibe_data')
+    # print(vibe_data)
 
     if not vibe_data:
         return render(request, 'spotify_app/error.html',
@@ -227,16 +220,18 @@ def display_top_artists(request):
 
 def determine_top_genre(request):
     """
-    Method to display the top 5 genres of the current user
-    :param request: user request
-    :return: the top genres html page
+    Method to display the top 5 genres of the current user.
+    :param request: User request.
+    :return: Render the top genres HTML page.
     """
-    top_artists = request.session.get('top_artists', [])
+    top_artists = request.session.get('top_artists_with_images', [])
     top_genres = {}
 
     # Count occurrences of each genre
     for artist in top_artists:
         curr_genres = artist.get("genres", [])
+        if not curr_genres:
+            continue  # Skip artists without genres
         for genre in curr_genres:
             top_genres[genre] = top_genres.get(genre, 0) + 1
 
@@ -244,7 +239,7 @@ def determine_top_genre(request):
     sorted_genres = sorted(top_genres.items(), key=lambda x: x[1], reverse=True)
     top_5_genres = sorted_genres[:5]
 
-    # Return or render the result
+    # Render the result
     return render(request, 'spotify_app/top_genres.html', {
         "top_genres": top_5_genres
     })

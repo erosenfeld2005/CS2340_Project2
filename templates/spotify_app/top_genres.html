@@ -1,9 +1,9 @@
 <h1>Your Top 5 Genres</h1>
 
 {% if top_genres %}
-    <ul>
+    <ul class="genre-list">
         {% for genre, count in top_genres %}
-            <li>
+            <li class="genre-item">
                 <p><strong>Genre:</strong> {{ genre }} (Count: {{ count }})</p>
             </li>
         {% endfor %}
@@ -11,4 +11,4 @@
 {% else %}
     <p>No genres found.</p>
 {% endif %}
-<h2><a href="{% url 'music_vibes' %}">Find out your Music Vibes</a></h2>
+<h2><a class="music-vibes-link" href="{% url 'music_vibes' %}">Find out your Music Vibes</a></h2>

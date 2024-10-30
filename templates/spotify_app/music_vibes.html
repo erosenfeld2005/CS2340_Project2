@@ -8,9 +8,9 @@
 <body>
     <h1>Your Music Vibes</h1>
     <ul>
-        <p>Average Danceability: {{ vibe_data.average_danceability|floatformat:2}}%</p>
-        <p>Average Valence: {{ vibe_data.average_valence|floatformat:2}}%</p>
-        <p>Average Energy: {{ vibe_data.average_energy|floatformat:2 }}%</p>
+        <p>Average Danceability: {{ vibe_data.average_danceability}}%</p>
+        <p>Average Valence: {{ vibe_data.average_valence}}%</p>
+        <p>Average Energy: {{ vibe_data.average_energy}}%</p>
     </ul>
     <h2><a href="{% url 'display_top_songs' %}">Back to Your Top Songs</a></h2>
 </body>
