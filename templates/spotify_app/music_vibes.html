@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Music Vibes</title>
+</head>
+<body>
+    <h1>Your Music Vibes</h1>
+    <ul>
+        <li><strong>Average Danceability:</strong> {{ average_danceability|floatformat:2 }}</li>
+        <li><strong>Average Valence:</strong> {{ average_valence|floatformat:2 }}</li>
+        <li><strong>Average Energy:</strong> {{ average_energy|floatformat:2 }}</li>
+    </ul>
+    <h2><a href="{% url 'display_top_songs' %}">Back to Your Top Songs</a></h2>
+</body>
+</html>

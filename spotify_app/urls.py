@@ -11,4 +11,5 @@ urlpatterns = [
     path('display_songs/', views.display_top_songs, name='display_top_songs'),
     path('display_artists/', views.display_top_artists,name='display_top_artists'),
     path('top_genres/', views.determine_top_genre, name='top_genres'),
+    path('music_vibes/', views.display_music_vibes, name='music_vibes'),
 ]

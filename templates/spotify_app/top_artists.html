@@ -1,17 +1,21 @@
-<h1>Your Top 50 Artists</h1>
-
-{% if top_artists %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Artists</title>
+</head>
+<body>
+    <h1>Your Top Artists</h1>
     <ul>
         {% for artist in top_artists %}
             <li>
-                <p><strong>Artist:</strong> {{ artist.name }}</p>
-                <p><strong>Genres:</strong> {{ artist.genres|join:", " }}</p>
+                <img src="{{ artist.image }}" alt="{{ artist.name }}'s image" style="width:100px;height:auto;">
+                <strong>{{ artist.name }}</strong> - Genres: {{ artist.genres|join:", " }}
             </li>
         {% endfor %}
     </ul>
-{% else %}
-    <p>No top artists found.</p>
-{% endif %}
+    <h2><a href="{% url 'top_genres' %}">View Your Top Genres</a></h2>
 
-<!-- Link back to top songs page -->
-<h2><a href="{% url 'top_genres' %}">View Your Top Genres</a></h2>
+</body>
+</html>
