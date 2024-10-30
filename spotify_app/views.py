@@ -95,7 +95,16 @@ def fetch_user_top_data(request):
     danceability, valence, energy, total_popularity_tracks = 0, 0, 0, 0
     track_count = len(top_tracks_data.get("items", []))
 
+    top_songs_with_artists = []
     for track in top_tracks_data.get("items", []):
+        song_info = {
+            "name": track.get("name"),
+            "artist": track["artists"][0]["name"] if track.get("artists") else "Unknown Artist",
+            # Get the first artist's name
+            "popularity": track.get("popularity"),
+            "image_url": track["album"]["images"][0]["url"] if track.get("album") and track["album"].get(
+                "images") else None  # Optional image
+        }
         audio_features_url = f"https://api.spotify.com/v1/audio-features/{track['id']}"
         audio_features_response = requests.get(audio_features_url, headers=headers, timeout=15)
         if audio_features_response.status_code == 200:
@@ -105,32 +114,56 @@ def fetch_user_top_data(request):
             energy += audio_features.get("energy", 0)
 
         total_popularity_tracks += track.get("popularity", 0)
-
+        top_songs_with_artists.append(song_info)
+    request.session['top_songs'] = top_songs_with_artists
     # Calculate averages
     danceability /= track_count if track_count else 1
+    danceability = (danceability * 100)
     valence /= track_count if track_count else 1
+    valence = (valence * 100)
     energy /= track_count if track_count else 1
+    energy = (energy * 100)
     average_popularity_tracks = total_popularity_tracks / track_count if track_count else 0
 
-    # Fetch top 50 artists
     top_artists_url = "https://api.spotify.com/v1/me/top/artists"
     top_artists_response = requests.get(top_artists_url, headers=headers, params={"limit": 50}, timeout=15)
     if top_artists_response.status_code != 200:
         return render(request, 'spotify_app/error.html', {"message": "Could not retrieve top artists."})
 
     top_artists_data = top_artists_response.json()
-    request.session['top_artists'] = top_artists_data.get("items", [])
-    # Calculate average popularity for top artists
-    total_popularity_artists = 0
-    artist_count = len(top_artists_data.get("items", []))
 
+    # Create a list to hold artists and their images
+    artists_with_images = []
     for artist in top_artists_data.get("items", []):
-        total_popularity_artists += artist.get("popularity", 0)
+        artist_info = {
+            "name": artist.get("name"),
+            "popularity": artist.get("popularity"),
+            "image_url": artist["images"][0]["url"] if artist.get("images") else None  # Safely get the image URL
+        }
+        artists_with_images.append(artist_info)
 
+    # Store combined artist data in the session
+    request.session['top_artists_with_images'] = artists_with_images
+
+    # Calculate average popularity for top artists
+    total_popularity_artists = sum(artist.get("popularity", 0) for artist in top_artists_data.get("items", []))
+    artist_count = len(top_artists_data.get("items", []))
     average_popularity_artists = total_popularity_artists / artist_count if artist_count else 0
 
     # Store vibe and popularity data in session
     request.session['vibe_data'] = {
+        "average_danceability": danceability,
+        "average_valence": valence,
+        "average_energy": energy,
+    }
+
+    request.session['popularity_data'] = {
+        "average_popularity_tracks": average_popularity_tracks,
+        "average_popularity_artists": average_popularity_artists
+    }
+
+    # Store vibe and popularity data in session
+    request.session["vibe_data"] = {
         "average_danceability": danceability,
         "average_valence": valence,
         "average_energy": energy,
@@ -180,14 +213,16 @@ def display_top_artists(request):
     :param request: user request
     :return: the top artists html page
     """
-    top_artists = request.session.get('top_artists')
+    # Get the top artists with their images from the session
+    top_artists_with_images = request.session.get('top_artists_with_images')
 
-    if not top_artists:
-        return render(request, 'spotify_app/error.html',
-                      {"message": "No top artists found in session."})
+    if not top_artists_with_images:
+        return render(request, 'spotify_app/error.html', {
+            "message": "No top artists found in session."
+        })
 
     return render(request, 'spotify_app/top_artists.html', {
-        "top_artists": top_artists
+        "top_artists_with_images": top_artists_with_images  # Updated context key
     })
 
 def determine_top_genre(request):
