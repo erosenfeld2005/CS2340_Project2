@@ -1,7 +1,6 @@
 """
 Python file that renders the landing page when the website is opened
 """
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 def landing_page(request):
@@ -12,6 +11,5 @@ def landing_page(request):
     """
     return render(request, 'landing.html')
 
-@login_required
 def dashboard(request):
     return render(request, 'dashboard.html')
