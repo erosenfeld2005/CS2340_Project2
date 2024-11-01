@@ -28,4 +28,5 @@ urlpatterns = [
     path('accounts/', include('userAuthentication.urls')),
     path('spotify_login/', accounts_views.spotify_login, name='spotify_login'),
     path("spotify/", include("spotify_app.urls")),
+    path('dashboard/', views.dashboard, name='dashboard'),
 ]
