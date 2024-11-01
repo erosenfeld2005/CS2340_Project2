@@ -16,14 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from . import views
+
 from userAuthentication import views as accounts_views  # Import the views from the accounts app
-from django.contrib.auth import views as auth_views
+from . import views
+#from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.landing_page, name='landing'),
     path('login/', accounts_views.login_view, name='login'),
     path('accounts/', include('userAuthentication.urls')),
-    path('signup-success/', accounts_views.signup_success, name='signup_success')
+    path('spotify_login/', accounts_views.spotify_login, name='spotify_login'),
+    path("spotify/", include("spotify_app.urls")),
 ]

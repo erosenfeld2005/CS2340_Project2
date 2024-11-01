@@ -9,10 +9,11 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 from decouple import config
-import os
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -41,9 +42,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'wrapped_app2',
-    'userAuthentication.apps.UserauthenticationConfig'
+    'userAuthentication',
+    'spotify_app',
 ]
+SPOTIFY_CLIENT_ID = config('SPOTIFY_CLIENT_ID')
+SPOTIFY_CLIENT_SECRET = config('SPOTIFY_CLIENT_SECRET')
+SPOTIFY_REDIRECT_URI = 'http://127.0.0.1:8000/spotify/callback'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -127,7 +131,8 @@ STATICFILES_DIRS = [
     BASE_DIR / 'spotifywrapped' / 'static',  # Static files location
 ]
 
-STATIC_ROOT = BASE_DIR / "staticfiles"  # Where static files will be collected when running `collectstatic` (for deployment)
+STATIC_ROOT = BASE_DIR / "staticfiles"
+# Where static files will be collected when running `collectstatic` (for deployment)
 
 
 # Default primary key field type
@@ -154,4 +159,3 @@ TEMPLATES = [
 ]
 
 AUTH_USER_MODEL = 'userAuthentication.CustomUser'
-
