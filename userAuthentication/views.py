@@ -5,8 +5,8 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.contrib import messages  # Import messages for feedback
-from .forms import SignupForm
 from spotifywrapped import views as spotiftyWrappedViews
+from .forms import SignupForm
 # Create your views here.
 def signup(request):
     """
