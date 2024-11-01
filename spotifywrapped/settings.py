@@ -159,3 +159,6 @@ TEMPLATES = [
 ]
 
 AUTH_USER_MODEL = 'userAuthentication.CustomUser'
+
+LOGIN_REDIRECT_URL = 'dashboard'
+
