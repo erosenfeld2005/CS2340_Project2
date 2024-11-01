@@ -11,7 +11,8 @@
     --button-text-dark: #FFFFFF;
     --shadow-light: rgba(0, 0, 0, 0.1);
     --shadow-dark: rgba(0, 0, 0, 0.4);
-    --navbar-bg-color: #3F665E; /* Dark turquoise for navbar */
+    --navbar-bg-color: #446c55; /* Dark green for navbar */
+    --background-dark-grey: #1E1E1E; /* border color */
 }
 
 *,
@@ -193,31 +194,118 @@ header {
     color: var(--text-light);
 }
 
+/* Logo */
+.logo img {
+    max-width: 300px;
+    height: auto; /* Ensure the logo scales properly */
+    margin-left: 50px; /* Add spacing between the text and logo */
+}
+
+/* Login */
+.login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /*padding: 200px; !* padding from nav bar*!*/
+    background-color: var(--light-background);
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-direction: column;
+}
+
+.login h4 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+}
+
+.login-contianer {
+    /*padding: 50px 31px;*/
+    /*width: 500px;*/
+    /*gap: 50px;*/
+    /*border: 2px solid var(--background-dark-grey, #1E1E1E);*/
+    /*flex-direction: column;*/
+    /*justify-content: center;*/
+    /*text-align: center;*/
+    /*align-items: center;*/
+    /*border-radius: 35px;*/
+    /*box-shadow: 0px 24px 65px 0px rgba(20, 20, 43, 0.16);*/
+
+    position: relative;
+    top: 50%;
+    transform: translateY(20%);
+
+    /* from figma*/
+    display: flex;
+    padding: 50px 50px; /* height padding, width padding*/
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* space between the classes within this class*/
+
+    border-radius: 35px;
+    border: 1px solid var(--background-dark-grey, #1E1E1E);
+    background: var(--light-background);
+
+/* Shadow 05 */
+box-shadow: 0px 24px 65px 0px rgba(20, 20, 43, 0.16);
+}
+
 /* Form */
-.form {
+.login-contianer form {
+    /* from figma*/
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 5px; /* space between input fields*/
+    align-items: center;
 }
 
-.form input {
-    padding: 10px;
-    border-radius: 50px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-    background-color: var(--primary-green);
+.login-contianer form input { /* input fields, not labels */
+    /*padding: 10px;*/
+    /*border-radius: 50px;*/
+    /*border: 1px solid #ccc;*/
+    /*font-size: 16px;*/
+    /*background-color: var(--primary-green);*/
     color: var(--text-dark);
-}
 
-.form button {
-    padding: 10px;
+    /* from figma*/
+    height: 48px;
+    width: 300px;
+    flex-shrink: 0;
+    align-self: stretch;
+
+    border-radius: 8px;
+    border: 1px solid var(--primary-green);
     background-color: var(--primary-green);
-    color: var(--button-text-light);
-    border: none;
-    border-radius: 50px;
 }
 
-.form button:hover {
+.login-contianer form button {
+    /*padding: 10px;*/
+    /*background-color: var(--primary-green);*/
+    /*color: var(--button-text-light);*/
+    /*border: none;*/
+    /*border-radius: 50px;*/
+
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+    color: var(--text-light);
+
+    /* from figma*/
+    display: flex;
+    padding: 5px;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    align-self: stretch;
+
+    border-radius: 8px;
+    background: var(--button-bg-dark);
+}
+
+
+
+.login-contianer form button:hover {
     background-color: var(--primary-green-dark);
 }
 
@@ -234,9 +322,20 @@ header {
     background-color: #3A4457;
 }
 
-/* Logo */
-.logo img {
-    max-width: 300px;
-    height: auto; /* Ensure the logo scales properly */
-    margin-left: 50px; /* Add spacing between the text and logo */
+.text-field {
+    /* from figma*/
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    align-self: stretch;
+}
+
+.button-alt-option {
+    /* from figma*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    align-self: stretch;
 }

@@ -1,51 +1,81 @@
+{% load static%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Sign Up</title>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
 </head>
 <body>
-    <div class="signup-container">
-        <h1>Sign Up</h1>
-        <form method="post">
-            {% csrf_token %}
 
-            <!-- Display non-field errors -->
-            {% if form.non_field_errors %}
-                <div class="alert alert-danger">{{ form.non_field_errors }}</div>
-            {% endif %}
+    <!-- Header and Navbar -->
+    <header>
+        <nav class="navbar">
+            <a href="/">Spotify Wrapped</a>
+            <a href="#">Explore</a>
+            <a href="#">Contact</a>
+            <a href="/login" class="btn">Login</a>
+        </nav>
+    </header>
+
+    <div class="login">
+        <div class="login-contianer">
+            <h4>Sign Up</h4>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <!-- Display non-field errors -->
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                {% endif %}
             <form method="post">
 
-            {{ form.name.label_tag }} {{ form.name }} <br> <!-- Add this line for name field -->
+                <!-- Render form fields with individual error handling -->
+                <div class="text-field">
+                    {{ form.name.label_tag }} {{ form.name }} <br>
+                    {{ form.username.label }}<br>
+                    {{ form.username }}<br>
+                </div>
 
-            <!-- Render form fields with individual error handling -->
-            {{ form.username.label }}<br>
-            {{ form.username }}<br>
-            {% if form.username.errors %}
-                <div class="alert alert-danger">{{ form.username.errors }}</div>
-            {% endif %}
+                {% if form.username.errors %}
+                    <div class="alert alert-danger">{{ form.username.errors }}</div>
+                {% endif %}
 
-            {{ form.email.label }}<br>
-            {{ form.email }}<br>
-            {% if form.email.errors %}
-                <div class="alert alert-danger">{{ form.email.errors }}</div>
-            {% endif %}
+                <div class="text-field">
+                    {{ form.email.label }}<br>
+                    {{ form.email }}<br>
+                </div>
 
-            {{ form.password1.label }}<br>
-            {{ form.password1 }}<br>
-            {% if form.password1.errors %}
-                <div class="alert alert-danger">{{ form.password1.errors }}</div>
-            {% endif %}
+                {% if form.email.errors %}
+                    <div class="alert alert-danger">{{ form.email.errors }}</div>
+                {% endif %}
 
-            {{ form.password2.label }}<br>
-            {{ form.password2 }}<br>
-            {% if form.password2.errors %}
-                <div class="alert alert-danger">{{ form.password2.errors }}</div>
-            {% endif %}
+                <div class="text-field">
+                    {{ form.password1.label }}<br>
+                    {{ form.password1 }}<br>
+                </div>
 
-            <button type="submit">Sign Up</button>
-        </form>
-        <p>Already have an account? <a href="{% url 'login' %}">Log In</a></p>
+                {% if form.password1.errors %}
+                    <div class="alert alert-danger">{{ form.password1.errors }}</div>
+                {% endif %}
+
+                <div class="text-field">
+                    {{ form.password2.label }}<br>
+                    {{ form.password2 }}<br>
+                </div>
+
+                {% if form.password2.errors %}
+                    <div class="alert alert-danger">{{ form.password2.errors }}</div>
+                {% endif %}
+
+                <div class="button-alt-option">
+                    <button type="submit">Sign Up</button>
+                    <p>Already have an account? <a href="{% url 'login' %}">Log In</a></p>
+                </div>
+
+            </form>
+        </div>
     </div>
 </body>
 </html>
