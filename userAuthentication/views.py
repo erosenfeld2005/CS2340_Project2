@@ -5,8 +5,8 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.contrib import messages  # Import messages for feedback
+from spotifywrapped import views as spotiftyWrappedViews
 from .forms import SignupForm
-
 # Create your views here.
 def signup(request):
     """
@@ -19,7 +19,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('spotify_login')
+            return redirect(spotiftyWrappedViews.dashboard)
     else:
         form = SignupForm()  # Ensure this initializes a new form
     return render(request, 'userAuthentication/signup.html', {'form': form})
@@ -41,7 +41,7 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('spotify_login')
+                return redirect(spotiftyWrappedViews.dashboard)
             messages.error(request, "Invalid username or password.")
         else:
             # When form is invalid, we can add error messages and also return the form

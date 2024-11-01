@@ -128,12 +128,13 @@
 
     <!-- Main Content Area for Centered Slideshow -->
     <div class="main-content">
-        <div class="slideshow-container">
+        <div id="slideshow-container" class="slideshow-container">
             <div class="slide active" data-image="{% static 'icon3.png' %}">
                 <img src="{% static 'icon3.png' %}" alt="Wrapped Summary">
                 <h2>Wrapped Summary</h2>
                 <p>Relive your top songs, artists, and playlists of the year.</p>
             </div>
+
             <div class="slide" data-image="{% static 'icon4.png' %}">
                 <img src="{% static 'icon4.png' %}" alt="Duo Wrapped">
                 <h2>Duo Wrapped</h2>
@@ -182,9 +183,11 @@
 
         function showSlide(index) {
             slides.forEach((slide, i) => {
+                slide.classList.remove('active');
                 slide.style.display = 'none';
                 dots[i].classList.remove('active');
             });
+            slides[index].classList.add('active');
             slides[index].style.display = 'block';
             dots[index].classList.add('active');
         }
@@ -201,6 +204,28 @@
 
         // Initial display
         showSlide(slideIndex);
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const slideshowContainer = document.getElementById('slideshow-container');
+
+            function updateLink() {
+                const activeSlide = document.querySelector('.slide.active');
+                if (activeSlide && activeSlide.querySelector('h2').innerText === 'Wrapped Summary') {
+                    slideshowContainer.onclick = () => {
+                        window.location.href = "{% url 'spotify_login' %}";
+                    };
+                } else {
+                    slideshowContainer.onclick = null; // Remove click event if not on "Wrapped Summary"
+                }
+            }
+
+            // Set up a MutationObserver to detect class changes in slides
+            const observer = new MutationObserver(updateLink);
+            slides.forEach(slide => observer.observe(slide, { attributes: true, attributeFilter: ['class'] }));
+
+            // Initial link setup
+            updateLink();
+        });
     </script>
 </body>
 </html>
