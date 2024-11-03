@@ -90,5 +90,6 @@ class SpotifyProfile(models.Model):
                     genre_counts[genre] = genre_counts.get(genre, 0) + 1
             sorted_genres = sorted(genre_counts.items(), key=lambda x: x[1], reverse=True)
             self.genre_data = dict(sorted_genres[:5])  # Store only top 5 genres
+            self.save()
             return top_artists
         return []

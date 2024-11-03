@@ -9,7 +9,7 @@ import requests
 from .models import SpotifyProfile
 
 
-def spotify_login():
+def spotify_login(request):
     """
     Function that redirects to the login/authorization page
     :return: redirect to the code page
