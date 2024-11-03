@@ -1,12 +1,19 @@
+"""
+Python file that holds how user interacts with spotify_wrapped section
+"""
 # views.py
 from django.shortcuts import render, redirect
 from django.conf import settings
-from .models import SpotifyProfile
 from requests.auth import HTTPBasicAuth
 import requests
+from .models import SpotifyProfile
 
 
-def spotify_login(request):
+def spotify_login():
+    """
+    Function that redirects to the login/authorization page
+    :return: redirect to the code page
+    """
     scopes = 'user-top-read'
     auth_url = (
         f"https://accounts.spotify.com/authorize?"
@@ -17,15 +24,20 @@ def spotify_login(request):
 
 
 def spotify_callback(request):
+    """
+    Function that redirects to the top_songs page if it successfully gets the access token
+    :param request: Request from the redirected URL
+    :return: The appropriate redirect to the top songs page if it successfully gets the access token
+    """
     code = request.GET.get("code")
     if not code:
         return render(request, 'spotify_app/error.html', {"message": "Authorization failed."})
 
-    access_token, refresh_token = exchange_code_for_token(code)
+    access_token = exchange_code_for_token(code)[0]
     if not access_token:
         return render(request, 'spotify_app/error.html', {"message": "No access token returned."})
 
-    profile, created = SpotifyProfile.objects.get_or_create(user=request.user)
+    profile, created = SpotifyProfile.objects.get_or_create(user=request.user)[0]
     profile.fetch_top_tracks(access_token)
     profile.fetch_top_artists(access_token)
 
@@ -33,6 +45,11 @@ def spotify_callback(request):
 
 
 def exchange_code_for_token(code):
+    """
+    Function that exchanges a authorization code for an access token
+    :param code: authorization code
+    :return: access token and refresh token
+    """
     token_url = "https://accounts.spotify.com/api/token"
     payload = {
         "grant_type": "authorization_code",
@@ -49,6 +66,11 @@ def exchange_code_for_token(code):
 
 
 def display_top_songs(request):
+    """
+    Function that displays the top songs page
+    :param request: Redirect input
+    :return: the appropriate page
+    """
     profile = SpotifyProfile.objects.get(user=request.user)
     if not profile.top_songs:
         return render(request, 'spotify_app/error.html', {"message": "No top songs found."})
@@ -57,6 +79,11 @@ def display_top_songs(request):
 
 
 def display_music_vibes(request):
+    """
+    Function that displays the music vibes page
+    :param request: Redirect input
+    :return: the appropriate page
+    """
     profile = SpotifyProfile.objects.get(user=request.user)
     if not profile.vibe_data:
         return render(request, 'spotify_app/error.html', {"message": "No vibe data found."})
@@ -65,14 +92,25 @@ def display_music_vibes(request):
 
 
 def display_top_artists(request):
+    """
+    Function that displays the top artists page
+    :param request: Redirect input
+    :return: the appropriate page
+    """
     profile = SpotifyProfile.objects.get(user=request.user)
     if not profile.top_artists_with_images:
         return render(request, 'spotify_app/error.html', {"message": "No top artists found."})
 
-    return render(request, 'spotify_app/top_artists.html', {"top_artists_with_images": profile.top_artists_with_images})
+    return render(request, 'spotify_app/top_artists.html', {"top_artists_with_images":
+                                                                profile.top_artists_with_images})
 
 
 def display_top_genres(request):
+    """
+    Function that displays the top genres page
+    :param request: Redirect input
+    :return: the appropriate page
+    """
     profile = SpotifyProfile.objects.get(user=request.user)
     top_genres = list(profile.genre_data.items())  # Convert dictionary to list of tuples
     return render(request, 'spotify_app/top_genres.html', {"top_genres": top_genres})
