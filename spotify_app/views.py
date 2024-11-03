@@ -37,7 +37,7 @@ def spotify_callback(request):
     if not access_token:
         return render(request, 'spotify_app/error.html', {"message": "No access token returned."})
 
-    profile, created = SpotifyProfile.objects.get_or_create(user=request.user)[0]
+    profile = SpotifyProfile.objects.get_or_create(user=request.user)[0]
     profile.fetch_top_tracks(access_token)
     profile.fetch_top_artists(access_token)
 

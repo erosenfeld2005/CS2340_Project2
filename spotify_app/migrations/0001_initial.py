@@ -30,7 +30,8 @@ class Migration(migrations.Migration):
                 ('vibe_data', models.JSONField(blank=True, default=dict)),
                 ('genre_data', models.JSONField(blank=True, default=dict)),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE,
-                                              related_name='spotify_profile', to=settings.AUTH_USER_MODEL)),
+                                              related_name='spotify_profile',
+                                              to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]
