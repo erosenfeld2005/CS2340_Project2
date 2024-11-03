@@ -12,7 +12,7 @@ class SpotifyProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                                 related_name='spotify_profile')
     top_songs = models.JSONField(default=list, blank=True)
-    top_artists_with_images = models.JSONField(default=list, blank=True)
+    top_five_artists = models.JSONField(default=list, blank=True)
     vibe_data = models.JSONField(default=dict, blank=True)
     genre_data = models.JSONField(default=dict, blank=True)
 
@@ -71,6 +71,7 @@ class SpotifyProfile(models.Model):
         :param access_token: user specific data
         :return: list of top artists
         """
+        ## Pulling from API
         headers = {"Authorization": f"Bearer {access_token}", "Content-Type": "application/json"}
         top_artists_url = "https://api.spotify.com/v1/me/top/artists"
         response = requests.get(top_artists_url, headers=headers, params={"limit": 50}, timeout=15)
@@ -82,8 +83,8 @@ class SpotifyProfile(models.Model):
                 "popularity": artist.get("popularity"),
                 "image_url": artist["images"][0]["url"] if artist.get("images") else None
             } for artist in top_artists_data]
-            self.top_artists_with_images = top_artists
-            self.save()
+
+            ## Calculate Genre
             genre_counts = {}
             for artist in top_artists_data:
                 for genre in artist.get("genres", []):
@@ -91,5 +92,10 @@ class SpotifyProfile(models.Model):
             sorted_genres = sorted(genre_counts.items(), key=lambda x: x[1], reverse=True)
             self.genre_data = dict(sorted_genres[:5])  # Store only top 5 genres
             self.save()
+
+            ## Top 5 Artsits
+            self.top_five_artists = top_artists[0:5]
+            self.save()
+
             return top_artists
         return []
