@@ -5,7 +5,7 @@
     --text-light: #FFFFFF;
     --primary-green: #CFE3E1; /* Pastel green buttons/accents */
     --primary-green-dark: #98B9B5; /* Darker pastel green hover */
-    --button-bg-light: #CFE3E1;
+    --button-bg-light: #A5CBC3;
     --button-bg-dark: #4A5672;
     --button-text-light: #FFFFFF;
     --button-text-dark: #FFFFFF;
@@ -86,7 +86,7 @@ h6 {
 
 /* Button */
 .btn {
-    border-radius: 25px;
+    border-radius: 15px;
     border: none;
     padding: 10px 20px;
     background-color: var(--button-bg-light);
