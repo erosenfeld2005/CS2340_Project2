@@ -1,3 +1,4 @@
 [MESSAGES CONTROL]
 disable=
     C0103,  # Invalid name
+    E1101,  #Model has no attribute objects
