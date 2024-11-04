@@ -35,7 +35,8 @@ class Migration(migrations.Migration):
                                                                ' assigning them.',
                                                      verbose_name='superuser status')),
                 ('username', models.CharField(error_messages=
-                                              {'unique': 'A user with that username already exists.'},
+                                              {'unique': 'A user with that '
+                                                         'username already exists.'},
                                               help_text='Required. 150 characters or fewer. '
                                                         'Letters, digits and @/./+/-/_ only.',
                                               max_length=150, unique=True,
@@ -55,7 +56,8 @@ class Migration(migrations.Migration):
                 ('is_active', models.BooleanField(default=True,
                                                   help_text='Designates whether this user'
                                                             ' should be treated as active.'
-                                                            ' Unselect this instead of deleting accounts.',
+                                                            ' Unselect this instead of'
+                                                            ' deleting accounts.',
                                                   verbose_name='active')),
                 ('date_joined', models.DateTimeField(default=django.utils.timezone.now,
                                                      verbose_name='date joined')),
