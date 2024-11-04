@@ -12,4 +12,6 @@ urlpatterns = [
     path('display_artists/', views.display_top_artists,name='display_top_artists'),
     path('top_genres/', views.display_top_genres, name='top_genres'),
     path('music_vibes/', views.display_music_vibes, name='music_vibes'),
+    path('save_profile/', views.save_spotify_profile, name='save_spotify_profile'),
+    path('saved_profiles/', views.display_saved_profiles, name='display_saved_profiles'),
 ]

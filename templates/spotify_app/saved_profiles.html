@@ -1,0 +1,11 @@
+<h2>Saved Spotify Profiles</h2>
+<ul>
+    {% for profile in profiles %}
+        <li>
+            Top Tracks: {{ profile.top_songs }} <br>
+            Top Artists: {{ profile.top_artists_with_images }} <br>
+            Vibe Data: {{ profile.vibe_data }} <br>
+            Saved at: {{ profile.created_at }}
+        </li>
+    {% endfor %}
+</ul>

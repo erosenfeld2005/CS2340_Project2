@@ -5,11 +5,12 @@ Python file that holds how user interacts with spotify_wrapped section
 from django.shortcuts import render, redirect
 from django.conf import settings
 from requests.auth import HTTPBasicAuth
+from django.utils import timezone
 import requests
-from .models import SpotifyProfile
+from .models import SpotifyProfile, TemporarySpotifyProfile
 
 
-def spotify_login():
+def spotify_login(request):
     """
     Function that redirects to the login/authorization page
     :return: redirect to the code page
@@ -30,6 +31,7 @@ def spotify_callback(request):
     :return: The appropriate redirect to the top songs page if it successfully gets the access token
     """
     code = request.GET.get("code")
+
     if not code:
         return render(request, 'spotify_app/error.html', {"message": "Authorization failed."})
 
@@ -37,11 +39,23 @@ def spotify_callback(request):
     if not access_token:
         return render(request, 'spotify_app/error.html', {"message": "No access token returned."})
 
-    profile = SpotifyProfile.objects.get_or_create(user=request.user)[0]
-    profile.fetch_top_tracks(access_token)
-    profile.fetch_top_artists(access_token)
+    # Create a TemporarySpotifyProfile instance for the current user
+    temp_profile = TemporarySpotifyProfile.objects.create(
+        top_songs=[],  # Initialize with empty data or whatever your default is
+        top_artists_with_images=[],
+        vibe_data=None,  # Initialize as needed
+        genre_data={},
+        # Note: No user field as per your design
+    )
 
-    return redirect('display_top_songs')
+    # Fetch and populate the data into the temporary profile
+    temp_profile.fetch_top_tracks(access_token)
+    temp_profile.fetch_top_artists(access_token)
+
+    # Optionally, you can store the temporary profile to the session for later retrieval
+    request.session['temporary_profile_id'] = temp_profile.id
+
+    return redirect('display_top_songs')  # Adjust this to your flow
 
 
 def exchange_code_for_token(code):
@@ -71,24 +85,45 @@ def display_top_songs(request):
     :param request: Redirect input
     :return: the appropriate page
     """
-    profile = SpotifyProfile.objects.get(user=request.user)
-    if not profile.top_songs:
-        return render(request, 'spotify_app/error.html', {"message": "No top songs found."})
+    temp_profile_id = request.session.get('temporary_profile_id')  # Retrieve the profile ID from the session
 
-    return render(request, 'spotify_app/top_song.html', {"top_songs": profile.top_songs})
+    if temp_profile_id:
+        try:
+            temp_profile = TemporarySpotifyProfile.objects.get(id=temp_profile_id)  # Get the temporary profile by ID
+            if not temp_profile.top_songs:
+                return render(request, 'spotify_app/error.html', {"message": "No top songs found."})
+
+            return render(request, 'spotify_app/top_song.html', {"top_songs": temp_profile.top_songs})
+        except TemporarySpotifyProfile.DoesNotExist:
+            return render(request, 'spotify_app/error.html', {"message": "Temporary profile not found."})
+    else:
+        return render(request, 'spotify_app/error.html', {"message": "No temporary profile ID found in session."})
 
 
 def display_music_vibes(request):
     """
-    Function that displays the music vibes page
+    Function that displays the music vibes page using TemporarySpotifyProfile
     :param request: Redirect input
     :return: the appropriate page
     """
-    profile = SpotifyProfile.objects.get(user=request.user)
-    if not profile.vibe_data:
-        return render(request, 'spotify_app/error.html', {"message": "No vibe data found."})
+    temp_profile_id = request.session.get('temporary_profile_id')  # Retrieve the profile ID from the session
 
-    return render(request, 'spotify_app/music_vibes.html', {"vibe_data": profile.vibe_data})
+    if temp_profile_id:
+        try:
+            temp_profile = TemporarySpotifyProfile.objects.get(id=temp_profile_id)  # Get the temporary profile by ID
+            if not temp_profile.vibe_data:
+                return render(request, 'spotify_app/error.html', {"message": "No vibe data found."})
+
+            # Combine both dictionaries into a single context dictionary
+            context = {
+                "vibe_data": temp_profile.vibe_data,
+                "temporary_profile_id": temp_profile_id
+            }
+            return render(request, 'spotify_app/music_vibes.html', context)
+        except TemporarySpotifyProfile.DoesNotExist:
+            return render(request, 'spotify_app/error.html', {"message": "Temporary profile not found."})
+    else:
+        return render(request, 'spotify_app/error.html', {"message": "No temporary profile ID found in session."})
 
 
 def display_top_artists(request):
@@ -97,12 +132,19 @@ def display_top_artists(request):
     :param request: Redirect input
     :return: the appropriate page
     """
-    profile = SpotifyProfile.objects.get(user=request.user)
-    if not profile.top_artists_with_images:
-        return render(request, 'spotify_app/error.html', {"message": "No top artists found."})
+    temp_profile_id = request.session.get('temporary_profile_id')  # Retrieve the profile ID from the session
 
-    return render(request, 'spotify_app/top_artists.html', {"top_artists_with_images":
-                                                                profile.top_artists_with_images})
+    if temp_profile_id:
+        try:
+            temp_profile = TemporarySpotifyProfile.objects.get(id=temp_profile_id)  # Get the temporary profile by ID
+            if not temp_profile.top_artists_with_images:
+                return render(request, 'spotify_app/error.html', {"message": "No top artists found."})
+
+            return render(request, 'spotify_app/top_artists.html', {"top_artists_with_images": temp_profile.top_artists_with_images})
+        except TemporarySpotifyProfile.DoesNotExist:
+            return render(request, 'spotify_app/error.html', {"message": "Temporary profile not found."})
+    else:
+        return render(request, 'spotify_app/error.html', {"message": "No temporary profile ID found in session."})
 
 
 def display_top_genres(request):
@@ -111,6 +153,56 @@ def display_top_genres(request):
     :param request: Redirect input
     :return: the appropriate page
     """
-    profile = SpotifyProfile.objects.get(user=request.user)
-    top_genres = list(profile.genre_data.items())  # Convert dictionary to list of tuples
-    return render(request, 'spotify_app/top_genres.html', {"top_genres": top_genres})
+    temp_profile_id = request.session.get('temporary_profile_id')  # Retrieve the profile ID from the session
+
+    if temp_profile_id:
+        try:
+            temp_profile = TemporarySpotifyProfile.objects.get(id=temp_profile_id)  # Get the temporary profile by ID
+            if not temp_profile.genre_data:
+                return render(request, 'spotify_app/error.html', {"message": "No genre data found."})
+
+            top_genres = list(temp_profile.genre_data.items())  # Convert dictionary to list of tuples
+            return render(request, 'spotify_app/top_genres.html', {"top_genres": top_genres})
+
+        except TemporarySpotifyProfile.DoesNotExist:
+            return render(request, 'spotify_app/error.html', {"message": "Temporary profile not found."})
+    else:
+        return render(request, 'spotify_app/error.html', {"message": "No temporary profile ID found in session."})
+
+def save_spotify_profile(request):
+    """
+    Function to save the TemporarySpotifyProfile to the user's SpotifyProfile
+    """
+    if request.method == 'POST':
+        # Retrieve the temporary_profile_id from the POST request
+        temporary_profile_id = request.POST.get('temporary_profile_id')
+
+        # Try to get the TemporarySpotifyProfile using the provided ID
+        try:
+            temp_profile = TemporarySpotifyProfile.objects.get(id=temporary_profile_id)
+
+            # Create a new SpotifyProfile linked to the logged-in user with data from the temporary profile
+            SpotifyProfile.objects.create(
+                user=request.user,
+                top_songs=temp_profile.top_songs,
+                top_artists_with_images=temp_profile.top_artists_with_images,
+                vibe_data=temp_profile.vibe_data,
+                genre_data=temp_profile.genre_data,
+                created_at=timezone.now(),
+            )
+            return redirect('display_saved_profiles')  # Redirect to the saved profiles page
+        except TemporarySpotifyProfile.DoesNotExist:
+            return render(request, 'spotify_app/error.html', {"message": "Temporary profile not found."})
+        except Exception as e:
+            # Handle any other exceptions, such as database errors
+            return render(request, 'spotify_app/error.html', {"message": str(e)})
+
+        # Handle the case where the request method is not POST
+    return render(request, 'spotify_app/error.html', {"message": "Invalid request method."})
+
+def display_saved_profiles(request):
+    """
+    Function to display saved Spotify profiles
+    """
+    profiles = request.user.spotify_profiles.all()  # Retrieve all profiles for the logged-in user
+    return render(request, 'spotify_app/saved_profiles.html', {'profiles': profiles})
