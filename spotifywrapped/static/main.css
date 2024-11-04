@@ -35,6 +35,7 @@ body {
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
+    font-family: 'DM Sans', sans-serif;
     font-weight: bold;
     margin: 0 0 20px;
 }
