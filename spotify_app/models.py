@@ -12,6 +12,7 @@ class SpotifyProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                                 related_name='spotify_profile')
     top_songs = models.JSONField(default=list, blank=True)
+    top_five_songs = models.JSONField(default=list, blank=True)
     top_five_artists = models.JSONField(default=list, blank=True)
     vibe_data = models.JSONField(default=dict, blank=True)
     genre_data = models.JSONField(default=dict, blank=True)
@@ -35,9 +36,15 @@ class SpotifyProfile(models.Model):
                                                                    track["album"].get(
                     "images") else None
             } for track in top_tracks_data]
+
             self.top_songs = top_tracks
             self.calculate_vibe_data(top_tracks_data, headers)  # Update vibe data
             self.save()
+
+            ## Top 5 Songs
+            self.top_five_songs = top_tracks[0:5]
+            self.save()
+
             return top_tracks
         return []
 

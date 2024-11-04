@@ -91,7 +91,7 @@ def display_music_vibes(request):
     return render(request, 'spotify_app/music_vibes.html', {"vibe_data": profile.vibe_data})
 
 
-def display_top_artists(request):
+def display_summary_content(request):
     """
     Function that displays the top artists page
     :param request: Redirect input
@@ -100,9 +100,13 @@ def display_top_artists(request):
     profile = SpotifyProfile.objects.get(user=request.user)
     if not profile.top_five_artists:
         return render(request, 'spotify_app/error.html', {"message": "No top artists found."})
+    if not profile.top_songs:
+        return render(request, 'spotify_app/error.html', {"message": "No top songs found."})
 
     return render(request, 'summary.html', {"top_five_artists":
-                                                                profile.top_five_artists})
+                                                                profile.top_five_artists, "top_five_songs": profile.top_five_songs})
+    # return render(request, 'summary.html', {"top_five_artists":
+    #                                             profile.top_five_artists})
 
 
 def display_top_genres(request):
