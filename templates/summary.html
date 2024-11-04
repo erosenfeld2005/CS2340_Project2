@@ -397,15 +397,15 @@
                 <h3>Your Musical Soul at a Glance...</h3>
                 <div class="glance-info">
                     <div class="glance-details">
-                        <h7>Top Artist: blah</h7>
+                        <h7>Top Artist: {{ top_five_songs.0.name }}</h7>
                         <img src="{{ top_five_artists.0.image_url }}" alt="top artist image" class="artist-photo">
                     </div>
                     <div class="glance-details">
-                        <h7>Top Song: blah</h7>
+                        <h7>Top Song: {{ top_five_songs.0.name }}</h7>
                         <img src="{{ top_five_artists.1.image_url }}" alt="top artist image" class="artist-photo">
                     </div>
                     <div class="glance-details">
-                        <h7>Top Genre: blah</h7>
+                        <h7>Top Genre: {{ top_five_genres.keys|list|first }}</h7>
                         <img src="{{ top_five_artists.2.image_url }}" alt="top artist image" class="artist-photo">
                     </div>
                 </div>

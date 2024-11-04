@@ -105,7 +105,8 @@ def display_summary_content(request):
 
     return render(request, 'summary.html', {"top_five_artists":
                                                                 profile.top_five_artists,
-                                            "top_five_songs": profile.top_five_songs})
+                                            "top_five_songs": profile.top_five_songs,
+                                            "top_five_genres": profile.genre_data})
     # return render(request, 'summary.html', {"top_five_artists":
     #                                             profile.top_five_artists})
 
