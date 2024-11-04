@@ -104,7 +104,8 @@ def display_summary_content(request):
         return render(request, 'spotify_app/error.html', {"message": "No top songs found."})
 
     return render(request, 'summary.html', {"top_five_artists":
-                                                                profile.top_five_artists, "top_five_songs": profile.top_five_songs})
+                                                                profile.top_five_artists,
+                                            "top_five_songs": profile.top_five_songs})
     # return render(request, 'summary.html', {"top_five_artists":
     #                                             profile.top_five_artists})
 

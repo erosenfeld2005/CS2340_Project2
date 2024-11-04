@@ -43,9 +43,12 @@ class Migration(migrations.Migration):
                                               [django.contrib.auth.validators.
                                               UnicodeUsernameValidator()],
                                               verbose_name='username')),
-                ('first_name', models.CharField(blank=True, max_length=150, verbose_name='first name')),
-                ('last_name', models.CharField(blank=True, max_length=150, verbose_name='last name')),
-                ('email', models.EmailField(blank=True, max_length=254, verbose_name='email address')),
+                ('first_name', models.CharField(blank=True, max_length=150, verbose_name=
+                'first name')),
+                ('last_name', models.CharField(blank=True, max_length=150, verbose_name=
+                'last name')),
+                ('email', models.EmailField(blank=True, max_length=254, verbose_name=
+                'email address')),
                 ('is_staff', models.BooleanField(default=False, help_text='Designates whether the '
                                                                           'user can log into this '
                                                                           'admin site.',
