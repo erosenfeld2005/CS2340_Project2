@@ -9,7 +9,7 @@ import requests
 from .models import SpotifyProfile
 
 
-def spotify_login():
+def spotify_login(request):
     """
     Function that redirects to the login/authorization page
     :return: redirect to the code page
@@ -41,7 +41,7 @@ def spotify_callback(request):
     profile.fetch_top_tracks(access_token)
     profile.fetch_top_artists(access_token)
 
-    return redirect('display_top_songs')
+    return redirect('summary')
 
 
 def exchange_code_for_token(code):
@@ -98,11 +98,11 @@ def display_top_artists(request):
     :return: the appropriate page
     """
     profile = SpotifyProfile.objects.get(user=request.user)
-    if not profile.top_artists_with_images:
+    if not profile.top_five_artists:
         return render(request, 'spotify_app/error.html', {"message": "No top artists found."})
 
-    return render(request, 'spotify_app/top_artists.html', {"top_artists_with_images":
-                                                                profile.top_artists_with_images})
+    return render(request, 'summary.html', {"top_five_artists":
+                                                                profile.top_five_artists})
 
 
 def display_top_genres(request):
@@ -113,4 +113,4 @@ def display_top_genres(request):
     """
     profile = SpotifyProfile.objects.get(user=request.user)
     top_genres = list(profile.genre_data.items())  # Convert dictionary to list of tuples
-    return render(request, 'spotify_app/top_genres.html', {"top_genres": top_genres})
+    return render(request, 'summary.html', {"top_genres": top_genres})

@@ -1,0 +1,222 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <style>
+        /* Centered Slideshow Playlist Style */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+            margin-top: 60px; /* Offset for the navbar */
+        }
+        .slideshow-container {
+            width: 800px;
+            height: 500px;
+            text-align: center;
+            border: 1px solid #A5CBC3;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+        .slide {
+            display: none;
+            padding: 20px;
+            text-align: left;
+        }
+        .slide.active {
+            display: block;
+        }
+        .slide img {
+            max-width: 50%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .slide h2 {
+            color: #A5CBC3;
+            font-size: 18px;
+            margin: 0;
+        }
+        .slide p {
+            color: #CCCCCC;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        /* Dots and Arrow Button Styling */
+        .dots-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .prev, .next {
+            cursor: pointer;
+            padding: 10px;
+            color: #FFFFFF;
+            font-weight: bold;
+            font-size: 18px;
+            user-select: none;
+            border-radius: 50%;
+            background-color: #333333;
+            margin: 0 10px;
+        }
+        .prev:hover, .next:hover {
+            background-color: #A5CBC3;
+        }
+        .dots {
+            display: flex;
+            justify-content: center;
+        }
+        .dot {
+            height: 12px;
+            width: 12px;
+            margin: 0 5px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .dot.active {
+            background-color: #A5CBC3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header and Navbar -->
+    <header>
+        <nav class="navbar">
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="#">Account</a>
+            <a href="#">Sign Out</a>
+        </nav>
+    </header>
+
+    <!-- Main Content Area for Centered Slideshow -->
+    <div class="main-content">
+        <div id="slideshow-container" class="slideshow-container">
+            <div class="slide active" data-image="{% static 'icon3.png' %}">
+                <img src="{% static 'icon3.png' %}" alt="Wrapped Summary">
+                <h2>Slide 1</h2>
+                <p>Short description here.</p>
+            </div>
+
+            <div class="slide" data-image="{% static 'icon3.png' %}">
+                <img src="{% static 'icon3.png' %}" alt="Wrapped Summary">
+                <h2>Slide 2</h2>
+                <ul>
+                    {% for artist in top_five_artists %}
+                        <h2>{{ artist.name }}</h2>
+                        <img src="{{ artist.image_url }}" alt="{{ artist.name }}'s image" style="width: 100px; height: auto;">
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="slide" data-image="{% static 'icon3.png' %}">
+                <img src="{% static 'icon3.png' %}" alt="Wrapped Summary">
+                <h2>Slide 3</h2>
+                <p>Short description here.</p>
+            </div>
+            <div class="slide" data-image="{% static 'icon3.png' %}">
+                <img src="{% static 'icon3.png' %}" alt="Wrapped Summary">
+                <h2>Slide 4</h2>
+                <p>Short description here.</p>
+            </div>
+            <div class="slide" data-image="{% static 'icon3.png' %}">
+                <img src="{% static 'icon3.png' %}" alt="Wrapped Summary">
+                <h2>Slide 5</h2>
+                <p>Short description here.</p>
+            </div>
+            <div class="slide" data-image="{% static 'icon3.png' %}">
+                <img src="{% static 'icon3.png' %}" alt="Wrapped Summary">
+                <h2>Slide 6</h2>
+                <p>Short description here.</p>
+            </div>
+            <div class="slide" data-image="{% static 'icon3.png' %}">
+                <img src="{% static 'icon3.png' %}" alt="Wrapped Summary">
+                <h2>Slide 7</h2>
+                <p>Short description here.</p>
+            </div>
+            <div class="slide" data-image="{% static 'icon3.png' %}">
+                <img src="{% static 'icon3.png' %}" alt="Wrapped Summary">
+                <h2>Slide 8</h2>
+                <p>Short description here.</p>
+            </div>
+        </div>
+
+        <div class="dots-container">
+            <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
+            <div class="dots">
+                <span class="dot active" onclick="currentSlide(0)"></span>
+                <span class="dot" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+                <span class="dot" onclick="currentSlide(4)"></span>
+                <span class="dot" onclick="currentSlide(5)"></span>
+                <span class="dot" onclick="currentSlide(6)"></span>
+                <span class="dot" onclick="currentSlide(7)"></span>
+            </div>
+            <a class="next" onclick="changeSlide(1)">&#10095;</a>
+        </div>
+    </div>
+
+    <script>
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                slide.style.display = 'none';
+                dots[i].classList.remove('active');
+            });
+            slides[index].classList.add('active');
+            slides[index].style.display = 'block';
+            dots[index].classList.add('active');
+        }
+
+        function changeSlide(n) {
+            slideIndex = (slideIndex + n + slides.length) % slides.length;
+            showSlide(slideIndex);
+        }
+
+        function currentSlide(index) {
+            slideIndex = index;
+            showSlide(slideIndex);
+        }
+
+        // Initial display
+        showSlide(slideIndex);
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const slideshowContainer = document.getElementById('slideshow-container');
+
+            function updateLink() {
+                const activeSlide = document.querySelector('.slide.active');
+                if (activeSlide && activeSlide.querySelector('h2').innerText === 'Wrapped Summary') {
+                    slideshowContainer.onclick = () => {
+                        window.location.href = "{% url 'spotify_login' %}";
+                    };
+                } else {
+                    slideshowContainer.onclick = null; // Remove click event if not on "Wrapped Summary"
+                }
+            }
+
+            // Set up a MutationObserver to detect class changes in slides
+            const observer = new MutationObserver(updateLink);
+            slides.forEach(slide => observer.observe(slide, { attributes: true, attributeFilter: ['class'] }));
+
+            // Initial link setup
+            updateLink();
+        });
+    </script>
+</body>
+</html>
