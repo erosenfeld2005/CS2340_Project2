@@ -103,12 +103,14 @@ def display_summary_content(request):
     if not profile.top_songs:
         return render(request, 'spotify_app/error.html', {"message": "No top songs found."})
 
+    top_genre = list(profile.genre_data.keys())[0]
+    top_five_genres = list(profile.genre_data.keys())[0:5]
     return render(request, 'summary.html', {"top_five_artists":
                                                                 profile.top_five_artists,
                                             "top_five_songs": profile.top_five_songs,
-                                            "top_five_genres": profile.genre_data})
+                                            "top_five_genres": top_five_genres, "top_genre": top_genre})
     # return render(request, 'summary.html', {"top_five_artists":
-    #                                             profile.top_five_artists})
+    #                                             profile.top_five_artists, "top_five_songs": profile.top_five_songs})
 
 
 def display_top_genres(request):

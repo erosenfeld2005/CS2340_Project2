@@ -385,7 +385,11 @@
             <div class="slide" data-image="{% static 'icon3.png' %}">
                 <img src="{% static 'icon3.png' %}" alt="Wrapped Summary">
                 <h2>Slide 6</h2>
-                <p>Short description here.</p>
+                <p>
+                    {% for genre in top_five_genres %}
+                        <li>{{ genre }}</li>
+                    {% endfor %}
+                </p>
             </div>
             <div class="slide" data-image="{% static 'icon3.png' %}">
                 <img src="{% static 'icon3.png' %}" alt="Wrapped Summary">
@@ -405,7 +409,7 @@
                         <img src="{{ top_five_artists.1.image_url }}" alt="top artist image" class="artist-photo">
                     </div>
                     <div class="glance-details">
-                        <h7>Top Genre: {{ top_five_genres.keys|list|first }}</h7>
+                        <h7>Top Genre: {{ top_genre }}</h7>
                         <img src="{{ top_five_artists.2.image_url }}" alt="top artist image" class="artist-photo">
                     </div>
                 </div>
