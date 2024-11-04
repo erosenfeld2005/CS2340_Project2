@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
     <link rel="stylesheet" href="{% static 'main.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* Centered Slideshow Playlist Style */
         .main-content {
@@ -18,8 +19,8 @@
             margin-top: 60px; /* Offset for the navbar */
         }
         .slideshow-container {
-            width: 800px;
-            height: 500px;
+            width: 1000px;
+            height: 550px;
             text-align: center;
             border: 1px solid #A5CBC3;
             border-radius: 10px;
@@ -41,16 +42,44 @@
             border-radius: 10px;
             margin-bottom: 10px;
         }
+
         .slide h2 {
-            color: #A5CBC3;
+            font-family: 'DM Sans', sans-serif;
+            color: #1E1E1E;
+            font-size: 64px;
+            line-height: 1.1;
+            margin-top: 30px;
+            margin-left: 70px;
+            margin-right: 50px;
+        }
+
+        .slide p {
+            color: #3F665E;
             font-size: 18px;
+            margin-top: 5px;
+            margin-left: 70px;
+            margin-right: 50px;
+        }
+
+        .icon-container {
+            width: 120%;
+            height: 90px; /* Adjust as needed for cropping */
+            overflow: hidden;
+            margin-top: 50px;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+        }
+
+        .intro-icon {
+            width: auto; /* Adjust width/height as needed */
+            height: 100%;
+            object-fit: cover;
             margin: 0;
         }
-        .slide p {
-            color: #CCCCCC;
-            font-size: 14px;
-            margin-top: 5px;
-        }
+
+
+
         /* Dots and Arrow Button Styling */
         .dots-container {
             display: flex;
@@ -102,21 +131,24 @@
     <!-- Main Content Area for Centered Slideshow -->
     <div class="main-content">
         <div id="slideshow-container" class="slideshow-container">
-            <div class="slide active" data-image="{% static 'icon3.png' %}">
-                <img src="{% static 'icon3.png' %}" alt="Wrapped Summary">
-                <h2>Slide 1</h2>
-                <p>Short description here.</p>
+            <div class="slide active">
+                <h2>Manish, are you ready to explore your musical soul?</h2>
+                <p class="intro-text">Your musical journey awaits—discover your top tracks, artists, and genres.</p>
+                <div class="icon-container">
+                    <img src="{% static 'sound-icon.png' %}" alt="sound waves" class="intro-icon">
+                </div>
+
             </div>
 
             <div class="slide" data-image="{% static 'icon3.png' %}">
                 <img src="{% static 'icon3.png' %}" alt="Wrapped Summary">
                 <h2>Slide 2</h2>
-                <ul>
+                <p>
                     {% for artist in top_five_artists %}
                         <h2>{{ artist.name }}</h2>
                         <img src="{{ artist.image_url }}" alt="{{ artist.name }}'s image" style="width: 100px; height: auto;">
                     {% endfor %}
-                </ul>
+                </p>
             </div>
 
             <div class="slide" data-image="{% static 'icon3.png' %}">
