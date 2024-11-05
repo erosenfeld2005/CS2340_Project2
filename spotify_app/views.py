@@ -159,7 +159,8 @@ def display_summary_content(request):
                               {"message": "No top songs found."})
             return render(request, 'summary.html', {"top_five_artists":
                                                         temp_profile.top_five_artists,
-                                            "top_five_songs": temp_profile.top_five_songs})
+                                            "top_five_songs": temp_profile.top_five_songs,
+                                                    "temp_profile_id": temp_profile_id})
         except TemporarySpotifyProfile.DoesNotExist:
             return render(request, 'spotify_app/error.html',
                           {"message": "Temporary profile not found."})
