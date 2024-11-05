@@ -176,6 +176,7 @@ def display_summary_content(request):
                 "vibe_data": temp_profile.vibe_data,  # Pass vibe data
                 "temp_profile_id": temp_profile_id
             }
+
             return render(request, 'summary.html', context)
 
         except TemporarySpotifyProfile.DoesNotExist:
