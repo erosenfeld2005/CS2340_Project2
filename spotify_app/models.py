@@ -1,15 +1,17 @@
 """
 Python file where models are created
 """
-from django.conf import settings
+
 from django.db import models
 import requests
-from django.utils import timezone
 
 from userAuthentication.models import CustomUser
 
 
 class TemporarySpotifyProfile(models.Model):
+    """
+    Model for the Temporary Spotify Profile
+    """
     top_songs = models.JSONField(default=list, blank=True)
     top_five_songs = models.JSONField(default=list, blank=True)
     top_five_artists = models.JSONField(default=list, blank=True)
@@ -104,6 +106,9 @@ class TemporarySpotifyProfile(models.Model):
         return []
 
 class SpotifyProfile(models.Model):
+    """
+        Model for the Saved Spotify Profile
+        """
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='spotify_profiles')
     top_songs = models.JSONField(default=list, blank=True)
     top_five_songs = models.JSONField(default=list, blank=True)
