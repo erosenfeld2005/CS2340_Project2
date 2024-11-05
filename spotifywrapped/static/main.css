@@ -5,7 +5,7 @@
     --text-light: #FFFFFF;
     --primary-green: #CFE3E1; /* Pastel green buttons/accents */
     --primary-green-dark: #98B9B5; /* Darker pastel green hover */
-    --button-bg-light: #A5CBC3;
+    --button-bg-light: #7ba39a;
     --button-bg-dark: #4A5672;
     --button-text-light: #FFFFFF;
     --button-text-dark: #FFFFFF;
@@ -102,6 +102,7 @@ h6 {
     text-align: center;
     cursor: pointer;
     box-shadow: var(--shadow-light);
+    text-decoration: none;
 }
 
 .btn:hover {
@@ -303,8 +304,6 @@ box-shadow: 0px 24px 65px 0px rgba(20, 20, 43, 0.16);
     border-radius: 8px;
     background: var(--button-bg-dark);
 }
-
-
 
 .login-contianer form button:hover {
     background-color: var(--primary-green-dark);
