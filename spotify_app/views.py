@@ -119,3 +119,13 @@ def display_top_genres(request):
     profile = SpotifyProfile.objects.get(user=request.user)
     top_genres = list(profile.genre_data.items())  # Convert dictionary to list of tuples
     return render(request, 'summary.html', {"top_genres": top_genres})
+
+
+def history(request):
+    """
+    Render the user's wrapped history.
+
+    :param request: The HTTP request object.
+    :return: The rendered history.html page.
+    """
+    return render(request, 'history.html')

@@ -21,12 +21,3 @@ def dashboard(request):
     :return: The rendered dashboard.html page.
     """
     return render(request, 'dashboard.html')
-
-def summary(request):
-    """
-    Render the spotify wrapped summary.
-
-    :param request: The HTTP request object.
-    :return: The rendered summary.html page.
-    """
-    return render(request, 'summary.html')
