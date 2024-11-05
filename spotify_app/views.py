@@ -9,6 +9,7 @@ from requests.auth import HTTPBasicAuth
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.utils import timezone
+from django.contrib.auth import logout
 
 from .models import SpotifyProfile, TemporarySpotifyProfile
 
@@ -25,6 +26,12 @@ def spotify_login(request):
     )
     return redirect(auth_url)
 
+def signout(request):
+    """
+    View to sign out and redirect to the landing page
+    """
+    logout(request)  # Log out the user
+    return redirect('landing')  # Redirect to landing after signing out
 
 def spotify_callback(request):
     """
