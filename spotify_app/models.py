@@ -11,7 +11,8 @@ from userAuthentication.models import CustomUser
 
 class TemporarySpotifyProfile(models.Model):
     top_songs = models.JSONField(default=list, blank=True)
-    top_artists_with_images = models.JSONField(default=list, blank=True)
+    top_five_songs = models.JSONField(default=list, blank=True)
+    top_five_artists = models.JSONField(default=list, blank=True)
     vibe_data = models.JSONField(default=dict, blank=True, null=True)
     genre_data = models.JSONField(default=dict, blank=True)
 
@@ -36,6 +37,10 @@ class TemporarySpotifyProfile(models.Model):
             } for track in top_tracks_data]
             self.top_songs = top_tracks
             self.calculate_vibe_data(top_tracks_data, headers)  # Update vibe data
+            self.save()
+
+            #Top Five Songs
+            self.top_five_songs = top_tracks[0:5]
             self.save()
             return top_tracks
         return []
@@ -81,8 +86,8 @@ class TemporarySpotifyProfile(models.Model):
                 "popularity": artist.get("popularity"),
                 "image_url": artist["images"][0]["url"] if artist.get("images") else None
             } for artist in top_artists_data]
-            self.top_artists_with_images = top_artists
-            self.save()
+
+            #Calculate Genre
             genre_counts = {}
             for artist in top_artists_data:
                 for genre in artist.get("genres", []):
@@ -90,13 +95,18 @@ class TemporarySpotifyProfile(models.Model):
             sorted_genres = sorted(genre_counts.items(), key=lambda x: x[1], reverse=True)
             self.genre_data = dict(sorted_genres[:5])  # Store only top 5 genres
             self.save()
+
+            self.top_five_artists = top_artists[0:5]
+            self.save()
+
             return top_artists
         return []
 
 class SpotifyProfile(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='spotify_profiles')
     top_songs = models.JSONField(default=list, blank=True)
-    top_artists_with_images = models.JSONField(default=list, blank=True)
-    vibe_data = models.JSONField(default=dict, blank=True)
+    top_five_songs = models.JSONField(default=list, blank=True)
+    top_five_artists = models.JSONField(default=list, blank=True)
+    vibe_data = models.JSONField(default=dict, blank=True, null=True)
     genre_data = models.JSONField(default=dict, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)  # Timestamp for when the profile was saved

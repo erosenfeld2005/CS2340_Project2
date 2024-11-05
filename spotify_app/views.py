@@ -42,7 +42,8 @@ def spotify_callback(request):
     # Create a TemporarySpotifyProfile instance for the current user
     temp_profile = TemporarySpotifyProfile.objects.create(
         top_songs=[],  # Initialize with empty data or whatever your default is
-        top_artists_with_images=[],
+        top_five_songs=[],
+        top_five_artists=[],
         vibe_data=None,  # Initialize as needed
         genre_data={},
         # Note: No user field as per your design
@@ -137,10 +138,10 @@ def display_top_artists(request):
     if temp_profile_id:
         try:
             temp_profile = TemporarySpotifyProfile.objects.get(id=temp_profile_id)  # Get the temporary profile by ID
-            if not temp_profile.top_artists_with_images:
+            if not temp_profile.top_five_artists:
                 return render(request, 'spotify_app/error.html', {"message": "No top artists found."})
 
-            return render(request, 'spotify_app/top_artists.html', {"top_artists_with_images": temp_profile.top_artists_with_images})
+            return render(request, 'spotify_app/top_artists.html', {"top_artists_with_images": temp_profile.top_five_artists})
         except TemporarySpotifyProfile.DoesNotExist:
             return render(request, 'spotify_app/error.html', {"message": "Temporary profile not found."})
     else:
@@ -185,7 +186,8 @@ def save_spotify_profile(request):
             SpotifyProfile.objects.create(
                 user=request.user,
                 top_songs=temp_profile.top_songs,
-                top_artists_with_images=temp_profile.top_artists_with_images,
+                top_five_songs = temp_profile.top_five_songs,
+                top_five_artists=temp_profile.top_five_artists,
                 vibe_data=temp_profile.vibe_data,
                 genre_data=temp_profile.genre_data,
                 created_at=timezone.now(),
