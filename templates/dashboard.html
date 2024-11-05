@@ -6,113 +6,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
     <link rel="stylesheet" href="{% static 'main.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            background-color: #1E1E1E;
-            color: #FFFFFF;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .navbar {
-            background-color: #3F665E;
-            padding: 10px;
-            display: flex;
-            justify-content: space-around;
-            width: 100%;
-            position: fixed;
-            top: 0;
-            z-index: 1;
-        }
-        .navbar a {
-            color: #FFFFFF;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .navbar a:hover {
-            color: #B3E5D6;
-        }
-        /* Centered Slideshow Playlist Style */
+        /* Centered Icon Grid Style */
         .main-content {
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             height: 100vh;
             width: 100%;
             margin-top: 60px; /* Offset for the navbar */
         }
-        .slideshow-container {
-            width: 400px;
-            height: 500px;
-            text-align: center;
-            border: 1px solid #A5CBC3;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+        /* Decorative Title */
+        .dashboard-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #3F665E;
             margin-bottom: 20px;
+            text-transform: uppercase;
+            position: relative;
         }
-        .slide {
-            display: none;
+        .dashboard-title::before,
+        .dashboard-title::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background-color: #3F665E;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .dashboard-title::before {
+            left: -60px;
+        }
+        .dashboard-title::after {
+            right: -60px;
+        }
+
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 columns */
+            gap: 50px;
+        }
+        .icon-card {
+            width: 300px;
+            height: 350px; /* Fixed height for uniformity */
+            background: linear-gradient(30deg, #A5CBC3 20%, #FFFFFF 100%);
+            text-align: center;
+            border-radius: 15px;
             padding: 20px;
-            text-align: left;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between; /* Space between icon and text */
+            color: #FFFFFF;
         }
-        .slide.active {
-            display: block;
+        .icon-card:hover {
+            transform: scale(1.08);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.7);
         }
-        .slide img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-        .slide h2 {
-            color: #A5CBC3;
-            font-size: 18px;
-            margin: 0;
-        }
-        .slide p {
-            color: #CCCCCC;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-        /* Dots and Arrow Button Styling */
-        .dots-container {
+        .icon-circle {
+            width: 200px; /* Circle diameter */
+            height: 200px; /* Circle diameter */
+            background-color: #2E4A47; /* Darker background */
+            border-radius: 50%; /* Makes it circular */
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3); /* Shadow effect */
+            margin-top: 15px; /* Space between the circle and the text */
         }
-        .prev, .next {
-            cursor: pointer;
-            padding: 10px;
-            color: #FFFFFF;
-            font-weight: bold;
-            font-size: 18px;
-            user-select: none;
-            border-radius: 50%;
-            background-color: #333333;
-            margin: 0 10px;
-        }
-        .prev:hover, .next:hover {
-            background-color: #A5CBC3;
-        }
-        .dots {
-            display: flex;
-            justify-content: center;
-        }
-        .dot {
-            height: 12px;
-            width: 12px;
-            margin: 0 5px;
-            background-color: #bbb;
-            border-radius: 50%;
-            display: inline-block;
-            cursor: pointer;
-        }
-        .dot.active {
-            background-color: #A5CBC3;
+
+        .icon-circle img {
+            width: 100%; /* Make the image fit within the circle */
+            height: 100%;
+            object-fit: cover; /* Cover to fill the circle */
+            border-radius: 50%; /* Ensures the image is circular */
         }
     </style>
 </head>
@@ -120,112 +94,55 @@
     <!-- Header and Navbar -->
     <header>
         <nav class="navbar">
-            <a href="#">Spotify Wrapped</a>
+            <a href="{% url 'landing' %}">Spotify Wrapped</a>
             <a href="#">Account</a>
             <a href="#">Sign Out</a>
         </nav>
     </header>
 
-    <!-- Main Content Area for Centered Slideshow -->
+    <!-- Main Content Area with Title and Icon Grid -->
     <div class="main-content">
-        <div id="slideshow-container" class="slideshow-container">
-            <div class="slide active" data-image="{% static 'icon3.png' %}">
-                <img src="{% static 'icon3.png' %}" alt="Wrapped Summary">
-                <h2>Wrapped Summary</h2>
+        <h1 class="dashboard-title">User Dashboard</h1>
+
+        <div class="icon-grid">
+            <div class="icon-card" onclick="window.location.href='/spotify/spotifylogin'">
+                <div class="icon-circle">
+                    <img src="{% static 'summary.png' %}" alt="Wrapped Summary">
+                </div>
                 <p>Relive your top songs, artists, and playlists of the year.</p>
             </div>
-
-            <div class="slide" data-image="{% static 'icon4.png' %}">
-                <img src="{% static 'icon4.png' %}" alt="Duo Wrapped">
-                <h2>Duo Wrapped</h2>
-                <p>Short description here.</p>
+            <div class="icon-card" onclick="window.location.href='URL_FOR_DUO_WRAPPED'">
+                <div class="icon-circle">
+                    <img src="{% static 'duo.png' %}" alt="Duo Wrapped">
+                </div>
+                <p>Share your music experience with a friend through Duo Wrapped.</p>
             </div>
-            <div class="slide" data-image="{% static 'icon6.png' %}">
-                <img src="{% static 'icon6.png' %}" alt="Wrapped History">
-                <h2>Wrapped History</h2>
-                <p>View your recently played tracks and history.</p>
+            <div class="icon-card" onclick="window.location.href='URL_FOR_WRAPPED_HISTORY'">
+                <div class="icon-circle">
+                    <img src="{% static 'history.png' %}" alt="Wrapped History">
+                </div>
+                <p>View your recently played tracks and history to track your listening habits.</p>
             </div>
-            <div class="slide" data-image="{% static 'icon7.png' %}">
-                <img src="{% static 'icon7.png' %}" alt="Explore">
-                <h2>Explore</h2>
-                <p>Discover new music, curated playlists, and more.</p>
+            <div class="icon-card" onclick="window.location.href='URL_FOR_EXPLORE'">
+                <div class="icon-circle">
+                    <img src="{% static 'explore.png' %}" alt="Explore">
+                </div>
+                <p>Discover new music, curated playlists, and artists just for you.</p>
             </div>
-            <div class="slide" data-image="{% static 'icon5.png' %}">
-                <img src="{% static 'icon5.png' %}" alt="Holiday Wrapped">
-                <h2>Holiday Wrapped</h2>
-                <p>Short description here.</p>
+            <div class="icon-card" onclick="window.location.href='URL_FOR_HOLIDAY_WRAPPED'">
+                <div class="icon-circle">
+                    <img src="{% static 'holiday.png' %}" alt="Holiday Wrapped">
+                </div>
+                <p>Celebrate the season with your favorite holiday tracks and memories.</p>
             </div>
-            <div class="slide" data-image="{% static 'icon8.png' %}">
-                <img src="{% static 'icon8.png' %}" alt="Games">
-                <h2>Games</h2>
-                <p>Short description here.</p>
+            <div class="icon-card" onclick="window.location.href='URL_FOR_GAMES'">
+                <div class="icon-circle">
+                    <img src="{% static 'games.png' %}" alt="Games">
+                </div>
+                <p>Enjoy interactive music games and challenges to enhance your experience.</p>
             </div>
         </div>
 
-        <div class="dots-container">
-            <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
-            <div class="dots">
-                <span class="dot active" onclick="currentSlide(0)"></span>
-                <span class="dot" onclick="currentSlide(1)"></span>
-                <span class="dot" onclick="currentSlide(2)"></span>
-                <span class="dot" onclick="currentSlide(3)"></span>
-                <span class="dot" onclick="currentSlide(4)"></span>
-                <span class="dot" onclick="currentSlide(5)"></span>
-            </div>
-            <a class="next" onclick="changeSlide(1)">&#10095;</a>
-        </div>
     </div>
-
-    <script>
-        let slideIndex = 0;
-        const slides = document.querySelectorAll('.slide');
-        const dots = document.querySelectorAll('.dot');
-
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                slide.classList.remove('active');
-                slide.style.display = 'none';
-                dots[i].classList.remove('active');
-            });
-            slides[index].classList.add('active');
-            slides[index].style.display = 'block';
-            dots[index].classList.add('active');
-        }
-
-        function changeSlide(n) {
-            slideIndex = (slideIndex + n + slides.length) % slides.length;
-            showSlide(slideIndex);
-        }
-
-        function currentSlide(index) {
-            slideIndex = index;
-            showSlide(slideIndex);
-        }
-
-        // Initial display
-        showSlide(slideIndex);
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const slideshowContainer = document.getElementById('slideshow-container');
-
-            function updateLink() {
-                const activeSlide = document.querySelector('.slide.active');
-                if (activeSlide && activeSlide.querySelector('h2').innerText === 'Wrapped Summary') {
-                    slideshowContainer.onclick = () => {
-                        window.location.href = "{% url 'spotify_login' %}";
-                    };
-                } else {
-                    slideshowContainer.onclick = null; // Remove click event if not on "Wrapped Summary"
-                }
-            }
-
-            // Set up a MutationObserver to detect class changes in slides
-            const observer = new MutationObserver(updateLink);
-            slides.forEach(slide => observer.observe(slide, { attributes: true, attributeFilter: ['class'] }));
-
-            // Initial link setup
-            updateLink();
-        });
-    </script>
 </body>
 </html>

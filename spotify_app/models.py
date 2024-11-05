@@ -75,6 +75,7 @@ class TemporarySpotifyProfile(models.Model):
         :param access_token: user specific data
         :return: list of top artists
         """
+        ## Pulling from API
         headers = {"Authorization": f"Bearer {access_token}", "Content-Type": "application/json"}
         top_artists_url = "https://api.spotify.com/v1/me/top/artists"
         response = requests.get(top_artists_url, headers=headers, params={"limit": 50}, timeout=15)

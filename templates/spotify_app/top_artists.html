@@ -8,7 +8,7 @@
 <body>
     <h1>Your Top Artists</h1>
     <ul>
-         {% for artist in top_artists_with_images %}
+         {% for artist in top_five_artists %}
             <div class="artist">
                 <h2>{{ artist.name }}</h2>
                 <img src="{{ artist.image_url }}" alt="{{ artist.name }}'s image" style="width: 100px; height: auto;"> <!-- Adjust width as needed -->

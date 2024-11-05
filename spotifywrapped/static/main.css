@@ -5,13 +5,13 @@
     --text-light: #FFFFFF;
     --primary-green: #CFE3E1; /* Pastel green buttons/accents */
     --primary-green-dark: #98B9B5; /* Darker pastel green hover */
-    --button-bg-light: #CFE3E1;
+    --button-bg-light: #A5CBC3;
     --button-bg-dark: #4A5672;
     --button-text-light: #FFFFFF;
     --button-text-dark: #FFFFFF;
     --shadow-light: rgba(0, 0, 0, 0.1);
     --shadow-dark: rgba(0, 0, 0, 0.4);
-    --navbar-bg-color: #446c55; /* Dark green for navbar */
+    --navbar-bg-color: #3F665E; /* Dark green for navbar */
     --background-dark-grey: #1E1E1E; /* border color */
 }
 
@@ -35,6 +35,7 @@ body {
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
+    font-family: 'DM Sans', sans-serif;
     font-weight: bold;
     margin: 0 0 20px;
 }
@@ -86,7 +87,7 @@ h6 {
 
 /* Button */
 .btn {
-    border-radius: 25px;
+    border-radius: 15px;
     border: none;
     padding: 10px 20px;
     background-color: var(--button-bg-light);

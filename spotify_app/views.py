@@ -31,7 +31,6 @@ def spotify_callback(request):
     :return: The appropriate redirect to the top songs page if it successfully gets the access token
     """
     code = request.GET.get("code")
-
     if not code:
         return render(request, 'spotify_app/error.html', {"message": "Authorization failed."})
 
@@ -55,8 +54,7 @@ def spotify_callback(request):
 
     # Optionally, you can store the temporary profile to the session for later retrieval
     request.session['temporary_profile_id'] = temp_profile.id
-
-    return redirect('display_top_songs')  # Adjust this to your flow
+    return redirect('summary')
 
 
 def exchange_code_for_token(code):
@@ -127,7 +125,7 @@ def display_music_vibes(request):
         return render(request, 'spotify_app/error.html', {"message": "No temporary profile ID found in session."})
 
 
-def display_top_artists(request):
+def display_summary_content(request):
     """
     Function that displays the top artists page
     :param request: Redirect input
@@ -140,13 +138,15 @@ def display_top_artists(request):
             temp_profile = TemporarySpotifyProfile.objects.get(id=temp_profile_id)  # Get the temporary profile by ID
             if not temp_profile.top_five_artists:
                 return render(request, 'spotify_app/error.html', {"message": "No top artists found."})
-
-            return render(request, 'spotify_app/top_artists.html', {"top_artists_with_images": temp_profile.top_five_artists})
+            if not temp_profile.top_songs:
+                return render(request, 'spotify_app/error.html', {"message": "No top songs found."})
+            return render(request, 'summary.html', {"top_five_artists":
+                                                        temp_profile.top_five_artists,
+                                            "top_five_songs": temp_profile.top_five_songs})
         except TemporarySpotifyProfile.DoesNotExist:
             return render(request, 'spotify_app/error.html', {"message": "Temporary profile not found."})
     else:
         return render(request, 'spotify_app/error.html', {"message": "No temporary profile ID found in session."})
-
 
 def display_top_genres(request):
     """
@@ -163,7 +163,7 @@ def display_top_genres(request):
                 return render(request, 'spotify_app/error.html', {"message": "No genre data found."})
 
             top_genres = list(temp_profile.genre_data.items())  # Convert dictionary to list of tuples
-            return render(request, 'spotify_app/top_genres.html', {"top_genres": top_genres})
+            return render(request, 'summary.html', {"top_genres": top_genres})
 
         except TemporarySpotifyProfile.DoesNotExist:
             return render(request, 'spotify_app/error.html', {"message": "Temporary profile not found."})

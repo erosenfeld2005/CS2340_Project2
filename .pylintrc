@@ -2,3 +2,4 @@
 disable=
     C0103,  # Invalid name
     E1101,  #Model has no attribute objects
+    W0613,  #Unused argument
