@@ -410,9 +410,13 @@
                     </div>
                 </div>
                 <div style="text-align: center; margin-top: 50px;">
-                    <button id="save-button" style="padding: 10px 20px; background-color: #3F665E; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                        Save
-                    </button>
+                    <form method="post" action="{% url 'save_spotify_profile' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="temporary_profile_id" value="{{ temp_profile_id }}">
+                        <button type="submit" style="padding: 10px 20px; background-color: #3F665E; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            Save this Profile
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
