@@ -34,4 +34,5 @@ urlpatterns = [
     path('account/confirm_delete/', views.confirm_delete_account, name='confirm_delete_account'),
     path('account/deleted/', views.account_deleted, name='account_deleted'),
     path('account/delete/', views.delete_account_confirmed, name='delete_account'),
+    path('history/', views.history, name='history'),
 ]
