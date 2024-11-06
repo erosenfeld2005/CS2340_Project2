@@ -59,17 +59,23 @@ class TemporarySpotifyProfile(models.Model):
             audio_features_url = f"https://api.spotify.com/v1/audio-features/{track['id']}"
             audio_features_response = requests.get(audio_features_url, headers=headers, timeout=15)
             if audio_features_response.status_code == 200:
+                print("Status Code == 200")
                 audio_features = audio_features_response.json()
                 total_danceability += audio_features.get("danceability", 0)
                 total_valence += audio_features.get("valence", 0)
                 total_energy += audio_features.get("energy", 0)
+            if audio_features_response.status_code != 200:
+                print(f"Error: {audio_features_response.status_code}, {audio_features_response.text}")
 
         count = len(top_tracks_data) or 1
+        print(total_danceability, total_valence, total_energy)
         self.vibe_data = {
             "average_danceability": (total_danceability / count) * 100,
             "average_valence": (total_valence / count) * 100,
             "average_energy": (total_energy / count) * 100,
         }
+        print(self.vibe_data["average_danceability"])
+        self.save()
 
     def fetch_top_artists(self, access_token):
         """
