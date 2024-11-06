@@ -7,304 +7,8 @@
     <title>Saved Wrapped Summary</title>
     <link rel="stylesheet" href="{% static 'main.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        /* Centered Slideshow Playlist Style */
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            width: 100%;
-            background: linear-gradient(30deg, #A5CBC3 20%, #FFFFFF 100%);
-        }
-        .slideshow-container {
-            width: 1000px;
-            height: 550px;
-            text-align: center;
-            border: 1px solid #A5CBC3;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            margin-bottom: 20px;
-            background: var(--light-background);
-        }
-        .slide {
-            display: none;
-            padding: 20px;
-            text-align: left;
-        }
-        .slide.active {
-            display: block;
-        }
-        .slide img {
-            max-width: 50%;
-            height: auto;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-
-        .slide h2 {
-            font-family: 'DM Sans', sans-serif;
-            color: #1E1E1E;
-            font-size: 64px;
-            line-height: 1.1;
-            margin-top: 30px;
-            margin-left: 70px;
-            margin-right: 50px;
-        }
-        .slide h3 {
-            font-family: 'DM Sans', sans-serif;
-            color: #3F665E;
-            font-size: 48px;
-            line-height: 1.1;
-            margin-top: 30px;
-            margin-left: 70px;
-            margin-right: 50px;
-        }
-        .slide h4 {
-            font-family: 'DM Sans', sans-serif;
-            color: #3F665E;
-            font-size: 36px;
-            line-height: 0.8;
-            margin-top: 30px;
-            margin-left: 70px;
-            margin-right: 50px;
-        }
-
-        .slide h5 {
-            font-family: 'DM Sans', sans-serif;
-            color: #3F665E;
-            font-size: 36px;
-            line-height: 0.8;
-            margin-top: 30px;
-            margin-right: 50px;
-        }
-
-        .slide h6 {
-            font-family: 'DM Sans', sans-serif;
-            color: #3F665E;
-            font-size: 48px;
-            line-height: 1.1;
-            margin-left: 70px;
-            margin-right: 50px;
-        }
-
-        .slide h7 {
-            font-family: 'DM Sans', sans-serif;
-            color: #3F665E;
-            font-size: 24px;
-            line-height: 1.1;
-            margin: 30px;
-        }
-
-        .slide p {
-            color: #3F665E;
-            font-size: 18px;
-            margin-top: 5px;
-            margin-left: 70px;
-            margin-right: 50px;
-        }
-
-        .slide p1 {
-            color: #3F665E;
-            font-size: 14px;
-            margin-top: 5px;
-            font-weight: bold;
-        }
-
-        .icon-container {
-            width: 120%;
-            height: 90px; /* Adjust as needed for cropping */
-            overflow: hidden;
-            margin-top: 50px;
-            display: flex;
-            justify-content: left;
-            align-items: center;
-        }
-
-        .intro-icon {
-            width: auto; /* Adjust width/height as needed */
-            height: 100%;
-            object-fit: cover;
-            margin: 0;
-        }
-
-        .artist-info {
-            display: flex; /* Align items in a row */
-            align-items: center; /* Center items vertically */
-        }
-
-        .artist-stats {
-            margin-right: 20px; /* Space between text and stats */
-            text-align: left; /* Center text and photo horizontally */
-            display: flex;
-            flex-direction: column; /* Stack name and photo vertically */
-        }
-
-        .artist-details {
-            margin-right: 20px; /* Space between text and stats */
-            text-align: center; /* Center text and photo horizontally */
-            display: flex;
-            flex-direction: column; /* Stack name and photo vertically */
-        }
-
-        .top-artist-photo {
-            width: 150px; /* Adjust width as needed */
-            height: auto; /* Maintain aspect ratio */
-            margin-left: 70px;
-        }
-
-
-        .song-info {
-            display: flex; /* Align items in a row */
-            align-items: center; /* Center items vertically */
-            width: 800px;
-            margin-right: 30px;
-        }
-
-        .song-stats {
-            text-align: left; /* Center text and photo horizontally */
-            display: flex;
-            flex-direction: column; /* Stack name and photo vertically */
-            margin-right: 70px;
-        }
-
-
-        .song-details1 {
-            align-items: center;
-            display: flex;
-            flex-direction: column; /* Stack name and photo vertically */
-            justify-content: center; /* Center items vertically */
-        }
-
-        .top-song-photo {
-            width: 150px; /* Adjust width as needed */
-            height: auto; /* Maintain aspect ratio */
-        }
-
-        .other-icon-container {
-            width: 100%;
-            height: 90px; /* Adjust as needed for cropping */
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .other-icon {
-            width: auto; /* Adjust width/height as needed */
-            height: 100px;
-            object-fit: cover;
-        }
-
-
-
-        .artist-container {
-            display: flex;
-            justify-content: center; /* Center all artist items within the container */
-            flex-wrap: nowrap; /* Prevent items from wrapping to the next line */
-            margin-left: 30px;
-            margin-right: 30px;
-        }
-
-        .artist {
-            display: flex; /* Use flexbox to align items */
-            flex-direction: column; /* Stack text and image vertically */
-            align-items: center; /* Center items horizontally */
-            margin: 5px; /* Adjust spacing between artists */
-        }
-
-        .artist-photo {
-            width: 100%;
-            height: auto;
-            margin-top: 15px; /* Space between the image and the text */
-            display: block; /* Ensure that the image is a block element */
-            margin-left: auto; /* Center alignment */
-            margin-right: auto; /* Center alignment */
-        }
-
-
-        .song-container {
-            display: flex;
-            justify-content: center; /* Center all artist items within the container */
-            flex-wrap: nowrap; /* Prevent items from wrapping to the next line */
-            margin-left: 30px;
-            margin-right: 30px;
-        }
-
-        .song {
-            display: flex; /* Use flexbox to align items */
-            flex-direction: column; /* Stack text and image vertically */
-            align-items: center; /* Center items horizontally */
-            margin: 5px; /* Adjust spacing between artists */
-        }
-
-        .song-photo {
-            width: 100%;
-            height: auto;
-            margin-top: 15px; /* Space between the image and the text */
-            display: block; /* Ensure that the image is a block element */
-            margin-left: auto; /* Center alignment */
-            margin-right: auto; /* Center alignment */
-        }
-
-
-        .glance-info {
-            display: flex; /* Align items in a row */
-            align-items: center; /* Center items vertically */
-            margin: 0;
-        }
-
-        .glance-details {
-            margin-right: 10px; /* Space between text and stats */
-            text-align: center; /* Center text and photo horizontally */
-            display: flex;
-            flex-direction: column; /* Stack name and photo vertically */
-        }
-
-
-
-        /* Dots and Arrow Button Styling */
-        .dots-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .prev, .next {
-            cursor: pointer;
-            padding: 10px;
-            color: #FFFFFF;
-            font-weight: bold;
-            font-size: 18px;
-            user-select: none;
-            border-radius: 50%;
-            background-color: #3F665E;
-            margin: 0 10px;
-        }
-        .prev:hover, .next:hover {
-            background-color: #1E1E1E;
-        }
-        .dots {
-            display: flex;
-            justify-content: center;
-        }
-        .dot {
-            height: 12px;
-            width: 12px;
-            margin: 0 5px;
-            background-color: white;
-            border-radius: 50%;
-            display: inline-block;
-            cursor: pointer;
-        }
-        .dot.active {
-            background-color: #3F665E;
-        }
-    </style>
 </head>
 <body>
-    <!-- Header and Navbar -->
     <header>
         <nav class="navbar">
             <a href="{% url 'dashboard' %}">Dashboard</a>
@@ -313,71 +17,65 @@
         </nav>
     </header>
 
-    <!-- Main Content Area for Centered Slideshow -->
     <div class="main-content">
-        <div id="slideshow-container" class="slideshow-container">
-
-            <!-- Slide 1 -->
-            <div class="slide active">
-                <h2>Manish, are you ready to explore your musical soul?</h2>
-                <p class="intro-text">Your musical journey awaits—discover your top tracks, artists, and genres.</p>
-                <div class="icon-container">
-                    <img src="{% static 'sound-icon.png' %}" alt="sound waves" class="intro-icon">
-                </div>
-            </div>
-
-            <!-- Slide 2 -->
-            <div class="slide">
-                <h2>Your top artist is...</h2>
-                <div class="artist-info">
-                    <div class="artist-details">
-                        <h3>{{ top_five_artists.0.name }}</h3>
-                        <img src="{{ top_five_artists.0.image_url }}" alt="top artist image" class="top-artist-photo">
-                    </div>
-                    <div class="artist-stats">
-                        <h4>Genre: {{ top_five_artists.0.genres|join:", " }}</h4> <!-- the join gets rid of the [' '] -->
-                        <h4>Popularity: {{ top_five_artists.0.popularity }}</h4>
-<!--                        <h4>Top Songs: </h4>-->
+        {% for profile in saved_profiles %}
+            <div id="slideshow-container-{{ forloop.counter }}" class="slideshow-container">
+                <!-- Slide 1: Introduction -->
+                <div class="slide active">
+                    <h2>{{ profile.user_name }}, are you ready to explore your musical soul?</h2>
+                    <p>Your musical journey awaits—discover your top tracks, artists, and genres.</p>
+                    <div class="icon-container">
+                        <img src="{% static 'sound-icon.png' %}" alt="sound waves" class="intro-icon">
                     </div>
                 </div>
-            </div>
 
-            <!-- Slide 3 -->
-            <div class="slide">
-                <h2>Your top 5 artists are...</h2>
-                <div class="artist-container">
-                    {% for artist in top_five_artists %}
-                        <div class="artist">
-                            <p1>#{{ forloop.counter }}. {{ artist.name }}</p1>
-                            <img src="{{ artist.image_url }}" alt="artist image" class="artist-photo">
+                <!-- Slide 2: Top Artist -->
+                <div class="slide">
+                    <h2>Your top artist is...</h2>
+                    <div class="artist-info">
+                        <div class="artist-details">
+                            <h3>{{ profile.top_five_artists.0.name }}</h3>
+                            <img src="{{ profile.top_five_artists.0.image_url }}" alt="top artist image" class="top-artist-photo">
                         </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <!-- Slide 4 -->
-            <div class="slide">
-                <h2>Your top song is...</h2>
-                <div class="song-info">
-                    <div class="song-details1" style="display: flex; flex-direction: column; align-items: center;">
-                        <h6>{{ top_five_songs.0.name }}</h6>
-                        <img src="{{ top_five_songs.0.image_url }}" alt="top song image" class="top-song-photo">
-                        <div class="other-icon-container">
-<!--                            <img src="{% static 'playback icon.png' %}" alt="playback" class="other-icon">-->
+                        <div class="artist-stats">
+                            <h4>Genre: {{ profile.top_five_artists.0.genres|join:", " }}</h4>
+                            <h4>Popularity: {{ profile.top_five_artists.0.popularity }}</h4>
                         </div>
                     </div>
-                    <div class="song-stats">
-                        <h5>Popularity: {{ top_five_songs.0.popularity }}</h5>
-<!--                        <h5>Dance Vibes: {{ top_five_songs.0.average_danceability }}</h5>-->
+                </div>
+
+                <!-- Slide 3: Top 5 Artists -->
+                <div class="slide">
+                    <h2>Your top 5 artists are...</h2>
+                    <div class="artist-container">
+                        {% for artist in profile.top_five_artists %}
+                            <div class="artist">
+                                <p>#{{ forloop.counter }}. {{ artist.name }}</p>
+                                <img src="{{ artist.image_url }}" alt="artist image" class="artist-photo">
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
-            </div>
 
-            <!-- Slide 5 -->
+                <!-- Slide 4: Top Song -->
+                <div class="slide">
+                    <h2>Your top song is...</h2>
+                    <div class="song-info">
+                        <div class="song-details1">
+                            <h6>{{ profile.top_five_songs.0.name }}</h6>
+                            <img src="{{ profile.top_five_songs.0.image_url }}" alt="top song image" class="top-song-photo">
+                        </div>
+                        <div class="song-stats">
+                            <h5>Popularity: {{ profile.top_five_songs.0.popularity }}</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 5 -->
             <div class="slide">
                 <h2>Your top 5 songs are...</h2>
                 <div class="song-container">
-                    {% for song in top_five_songs %}
+                    {% for song in profile.top_five_songs %}
                         <div class="song">
                             <p1>#{{ forloop.counter }}. {{ song.name }}</p1>
                             <img src="{{ song.image_url }}" alt="song image" class="song-photo">
@@ -390,7 +88,7 @@
             <div class="slide">
                 <h2>Your top 5 genres are...</h2>
                 <div class="artist-container">
-                    {% for genre, count in top_genres.items %}
+                    {% for genre, count in profile.top_genres.items %}
                         <div class="artist">
                             <p1>#{{ forloop.counter }}. {{ genre }}</p1>
                             <p>Count: {{ count }}</p> <!-- Display how often each genre appears -->
@@ -404,107 +102,67 @@
                 <h2>Your vibe data...</h2>
                 <div class="artist-info">
                     <div class="artist-details">
-                        <h4>Danceability: {{ vibe_data.average_danceability|floatformat:2 }}%</h4>
-                        <h4>Valence: {{ vibe_data.average_valence|floatformat:2 }}%</h4>
-                        <h4>Energy: {{ vibe_data.average_energy|floatformat:2 }}%</h4>
+                        <h4>Danceability: {{ profile.vibe_data.average_danceability|floatformat:2 }}%</h4>
+                        <h4>Valence: {{ profile.vibe_data.average_valence|floatformat:2 }}%</h4>
+                        <h4>Energy: {{ profile.vibe_data.average_energy|floatformat:2 }}%</h4>
                     </div>
                 </div>
             </div>
 
-            <!-- Slide 8 -->
-            <div class="slide">
-                <h3>Your Musical Soul at a Glance...</h3>
-                <div class="glance-info">
-                    <div class="glance-details">
-                        <h7>Top Artist: blah</h7>
-                        <img src="{{ top_five_artists.0.image_url }}" alt="top artist image" class="artist-photo">
+                <!-- Slide for Glance Summary -->
+                <div class="slide">
+                    <h3>Your Musical Soul at a Glance...</h3>
+                    <div class="glance-info">
+                        <div class="glance-details">
+                            <h7>Top Artist: {{ profile.top_five_artists.0.name }}</h7>
+                            <img src="{{ profile.top_five_artists.0.image_url }}" alt="top artist image" class="artist-photo">
+                        </div>
+                        <div class="glance-details">
+                            <h7>Top Song: {{ profile.top_five_songs.0.name }}</h7>
+                            <img src="{{ profile.top_five_songs.0.image_url }}" alt="top song image" class="artist-photo">
+                        </div>
+                        <div class="glance-details">
+                            <h7>Top Genre: {{ profile.top_genres|first }}</h7>
+                        </div>
                     </div>
-                    <div class="glance-details">
-                        <h7>Top Song: blah</h7>
-                        <img src="{{ top_five_artists.1.image_url }}" alt="top artist image" class="artist-photo">
-                    </div>
-                    <div class="glance-details">
-                        <h7>Top Genre: blah</h7>
-                        <img src="{{ top_five_artists.2.image_url }}" alt="top artist image" class="artist-photo">
-                    </div>
-                </div>
-                <div style="text-align: center; margin-top: 50px;">
-                    <form method="post" action="{% url 'save_spotify_profile' %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="temporary_profile_id" value="{{ temp_profile_id }}">
-                        <button type="submit" style="padding: 10px 20px; background-color: #3F665E; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                            Save this Profile
+                    <div style="text-align: center; margin-top: 50px;">
+                        <button onclick="window.location.href='{% url 'history' %}'" style="padding: 10px 20px; background-color: #3F665E; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            Go Back to Your Wrapped History
                         </button>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="dots-container">
-            <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
-            <div class="dots">
-                <span class="dot active" onclick="currentSlide(0)"></span>
-                <span class="dot" onclick="currentSlide(1)"></span>
-                <span class="dot" onclick="currentSlide(2)"></span>
-                <span class="dot" onclick="currentSlide(3)"></span>
-                <span class="dot" onclick="currentSlide(4)"></span>
-                <span class="dot" onclick="currentSlide(5)"></span>
-                <span class="dot" onclick="currentSlide(6)"></span>
-                <span class="dot" onclick="currentSlide(7)"></span>
-            </div>
-            <a class="next" onclick="changeSlide(1)">&#10095;</a>
-        </div>
+        {% endfor %}
     </div>
 
+
+    <!-- Script for Slides Navigation -->
     <script>
-        let slideIndex = 0;
-        const slides = document.querySelectorAll('.slide');
-        const dots = document.querySelectorAll('.dot');
+        const slideshows = document.querySelectorAll('.slideshow-container');
 
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                slide.classList.remove('active');
-                slide.style.display = 'none';
-                dots[i].classList.remove('active');
-            });
-            slides[index].classList.add('active');
-            slides[index].style.display = 'block';
-            dots[index].classList.add('active');
-        }
+        slideshows.forEach((container, index) => {
+            let slideIndex = 0;
+            const slides = container.querySelectorAll('.slide');
+            const dots = container.querySelectorAll('.dot');
 
-        function changeSlide(n) {
-            slideIndex = (slideIndex + n + slides.length) % slides.length;
-            showSlide(slideIndex);
-        }
-
-        function currentSlide(index) {
-            slideIndex = index;
-            showSlide(slideIndex);
-        }
-
-        // Initial display
-        showSlide(slideIndex);
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const slideshowContainer = document.getElementById('slideshow-container');
-
-            function updateLink() {
-                const activeSlide = document.querySelector('.slide.active');
-                if (activeSlide && activeSlide.querySelector('h2').innerText === 'Wrapped Summary') {
-                    slideshowContainer.onclick = () => {
-                        window.location.href = "{% url 'spotify_login' %}";
-                    };
-                } else {
-                    slideshowContainer.onclick = null; // Remove click event if not on "Wrapped Summary"
-                }
+            function showSlide(n) {
+                slides.forEach((slide, i) => {
+                    slide.style.display = 'none';
+                });
+                slides[n].style.display = 'block';
             }
 
-            // Set up a MutationObserver to detect class changes in slides
-            const observer = new MutationObserver(updateLink);
-            slides.forEach(slide => observer.observe(slide, { attributes: true, attributeFilter: ['class'] }));
+            showSlide(slideIndex);
 
-            // Initial link setup
-            updateLink();
+            container.querySelector('.prev').addEventListener('click', () => {
+                slideIndex = (slideIndex - 1 + slides.length) % slides.length;
+                showSlide(slideIndex);
+            });
+
+            container.querySelector('.next').addEventListener('click', () => {
+                slideIndex = (slideIndex + 1) % slides.length;
+                showSlide(slideIndex);
+            });
         });
     </script>
 </body>

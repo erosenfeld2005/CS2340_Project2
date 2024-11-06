@@ -52,11 +52,10 @@
             width: 80%;
         }
 
-        .date-button {
+        .date-button, .delete-button {
             font-size: 24px;
             font-weight: bold;
             color: #FFFFFF;
-            background-color: #3F665E;
             padding: 20px;
             border: none;
             border-radius: 15px;
@@ -66,7 +65,15 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
-        .date-button:hover {
+        .date-button {
+            background-color: #3F665E;
+        }
+
+        .delete-button {
+            background-color: #E63946; /* red for delete */
+        }
+
+        .date-button:hover, .delete-button:hover {
             transform: scale(1.05);
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
         }
@@ -76,7 +83,7 @@
     <!-- Header and Navbar -->
     <header>
         <nav class="navbar">
-            <a href="{% url 'landing' %}">Spotify Wrapped</a>
+            <a href="{% url 'dashboard' %}">Dashboard</a>
             <a href="#">Account</a>
             <a href="#">Sign Out</a>
         </nav>
@@ -88,9 +95,16 @@
 
         <div class="button-grid">
             {% for profile in profiles %}
-                <button class="summary-button" onclick="window.location.href='{% url 'saved_summary' %}'">
-                    {{ profile.created_at }}
-                </button>
+                <div>
+                    <!-- Button linking to detailed summary page -->
+                    <button class="date-button" onclick="window.location.href='{% url 'saved_summary' profile.id %}'">
+                        {{ profile.created_at }}
+                    </button>
+                    <!-- Button for deleting the saved summary -->
+                    <button class="delete-button" onclick="window.location.href='{% url 'delete_summary' profile.id %}'">
+                        Delete
+                    </button>
+                </div>
             {% empty %}
                 <p>No saved wrapped summaries available.</p>
             {% endfor %}
