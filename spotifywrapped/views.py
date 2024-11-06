@@ -69,3 +69,12 @@ def delete_account_confirmed(request):
         logout(request)
         return redirect('landing')
     return redirect('account_settings')
+
+def history(request):
+    """
+    Render the wrapped history page.
+
+    :param request: The HTTP request object.
+    :return: The rendered history.html page.
+    """
+    return render(request, 'history.html')

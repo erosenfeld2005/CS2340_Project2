@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wrapped History</title>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Centered Button Grid Style */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100%;
+        }
+
+        /* Decorative Title */
+        .title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #3F665E;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            position: relative;
+        }
+        .title::before,
+        .title::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background-color: #3F665E;
+            top: 50%;
+            transform: translateY(-50%);
+            margin-bottom: 60px;
+        }
+        .title::before {
+            left: -60px;
+        }
+        .title::after {
+            right: -60px;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 columns */
+            gap: 30px;
+            width: 80%;
+        }
+
+        .date-button {
+            font-size: 24px;
+            font-weight: bold;
+            color: #FFFFFF;
+            background-color: #3F665E;
+            padding: 20px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .date-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header and Navbar -->
+    <header>
+        <nav class="navbar">
+            <a href="{% url 'landing' %}">Spotify Wrapped</a>
+            <a href="#">Account</a>
+            <a href="#">Sign Out</a>
+        </nav>
+    </header>
+
+    <!-- Main Content Area with Title and Button Grid -->
+    <div class="main-content">
+        <h1 class="title">Your Wrapped History</h1>
+
+        <div class="button-grid">
+            <button class="date-button" onclick="window.location.href='URL_FOR_DATE_1'">Date 1</button>
+            <button class="date-button" onclick="window.location.href='URL_FOR_DATE_2'">Date 2</button>
+            <button class="date-button" onclick="window.location.href='URL_FOR_DATE_3'">Date 3</button>
+            <button class="date-button" onclick="window.location.href='URL_FOR_DATE_4'">Date 4</button>
+            <button class="date-button" onclick="window.location.href='URL_FOR_DATE_5'">Date 5</button>
+            <button class="date-button" onclick="window.location.href='URL_FOR_DATE_6'">Date 6</button>
+<!--            {% for summary in summaries %}-->
+<!--                <button class="summary-button" onclick="window.location.href='{% url 'summary_detail' summary.id %}'">-->
+<!--                    {{ summary.date }}-->
+<!--                </button>-->
+<!--            {% empty %}-->
+<!--                <p>No summaries available.</p>-->
+<!--            {% endfor %}-->
+        </div>
+    </div>
+</body>
+</html>
