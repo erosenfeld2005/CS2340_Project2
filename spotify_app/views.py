@@ -158,7 +158,7 @@ def display_summary_content(request):
         try:
             temp_profile = TemporarySpotifyProfile.objects.get(id=temp_profile_id)
             # Get the temporary profile by ID
-            if not temp_profile.top_five_artists or temp_profile.genre_data:
+            if not temp_profile.top_five_artists or not temp_profile.genre_data:
                 return render(request, 'spotify_app/error.html',
                               {"message": "No top artists and genres found."})
             if not temp_profile.top_songs:
