@@ -168,10 +168,13 @@ def display_summary_content(request):
                 return render(request, 'spotify_app/error.html',
                               {"message": "No vibe data found."})
 
+            top_genre = list(temp_profile.genre_data.keys())[0]
+
             context = {
                 "top_five_artists": temp_profile.top_five_artists,
                 "top_five_songs": temp_profile.top_five_songs,
                 "top_genres": temp_profile.genre_data,  # Pass genre data
+                "top_1_genre": top_genre,
                 "vibe_data": temp_profile.vibe_data,  # Pass vibe data
                 "temp_profile_id": temp_profile_id
             }
