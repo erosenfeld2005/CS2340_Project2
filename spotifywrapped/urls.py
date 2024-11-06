@@ -30,4 +30,8 @@ urlpatterns = [
     path("spotify/", include("spotify_app.urls")),
     path('dashboard/', views.dashboard, name='dashboard'),
     # path('summary/', views.summary, name='summary'),
+    path('account/', views.account_settings, name='account_settings'),
+    path('account/confirm_delete/', views.confirm_delete_account, name='confirm_delete_account'),
+    path('account/deleted/', views.account_deleted, name='account_deleted'),
+    path('account/delete/', views.delete_account_confirmed, name='delete_account'),
 ]

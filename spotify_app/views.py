@@ -9,6 +9,7 @@ from requests.auth import HTTPBasicAuth
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.utils import timezone
+from django.contrib.auth import logout
 
 from .models import SpotifyProfile, TemporarySpotifyProfile
 
@@ -25,6 +26,12 @@ def spotify_login(request):
     )
     return redirect(auth_url)
 
+def signout(request):
+    """
+    View to sign out and redirect to the landing page
+    """
+    logout(request)  # Log out the user
+    return redirect('landing')  # Redirect to landing after signing out
 
 def spotify_callback(request):
     """
@@ -151,16 +158,26 @@ def display_summary_content(request):
         try:
             temp_profile = TemporarySpotifyProfile.objects.get(id=temp_profile_id)
             # Get the temporary profile by ID
-            if not temp_profile.top_five_artists:
+            if not temp_profile.top_five_artists or temp_profile.genre_data:
                 return render(request, 'spotify_app/error.html',
-                              {"message": "No top artists found."})
+                              {"message": "No top artists and genres found."})
             if not temp_profile.top_songs:
                 return render(request, 'spotify_app/error.html',
                               {"message": "No top songs found."})
-            return render(request, 'summary.html', {"top_five_artists":
-                                                        temp_profile.top_five_artists,
-                                            "top_five_songs": temp_profile.top_five_songs,
-                                                    "temp_profile_id": temp_profile_id})
+            if not temp_profile.vibe_data:
+                return render(request, 'spotify_app/error.html',
+                              {"message": "No vibe data found."})
+
+            context = {
+                "top_five_artists": temp_profile.top_five_artists,
+                "top_five_songs": temp_profile.top_five_songs,
+                "top_genres": temp_profile.genre_data,  # Pass genre data
+                "vibe_data": temp_profile.vibe_data,  # Pass vibe data
+                "temp_profile_id": temp_profile_id
+            }
+
+            return render(request, 'summary.html', context)
+
         except TemporarySpotifyProfile.DoesNotExist:
             return render(request, 'spotify_app/error.html',
                           {"message": "Temporary profile not found."})

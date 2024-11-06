@@ -308,14 +308,16 @@
     <header>
         <nav class="navbar">
             <a href="{% url 'dashboard' %}">Dashboard</a>
-            <a href="#">Account</a>
-            <a href="#">Sign Out</a>
+            <a href="{% url 'account_settings' %}">Account</a>
+            <a href="{% url 'signout' %}" class="btn">Sign Out</a>
         </nav>
     </header>
 
     <!-- Main Content Area for Centered Slideshow -->
     <div class="main-content">
         <div id="slideshow-container" class="slideshow-container">
+
+            <!-- Slide 1 -->
             <div class="slide active">
                 <h2>Manish, are you ready to explore your musical soul?</h2>
                 <p class="intro-text">Your musical journey awaits—discover your top tracks, artists, and genres.</p>
@@ -324,6 +326,7 @@
                 </div>
             </div>
 
+            <!-- Slide 2 -->
             <div class="slide">
                 <h2>Your top artist is...</h2>
                 <div class="artist-info">
@@ -339,7 +342,7 @@
                 </div>
             </div>
 
-
+            <!-- Slide 3 -->
             <div class="slide">
                 <h2>Your top 5 artists are...</h2>
                 <div class="artist-container">
@@ -352,6 +355,7 @@
                 </div>
             </div>
 
+            <!-- Slide 4 -->
             <div class="slide">
                 <h2>Your top song is...</h2>
                 <div class="song-info">
@@ -369,6 +373,7 @@
                 </div>
             </div>
 
+            <!-- Slide 5 -->
             <div class="slide">
                 <h2>Your top 5 songs are...</h2>
                 <div class="song-container">
@@ -381,18 +386,32 @@
                 </div>
             </div>
 
-
-            <div class="slide" data-image="{% static 'icon3.png' %}">
-                <img src="{% static 'icon3.png' %}" alt="Wrapped Summary">
-                <h2>Slide 6</h2>
-                <p>Short description here.</p>
+            <!-- Slide 6 -->
+            <div class="slide">
+                <h2>Your top 5 genres are...</h2>
+                <div class="artist-container">
+                    {% for genre, count in top_genres.items %}
+                        <div class="artist">
+                            <p1>#{{ forloop.counter }}. {{ genre }}</p1>
+                            <p>Count: {{ count }}</p> <!-- Display how often each genre appears -->
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
-            <div class="slide" data-image="{% static 'icon3.png' %}">
-                <img src="{% static 'icon3.png' %}" alt="Wrapped Summary">
-                <h2>Slide 7</h2>
-                <p>Short description here.</p>
+
+            <!-- Slide 7 -->
+            <div class="slide">
+                <h2>Your vibe data...</h2>
+                <div class="artist-info">
+                    <div class="artist-details">
+                        <h4>Danceability: {{ vibe_data.average_danceability|floatformat:2 }}%</h4>
+                        <h4>Valence: {{ vibe_data.average_valence|floatformat:2 }}%</h4>
+                        <h4>Energy: {{ vibe_data.average_energy|floatformat:2 }}%</h4>
+                    </div>
+                </div>
             </div>
 
+            <!-- Slide 8 -->
             <div class="slide">
                 <h3>Your Musical Soul at a Glance...</h3>
                 <div class="glance-info">
