@@ -34,10 +34,20 @@ def summary(request):
 
 @login_required
 def account_settings(request):
+    """
+    Render the user account settings.
+    :param request: The HTTP request object.
+    :return: The rendered account_settings.html page.
+    """
     return render(request, 'deletion/account_settings.html')
 
 @login_required
 def confirm_delete_account(request):
+    """
+    Render the user confirm delete account button view.
+    :param request: The HTTP request object.
+    :return: The rendered confirm page
+    """
     return render(request, 'deletion/confirm_delete_account.html')
 
 @login_required
@@ -49,8 +59,13 @@ def account_deleted(request):
 
 @login_required
 def delete_account_confirmed(request):
+    """
+    View to display a page that the account has been successfully deleted.
+    :param request: The HTTP request object.
+    :return: Either the landing or signup page
+    """
     if request.method == 'POST':
         request.user.delete()
         logout(request)
-        return redirect('signup')
+        return redirect('landing')
     return redirect('account_settings')

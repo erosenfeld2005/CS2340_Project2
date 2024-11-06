@@ -158,16 +158,15 @@ def display_summary_content(request):
         try:
             temp_profile = TemporarySpotifyProfile.objects.get(id=temp_profile_id)
             # Get the temporary profile by ID
-            if not temp_profile.top_five_artists:
+            if not temp_profile.top_five_artists or temp_profile.genre_data:
                 return render(request, 'spotify_app/error.html',
-                              {"message": "No top artists found."})
+                              {"message": "No top artists and genres found."})
             if not temp_profile.top_songs:
                 return render(request, 'spotify_app/error.html',
                               {"message": "No top songs found."})
-            if not temp_profile.genre_data:
-                return render(request, 'spotify_app/error.html', {"message": "No genre data found."})
             if not temp_profile.vibe_data:
-                return render(request, 'spotify_app/error.html', {"message": "No vibe data found."})
+                return render(request, 'spotify_app/error.html',
+                              {"message": "No vibe data found."})
 
             context = {
                 "top_five_artists": temp_profile.top_five_artists,
@@ -254,4 +253,3 @@ def display_saved_profiles(request):
     """
     profiles = request.user.spotify_profiles.all()  # Retrieve all profiles for the logged-in user
     return render(request, 'spotify_app/saved_profiles.html', {'profiles': profiles})
-
