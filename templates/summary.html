@@ -319,7 +319,7 @@
 
             <!-- Slide 1 -->
             <div class="slide active">
-                <h2>Manish, are you ready to explore your musical soul?</h2>
+                <h2>{{user_name}}, are you ready to explore your musical soul?</h2>
                 <p class="intro-text">Your musical journey awaits—discover your top tracks, artists, and genres.</p>
                 <div class="icon-container">
                     <img src="{% static 'sound-icon.png' %}" alt="sound waves" class="intro-icon">
@@ -429,7 +429,7 @@
                     </div>
                 </div>
                 <div style="text-align: center; margin-top: 50px;">
-                    <form method="post" action="{% url 'history' %}">
+                    <form method="post" action="{% url 'save_spotify_profile' %}">
                         {% csrf_token %}
                         <input type="hidden" name="temporary_profile_id" value="{{ temp_profile_id }}">
                         <button type="submit" style="padding: 10px 20px; background-color: #3F665E; color: white; border: none; border-radius: 5px; cursor: pointer;">

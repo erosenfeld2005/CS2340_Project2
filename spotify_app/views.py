@@ -167,8 +167,10 @@ def display_summary_content(request):
             if not temp_profile.vibe_data:
                 return render(request, 'spotify_app/error.html',
                               {"message": "No vibe data found."})
+            user_name = request.user.name  # Retrieve the custom user's name
 
             context = {
+                "user_name": user_name,
                 "top_five_artists": temp_profile.top_five_artists,
                 "top_five_songs": temp_profile.top_five_songs,
                 "top_genres": temp_profile.genre_data,  # Pass genre data
@@ -236,7 +238,7 @@ def save_spotify_profile(request):
                 genre_data=temp_profile.genre_data,
                 created_at=timezone.now(),
             )
-            return redirect('display_saved_profiles')  # Redirect to the saved profiles page
+            return redirect('history')  # Redirect to the history page
         except TemporarySpotifyProfile.DoesNotExist:
             return render(request, 'spotify_app/error.html',
                           {"message": "Temporary profile not found."})
