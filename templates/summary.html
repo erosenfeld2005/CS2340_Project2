@@ -183,6 +183,13 @@
             height: auto; /* Maintain aspect ratio */
         }
 
+        .vibes-details {
+            margin-right: 20px; /* Space between text and stats */
+            text-align: left; /* Center text and photo horizontally */
+            display: flex;
+            flex-direction: column; /* Stack name and photo vertically */
+        }
+
         .other-icon-container {
             width: 100%;
             height: 90px; /* Adjust as needed for cropping */
@@ -319,7 +326,7 @@
 
             <!-- Slide 1 -->
             <div class="slide active">
-                <h2>Manish, are you ready to explore your musical soul?</h2>
+                <h2>{{user.name}}, are you ready to explore your musical soul?</h2>
                 <p class="intro-text">Your musical journey awaits—discover your top tracks, artists, and genres.</p>
                 <div class="icon-container">
                     <img src="{% static 'sound-icon.png' %}" alt="sound waves" class="intro-icon">
@@ -403,7 +410,7 @@
             <div class="slide">
                 <h2>Your vibe data...</h2>
                 <div class="artist-info">
-                    <div class="artist-details">
+                    <div class="vibes-details">
                         <h4>Danceability: {{ vibe_data.average_danceability|floatformat:2 }}%</h4>
                         <h4>Valence: {{ vibe_data.average_valence|floatformat:2 }}%</h4>
                         <h4>Energy: {{ vibe_data.average_energy|floatformat:2 }}%</h4>
@@ -416,15 +423,15 @@
                 <h3>Your Musical Soul at a Glance...</h3>
                 <div class="glance-info">
                     <div class="glance-details">
-                        <h7>Top Artist: blah</h7>
+                        <h7>Top Artist: {{top_five_artists.0.name}} </h7>
                         <img src="{{ top_five_artists.0.image_url }}" alt="top artist image" class="artist-photo">
                     </div>
                     <div class="glance-details">
-                        <h7>Top Song: blah</h7>
+                        <h7>Top Song: {{top_five_songs.0.name}} </h7>
                         <img src="{{ top_five_artists.1.image_url }}" alt="top artist image" class="artist-photo">
                     </div>
                     <div class="glance-details">
-                        <h7>Top Genre: blah</h7>
+                        <h7>Top Genre: {{top_1_genre}} </h7>
                         <img src="{{ top_five_artists.2.image_url }}" alt="top artist image" class="artist-photo">
                     </div>
                 </div>
