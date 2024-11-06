@@ -253,3 +253,43 @@ def display_saved_profiles(request):
     """
     profiles = request.user.spotify_profiles.all()  # Retrieve all profiles for the logged-in user
     return render(request, 'spotify_app/saved_profiles.html', {'profiles': profiles})
+
+def display_saved_summary_content(request):
+    """
+    Function that displays the top artists page
+    :param request: Redirect input
+    :return: the appropriate page
+    """
+    temp_profile_id = request.session.get('temporary_profile_id')
+    # Retrieve the profile ID from the session
+
+    if temp_profile_id:
+        try:
+            temp_profile = TemporarySpotifyProfile.objects.get(id=temp_profile_id)
+            # Get the temporary profile by ID
+            if not temp_profile.top_five_artists or not temp_profile.genre_data:
+                return render(request, 'spotify_app/error.html',
+                              {"message": "No top artists and genres found."})
+            if not temp_profile.top_songs:
+                return render(request, 'spotify_app/error.html',
+                              {"message": "No top songs found."})
+            if not temp_profile.vibe_data:
+                return render(request, 'spotify_app/error.html',
+                              {"message": "No vibe data found."})
+
+            context = {
+                "top_five_artists": temp_profile.top_five_artists,
+                "top_five_songs": temp_profile.top_five_songs,
+                "top_genres": temp_profile.genre_data,  # Pass genre data
+                "vibe_data": temp_profile.vibe_data,  # Pass vibe data
+                "temp_profile_id": temp_profile_id
+            }
+
+            return render(request, 'summary.html', context)
+
+        except TemporarySpotifyProfile.DoesNotExist:
+            return render(request, 'spotify_app/error.html',
+                          {"message": "Temporary profile not found."})
+    else:
+        return render(request, 'spotify_app/error.html',
+                      {"message": "No temporary profile ID found in session."})

@@ -87,19 +87,13 @@
         <h1 class="title">Your Wrapped History</h1>
 
         <div class="button-grid">
-            <button class="date-button" onclick="window.location.href='URL_FOR_DATE_1'">Date 1</button>
-            <button class="date-button" onclick="window.location.href='URL_FOR_DATE_2'">Date 2</button>
-            <button class="date-button" onclick="window.location.href='URL_FOR_DATE_3'">Date 3</button>
-            <button class="date-button" onclick="window.location.href='URL_FOR_DATE_4'">Date 4</button>
-            <button class="date-button" onclick="window.location.href='URL_FOR_DATE_5'">Date 5</button>
-            <button class="date-button" onclick="window.location.href='URL_FOR_DATE_6'">Date 6</button>
-<!--            {% for summary in summaries %}-->
-<!--                <button class="summary-button" onclick="window.location.href='{% url 'summary_detail' summary.id %}'">-->
-<!--                    {{ summary.date }}-->
-<!--                </button>-->
-<!--            {% empty %}-->
-<!--                <p>No summaries available.</p>-->
-<!--            {% endfor %}-->
+            {% for profile in profiles %}
+                <button class="summary-button" onclick="window.location.href='{% url 'saved_summary' %}'">
+                    {{ profile.created_at }}
+                </button>
+            {% empty %}
+                <p>No saved wrapped summaries available.</p>
+            {% endfor %}
         </div>
     </div>
 </body>
