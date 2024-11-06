@@ -65,7 +65,8 @@ class TemporarySpotifyProfile(models.Model):
                 total_valence += audio_features.get("valence", 0)
                 total_energy += audio_features.get("energy", 0)
             if audio_features_response.status_code != 200:
-                print(f"Error: {audio_features_response.status_code}, {audio_features_response.text}")
+                print(f"Error: {audio_features_response.status_code},"
+                      f"{audio_features_response.text}")
 
         count = len(top_tracks_data) or 1
         print(total_danceability, total_valence, total_energy)
