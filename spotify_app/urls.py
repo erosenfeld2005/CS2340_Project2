@@ -15,5 +15,6 @@ urlpatterns = [
     path('save_profile/', views.save_spotify_profile, name='save_spotify_profile'),
     path('saved_profiles/', views.display_saved_profiles, name='display_saved_profiles'),
     path('signout/', views.signout, name='signout'),
-    path('saved_summary/', views.display_saved_summary_content, name='saved_summary'),
+    path('saved_summary/<str:created_at>/', views.display_saved_summary_content, name='saved_summary'),
+
 ]

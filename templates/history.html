@@ -97,12 +97,8 @@
             {% for profile in profiles %}
                 <div>
                     <!-- Button linking to detailed summary page -->
-                    <button class="date-button" onclick="window.location.href='{% url 'saved_summary' profile.id %}'">
+                    <button class="date-button" onclick="window.location.href='{% url 'saved_summary' profile.created_at %}'">
                         {{ profile.created_at }}
-                    </button>
-                    <!-- Button for deleting the saved summary -->
-                    <button class="delete-button" onclick="window.location.href='{% url 'delete_summary' profile.id %}'">
-                        Delete
                     </button>
                 </div>
             {% empty %}

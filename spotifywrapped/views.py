@@ -5,6 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.shortcuts import render, redirect
 
+from spotify_app.models import SpotifyProfile
+
+
 def landing_page(request):
     """
     Opens landing.html
@@ -77,4 +80,5 @@ def history(request):
     :param request: The HTTP request object.
     :return: The rendered history.html page.
     """
-    return render(request, 'history.html')
+    profiles = SpotifyProfile.objects.filter(user=request.user)
+    return render(request, 'history.html', {'profiles': profiles})

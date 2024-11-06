@@ -429,7 +429,7 @@
                     </div>
                 </div>
                 <div style="text-align: center; margin-top: 50px;">
-                    <form method="post" action="{% url 'save_spotify_profile' %}">
+                    <form method="post" action="{% url 'history' %}">
                         {% csrf_token %}
                         <input type="hidden" name="temporary_profile_id" value="{{ temp_profile_id }}">
                         <button type="submit" style="padding: 10px 20px; background-color: #3F665E; color: white; border: none; border-radius: 5px; cursor: pointer;">
