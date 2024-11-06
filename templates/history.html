@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wrapped History</title>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Centered Button Grid Style */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100%;
+        }
+
+        /* Decorative Title */
+        .title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #3F665E;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            position: relative;
+        }
+        .title::before,
+        .title::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background-color: #3F665E;
+            top: 50%;
+            transform: translateY(-50%);
+            margin-bottom: 60px;
+        }
+        .title::before {
+            left: -60px;
+        }
+        .title::after {
+            right: -60px;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 columns */
+            gap: 30px;
+            width: 80%;
+        }
+
+        .date-button, .delete-button {
+            font-size: 24px;
+            font-weight: bold;
+            color: #FFFFFF;
+            padding: 20px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .date-button {
+            background-color: #3F665E;
+        }
+
+        .delete-button {
+            background-color: #E63946; /* red for delete */
+        }
+
+        .date-button:hover, .delete-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header and Navbar -->
+    <header>
+        <nav class="navbar">
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="#">Account</a>
+            <a href="#">Sign Out</a>
+        </nav>
+    </header>
+
+    <!-- Main Content Area with Title and Button Grid -->
+    <div class="main-content">
+        <h1 class="title">Your Wrapped History</h1>
+
+        <div class="button-grid">
+            {% for profile in profiles %}
+                <div>
+                    <!-- Button linking to detailed summary page -->
+                    <button class="date-button" onclick="window.location.href='{% url 'saved_summary' profile.created_at %}'">
+                        {{ profile.created_at }}
+                    </button>
+                </div>
+            {% empty %}
+                <p>No saved wrapped summaries available.</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
