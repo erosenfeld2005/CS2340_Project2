@@ -4,6 +4,9 @@ Python file that renders the landing page when the website is opened
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.shortcuts import render, redirect
+from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib import messages
 
 from spotify_app.models import SpotifyProfile
 
@@ -82,3 +85,49 @@ def history(request):
     """
     profiles = SpotifyProfile.objects.filter(user=request.user)
     return render(request, 'history.html', {'profiles': profiles})
+
+
+def contact_developers(request):
+    """
+    Render the contact developers page.
+
+    :param request: The HTTP request object.
+    :return: The rendered contact_developers.html page.
+    """
+    return render(request, 'contact_developers.html')
+
+
+def submit_feedback(request):
+    """
+        Submists a request.
+
+        :param request: The HTTP request object.
+        :return: submission.
+        """
+    if request.method == 'POST':
+        name = request.POST['name']
+        email = request.POST['email']
+        message = request.POST['message']
+
+        # Email the feedback
+        send_mail(
+            f"Feedback from {name}",
+            message,
+            email,
+            [settings.CONTACT_EMAIL],
+            fail_silently=False,
+        )
+        messages.success(request, "Thank you for your feedback!")
+        return redirect('contact_developers')  # Ensure this matches the correct URL name
+
+    return render(request, 'contact_developers.html')
+
+
+def loading(request):
+    """
+    Render loading page.
+
+    :param request: The HTTP request object.
+    :return: The rendered loading.html page.
+    """
+    return render(request, 'loading.html')
