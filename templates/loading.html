@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Center the loading container */
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f3f3f3;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .loading-container {
+            text-align: center;
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        /* Rotating animation */
+        .img {
+            width: 250px;
+            height: 250px;
+            animation: spin 4s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <img src="{% static 'spotify wrapped icon.png' %}" alt="loading..." class="img">
+        <div class="loading-text">Loading, please wait...</div>
+    </div>
+</body>
+</html>
