@@ -98,6 +98,12 @@ def contact_developers(request):
 
 
 def submit_feedback(request):
+    """
+        Submists a request.
+
+        :param request: The HTTP request object.
+        :return: submission.
+        """
     if request.method == 'POST':
         name = request.POST['name']
         email = request.POST['email']
@@ -115,6 +121,3 @@ def submit_feedback(request):
         return redirect('contact_developers')  # Ensure this matches the correct URL name
 
     return render(request, 'contact_developers.html')
-
-
-
