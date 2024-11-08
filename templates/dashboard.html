@@ -8,52 +8,37 @@
     <link rel="stylesheet" href="{% static 'main.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Centered Icon Grid Style */
+        /* Centered Content Style */
         .main-content {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
             width: 100%;
-            margin-top: 60px; /* Offset for the navbar */
+            padding: 20px;
+            margin-top: 60px;
             margin-bottom: 60px;
         }
 
-        /* Decorative Title */
+        /* Dashboard Title */
         .dashboard-title {
-            font-size: 36px;
+            font-size: 2.5rem;
             font-weight: bold;
             color: #3F665E;
             margin-bottom: 20px;
             text-transform: uppercase;
-            position: relative;
-        }
-        .dashboard-title::before,
-        .dashboard-title::after {
-            content: '';
-            position: absolute;
-            width: 50px;
-            height: 3px;
-            background-color: #3F665E;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        .dashboard-title::before {
-            left: -60px;
-        }
-        .dashboard-title::after {
-            right: -60px;
         }
 
+        /* Responsive Icon Grid */
         .icon-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3 columns */
-            gap: 50px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
         }
+
         .icon-card {
-            width: 300px;
-            height: 350px; /* Fixed height for uniformity */
             background: linear-gradient(30deg, #A5CBC3 20%, #FFFFFF 100%);
             text-align: center;
             border-radius: 15px;
@@ -64,30 +49,51 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between; /* Space between icon and text */
+            justify-content: space-between;
             color: #FFFFFF;
+            width: 100%;
         }
+
         .icon-card:hover {
             transform: scale(1.08);
             box-shadow: 0 12px 20px rgba(0, 0, 0, 0.7);
         }
+
         .icon-circle {
-            width: 200px; /* Circle diameter */
-            height: 200px; /* Circle diameter */
-            background-color: #2E4A47; /* Darker background */
-            border-radius: 50%; /* Makes it circular */
+            width: 80%;
+            max-width: 150px;
+            aspect-ratio: 1;
+            background-color: #2E4A47;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3); /* Shadow effect */
-            margin-top: 15px; /* Space between the circle and the text */
+            margin-top: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
         }
 
         .icon-circle img {
-            width: 100%; /* Make the image fit within the circle */
+            width: 100%;
             height: 100%;
-            object-fit: cover; /* Cover to fill the circle */
-            border-radius: 50%; /* Ensures the image is circular */
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .dashboard-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-title {
+                font-size: 1.8rem;
+            }
+
+            .icon-card {
+                padding: 15px;
+            }
         }
     </style>
 </head>
@@ -95,8 +101,7 @@
     <!-- Header and Navbar -->
     <header>
         <nav class="navbar">
-            <a href="{% url 'landing' %}">Spotify Wrapped</a>
-            <a href="{% url 'contact_developers' %}">Contact</a>
+            <a href=>Spotify Wrapped</a>
             <a href="{% url 'account_settings' %}">Account</a>
             <a href="{% url 'signout' %}" class="btn">Sign Out</a>
         </nav>
@@ -144,7 +149,6 @@
                 <p>Enjoy interactive music games and challenges to enhance your experience.</p>
             </div>
         </div>
-
     </div>
 </body>
 </html>
