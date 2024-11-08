@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 from decouple import config
+import ssl
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -161,3 +162,13 @@ TEMPLATES = [
 AUTH_USER_MODEL = 'userAuthentication.CustomUser'
 
 LOGIN_REDIRECT_URL = 'dashboard'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True  # Enable TLS
+EMAIL_USE_SSL = False  # Disable SSL
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+CONTACT_EMAIL = 'group12cs2340@gmail.com'  # Email to receive feedback

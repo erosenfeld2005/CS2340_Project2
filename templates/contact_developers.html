@@ -1,0 +1,177 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact the Developers</title>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Centered Container Styling */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-top: 60px;
+            padding-bottom: 60px;
+        }
+
+        /* Decorative Title Styling */
+        .contact-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #3F665E;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            position: relative;
+        }
+        .contact-title::before,
+        .contact-title::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background-color: #3F665E;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .contact-title::before {
+            left: -60px;
+        }
+        .contact-title::after {
+            right: -60px;
+        }
+
+        /* Developer Card Styling */
+        .team-member {
+            width: 80%;
+            max-width: 700px;
+            background: linear-gradient(30deg, #A5CBC3 20%, #FFFFFF 100%);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            margin-bottom: 20px;
+            color: #2E4A47;
+        }
+        .team-member h3 {
+            margin: 0;
+            font-size: 24px;
+            color: #2E4A47;
+        }
+
+        /* Feedback Form Styling */
+        .feedback-form-container {
+            width: 80%;
+            max-width: 700px;
+            background: linear-gradient(30deg, #A5CBC3 20%, #FFFFFF 100%);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        .feedback-form h1 {
+            font-size: 24px;
+            color: #2E4A47;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        .feedback-form input,
+        .feedback-form textarea,
+        .feedback-form button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        .feedback-form button {
+            background-color: #3F665E;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .feedback-form button:hover {
+            background-color: #98B9B5;
+        }
+
+        /* Success Message Styling */
+        .alert {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: center;
+            width: 80%;
+            max-width: 700px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header and Navbar -->
+    <header>
+        <nav class="navbar">
+            <a href="#">Spotify Wrapped</a>
+            <a href="#">Explore</a>
+            <a href="{% url 'contact_developers' %}">Contact</a>
+            <a href="{% url 'login' %}" class="btn">Login</a>
+        </nav>
+    </header>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <h1 class="contact-title">Contact the Developers</h1>
+
+        <!-- Success Message (Thank You Popup) -->
+        {% if messages %}
+            <div class="alert">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Developer Team Section -->
+        <div class="team-member">
+            <h3>Emily Rosenfield</h3>
+            <p>Lorem ipsum dolor sit amet. Eum ullam suscipit hic doloremque soluta est
+                corporis odio. Eum mollitia itaque vel dolores sint ut perferendis eaque.
+                Sit officiis unde quo neque dolor non laboriosam rerum ea delectus beatae
+                et eligendi deleniti aut iste pariatur. Eos deleniti sint qui voluptatem nulla
+                eum voluptatem facere quo consequatur impedit et voluptatem velit ut dolores
+                nemo At consequatur velit.</p>
+        </div>
+
+        <div class="team-member">
+            <h3>Anne Youn</h3>
+            <p>Lorem ipsum dolor sit amet. Eum ullam suscipit hic doloremque soluta est
+                corporis odio. Eum mollitia itaque vel dolores sint ut perferendis eaque.
+                Sit officiis unde quo neque dolor non laboriosam rerum ea delectus beatae
+                et eligendi deleniti aut iste pariatur. Eos deleniti sint qui voluptatem nulla
+                eum voluptatem facere quo consequatur impedit et voluptatem velit ut dolores
+                nemo At consequatur velit.</p>
+        </div>
+
+        <!-- Feedback Form Container -->
+        <div class="feedback-form-container">
+            <form action="{% url 'submit_feedback' %}" method="POST" class="feedback-form">
+                {% csrf_token %}
+                <h1>Feedback Form:</h1>
+                <input type="text" name="name" placeholder="Your Name" required>
+                <input type="email" name="email" placeholder="Your Email" required>
+                <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+                <button type="submit">Send Feedback</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
