@@ -102,7 +102,7 @@ class TestSpotifyCallbackView(TestCase):
     @patch('spotify_app.views.requests.post')
     def test_spotify_callback_success(self, mock_post):
         # Create a user for the test
-        user = User.objects.create_user(username='testuser', password='password')
+        user = CustomUser.objects.create_user(username='testuser', password='password')
 
         # Log the user in
         self.client.login(username='testuser', password='password')
