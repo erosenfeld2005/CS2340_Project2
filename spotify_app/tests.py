@@ -1,7 +1,8 @@
 """
 Python file to create and store test cases
 """
-from unittest import TestCase
+from django.test import TestCase
+
 from unittest.mock import patch
 from .models import SpotifyProfile, TemporarySpotifyProfile
 from .views import display_top_songs
