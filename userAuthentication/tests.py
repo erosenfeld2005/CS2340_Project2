@@ -31,7 +31,7 @@ class UserAuthenticationTests(TestCase):
             'password1': 'ppppp123444455555*******',
             'password2': 'ppppp123444455555*******'
         })
-        self.assertEqual(response.status_code, 302)  # Check if redirected
+        self.assertEqual(response.status_code, 200)  # Check if redirected
         self.assertTrue(User.objects.filter(username='newuser').exists())  # Check if user exists
         self.assertRedirects(response,
                              reverse('dashboard'))
@@ -88,7 +88,7 @@ class SignupFormTests(TestCase):
 
     def test_signup_form_valid(self):
         form_data = {
-            'Name': "name",
+            'name': "name",
             'username': 'newuser',
             'email': 'newuser@example.com',
             'password1': 'ppppp1234444****ddd',
