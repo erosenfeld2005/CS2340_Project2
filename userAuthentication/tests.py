@@ -87,6 +87,10 @@ class SignupFormTests(TestCase):
     """
 
     def test_signup_form_valid(self):
+        """
+        Test if the signup form is valid
+        :return: Whether the signup form is valid
+        """
         form_data = {
             'name': "name",
             'username': 'newuser',

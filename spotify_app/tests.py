@@ -1,20 +1,29 @@
 """
 Python file to create and store test cases
 """
-from django.test import TestCase
 
 from unittest.mock import patch
+
+from django.test import TestCase
 from django.utils import timezone
+from django.conf import settings
+from django.urls import reverse
 
 from userAuthentication.models import CustomUser
 from .models import SpotifyProfile, TemporarySpotifyProfile
-from django.conf import settings
-import requests
-from django.urls import reverse
 
+
+"""
+Tests for the Temporary Spotify Profile
+"""
 class TestTemporarySpotifyProfile(TestCase):
     @patch('spotify_app.models.requests.get')
     def test_fetch_top_tracks(self, mock_get):
+        """
+        Test fetch top tracks function in model
+        :param mock_get: This pretends to get an access code from the API and then a corresponding JSON object
+        :return: Whether fetch top tracks is working
+        """
         # Mock response with valid artist data for both tracks
         mock_response = {
             'items': [
@@ -37,6 +46,11 @@ class TestTemporarySpotifyProfile(TestCase):
 
     @patch('spotify_app.models.requests.get')
     def test_fetch_top_artists(self, mock_get):
+        """
+        Test fetch top artists function in model
+        :param mock_get: This pretends to get an access code from the API and then a corresponding JSON object
+        :return: Whether fetch top artists is working
+        """
         mock_response = {
             'items': [
                 {'name': 'Artist 1'},
@@ -54,11 +68,21 @@ class TestTemporarySpotifyProfile(TestCase):
         self.assertEqual(artists[1]['name'], 'Artist 2')
 
 class TestSpotifyProfile(TestCase):
+    """
+    This holds the tests for the Spotify Profile model
+    """
     @patch('spotify_app.models.TemporarySpotifyProfile.fetch_top_tracks')
     @patch('spotify_app.models.TemporarySpotifyProfile.fetch_top_artists')
     def test_save_spotify_profile(self, mock_fetch_top_tracks, mock_fetch_top_artists):
+        """
+        This tests if the save of spotify profile works correctly
+        :param mock_fetch_top_tracks: Pretends to be a return from the API
+        :param mock_fetch_top_artists: Pretends to be a return from the API
+        :return: Whether save spotify profile works correctly
+        """
         # Create a CustomUser instance
-        user = CustomUser.objects.create_user(name = "test_name", username="test_user", password="password")
+        user = CustomUser.objects.create_user(name = "test_name",
+                                              username="test_user", password="password")
 
         # Create a TemporarySpotifyProfile instance
         temp_profile = TemporarySpotifyProfile.objects.create(
@@ -88,26 +112,49 @@ class TestSpotifyProfile(TestCase):
         self.assertEqual(saved_profile.top_songs, temp_profile.top_songs)
 
 class TestSpotifyLoginView(TestCase):
+    """
+    This holds the tests for spotify login
+    """
     def test_spotify_login_redirect(self):
+        """
+        Tests if spotify login redirects correctly
+        :return: Whether spotify login redirect works correctly
+        """
         response = self.client.get(reverse('spotify_login'))
         scopes = 'user-top-read'
         auth_url = (
-            f"https://accounts.spotify.com/authorize?"
-            f"client_id={settings.SPOTIFY_CLIENT_ID}&response_type=code"
+            f"https://accounts.spotify.com/"
+            f"authorize?"
+            f"client_id={settings.SPOTIFY_CLIENT_ID}"
+            f"&response_type=code"
             f"&redirect_uri={settings.SPOTIFY_REDIRECT_URI}&scope={scopes}"
         )
 
         # Check that it redirects to Spotify's authorization page
-        self.assertRedirects(response, auth_url, fetch_redirect_response=False)  # Update with actual redirect URL if needed
+        self.assertRedirects(response, auth_url,
+                             fetch_redirect_response=False)
+                        # Update with actual redirect URL if needed
 
 
 class TestSpotifyCallbackView(TestCase):
+    """
+    This holds the tests for spotify callback view
+    """
     @patch('spotify_app.views.exchange_code_for_token')
     @patch('spotify_app.views.TemporarySpotifyProfile.fetch_top_tracks')
     @patch('spotify_app.views.TemporarySpotifyProfile.fetch_top_artists')
-    def test_spotify_callback_success(self, mock_fetch_artists, mock_fetch_tracks, mock_exchange_token):
-        # Create a user for the test
-        user = CustomUser.objects.create_user(username='testuser', password='password')
+    def test_spotify_callback_success(self,
+                                      mock_fetch_artists,
+                                      mock_fetch_tracks,
+                                      mock_exchange_token):
+        """
+        Tests a successful spotify callback view
+        :param mock_fetch_artists: A mock return from the API
+        :param mock_fetch_tracks:  A mock return from the API
+        :param mock_exchange_token:  A mock return from the API
+        :return: True if successful spotify callback view is working and
+            redirecting to summary.html
+        """
 
         # Log the user in
         self.client.login(username='testuser', password='password')
@@ -116,7 +163,7 @@ class TestSpotifyCallbackView(TestCase):
         mock_exchange_token.return_value = ('valid_token', 'valid_refresh_token')
 
         # Mock fetching top tracks and artists
-        mock_fetch_tracks.return_value = None  # Simulate successful fetch (doesn't need to return anything)
+        mock_fetch_tracks.return_value = None  # Simulate successful fetch
         mock_fetch_artists.return_value = None
 
         # Simulate callback with a valid authorization code
@@ -139,6 +186,11 @@ class TestSpotifyCallbackView(TestCase):
 
     @patch('spotify_app.views.requests.post')
     def test_spotify_callback_failure(self, mock_post):
+        """
+        Tests a failed spotify callback view
+        :param mock_post: An invalid code
+        :return: True if failed spotify callback view is redirecting to error.html
+        """
         mock_post.return_value.json.return_value = {'error': 'invalid_request'}
 
         response = self.client.get(reverse('spotify_callback'), {'code': 'invalid_code'})
@@ -147,64 +199,15 @@ class TestSpotifyCallbackView(TestCase):
         self.assertContains(response, 'No access token returned')
         self.assertTemplateUsed(response, 'spotify_app/error.html')
 
-
-# class TestDisplayTopSongsView(TestCase):
-#     @patch('spotify_app.views.TemporarySpotifyProfile.fetch_top_tracks')
-#     def test_display_top_songs_with_valid_session(self, mock_fetch_tracks):
-#         # Create a TemporarySpotifyProfile object
-#         temp_profile = TemporarySpotifyProfile.objects.create(id=1)
-#         temp_profile.top_songs = [{'name': 'Song 1'}]
-#         temp_profile.save()
-#
-#         # Mock the fetch_top_tracks method to return top songs
-#         mock_fetch_tracks.return_value = temp_profile.top_songs
-#
-#         # Set session data to simulate a valid session with a temporary profile ID
-#         self.client.session['temporary_profile_id'] = temp_profile.id
-#         self.client.session.save()  # Ensure session is saved after modification
-#
-#         # Send the request to the view
-#         response = self.client.get(reverse('display_top_songs'))
-#
-#         # Check that the correct top song is passed to the template
-#         self.assertContains(response, 'Song 1')
-#
-#         # Ensure the correct template is used
-#         self.assertTemplateUsed(response, 'spotify_app/top_song.html')
-
-    # def test_display_top_songs_with_invalid_session(self):
-    #     # Test behavior when no temporary_profile_id is in the session
-    #     response = self.client.get(reverse('display_top_songs'))
-    #
-    #     # Expect an error page with a 200 status code if session data is missing
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertTemplateUsed(response, 'spotify_app/error.html')
-    #     self.assertContains(response, "No temporary profile ID found in session.")
-
-# class TestSaveSpotifyProfileView(TestCase):
-#     def setUp(self):
-#         # Create a user and log them in
-#         self.user = CustomUser.objects.create_user(username='test_user', password='test_pass')
-#         self.client.force_login(self.user)
-#
-#         # Create a temporary profile and save its ID in the session
-#         self.temp_profile = TemporarySpotifyProfile.objects.create()
-#         session = self.client.session
-#         session['temporary_profile_id'] = self.temp_profile.id
-#         session.save()
-#
-#     def test_save_spotify_profile_view(self):
-#         # Send a POST request to save the Spotify profile
-#         response = self.client.post(reverse('save_spotify_profile'))
-#
-#         # Ensure the response redirects to the history page
-#         self.assertRedirects(response, reverse('history'))
-#
-#         # Check that a SpotifyProfile was created for the logged-in user
-#         self.assertTrue(SpotifyProfile.objects.filter(user=self.user).exists())
-
 class TestSaveSpotifyProfileView(TestCase):
+    """
+    Tests Saved Spotify Profile View (History)
+    """
     def setUp(self):
+        """
+        Checks setup of a temp profile and user
+        :return: Nothing
+        """
         # Create and log in a user
         self.user = CustomUser.objects.create_user(username='test_user', password='test_pass')
         self.client.force_login(self.user)
@@ -219,6 +222,10 @@ class TestSaveSpotifyProfileView(TestCase):
         )
 
     def test_save_spotify_profile_view(self):
+        """
+        Tests that the spotify profile saves and redirects correctly
+        :return: True if save spotify profile is working
+        """
         # Send a POST request with the temporary_profile_id to save the Spotify profile
         response = self.client.post(reverse('save_spotify_profile'), {
             'temporary_profile_id': self.temp_profile.id

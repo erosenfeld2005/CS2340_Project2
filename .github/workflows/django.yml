@@ -60,15 +60,6 @@ jobs:
         coverage run --source='.' manage.py test --keepdb
         coverage report --fail-under=80  # Replace 80 with your minimum coverage percentage
 
-    - name: Generate Coverage Report
-      run: coverage html  # Generates an HTML report you can view locally
-
-    - name: Upload coverage report
-      uses: actions/upload-artifact@v3.2.0
-      with:
-        name: coverage-report
-        path: htmlcov/index.html
-
     - name: Analyzing code with pylint
       run: |
         pylint $(git ls-files '*.py')

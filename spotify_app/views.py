@@ -204,6 +204,11 @@ def display_saved_summary_content(request, created_at):
     return render(request, 'saved_summary.html', context)
 
 def error_view(request):
+    """
+    View to display errors
+    :param request: User request to get to this page
+    :return: Renders the error
+    """
     basicM = "basic message for an error"
     return render(request, 'error.html', {'message': basicM})
 
