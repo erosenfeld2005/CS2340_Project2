@@ -295,3 +295,7 @@ def display_saved_summary_content(request, created_at):
     # else:
     #     return render(request, 'spotify_app/error.html',
     #                   {"message": "No temporary profile ID found in session."})
+
+def error_view(request):
+    basicM = "basic message for an error"
+    return render(request, 'error.html', {'message': basicM})

@@ -6,6 +6,7 @@ from . import views
 
 urlpatterns = [
     path("spotifylogin/", views.spotify_login, name="spotify_login"),
+    path('error/', views.error_view, name='error'),  # Define the error page URL with the name 'error'
     path("callback/", views.spotify_callback, name="spotify_callback"),
     #path('fetch_data/', views.fetch_user_top_data, name='fetch_user_top_data'),
     path('display_songs/', views.display_top_songs, name='display_top_songs'),
