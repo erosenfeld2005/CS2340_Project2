@@ -123,15 +123,26 @@ class TestSpotifyCallbackView(TestCase):
 class TestDisplayTopSongsView(TestCase):
     @patch('spotify_app.views.TemporarySpotifyProfile.fetch_top_tracks')
     def test_display_top_songs_with_valid_session(self, mock_fetch_tracks):
-        mock_fetch_tracks.return_value = [{'name': 'Song 1'}]
+        # Create a TemporarySpotifyProfile object
+        temp_profile = TemporarySpotifyProfile.objects.create(id=1)
+        temp_profile.top_songs = [{'name': 'Song 1'}]
+        temp_profile.save()
 
-        # Set session data
-        self.client.session['temporary_profile_id'] = 1
+        # Mock the fetch_top_tracks method to return top songs
+        mock_fetch_tracks.return_value = temp_profile.top_songs
 
+        # Set session data to simulate a valid session with a temporary profile ID
+        self.client.session['temporary_profile_id'] = temp_profile.id
+        self.client.session.save()
+
+        # Send the request to the view
         response = self.client.get(reverse('display_top_songs'))
 
-        # Check that the top songs are correctly passed to the template
+        # Check that the correct top song is passed to the template
         self.assertContains(response, 'Song 1')
+
+        # Ensure the correct template is used
+        self.assertTemplateUsed(response, 'spotify_app/top_song.html')
 
     def test_display_top_songs_with_invalid_session(self):
         # Test behavior when no temporary_profile_id is in the session
