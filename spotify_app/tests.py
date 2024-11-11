@@ -12,16 +12,16 @@ from django.urls import reverse
 from userAuthentication.models import CustomUser
 from .models import SpotifyProfile, TemporarySpotifyProfile
 
-
-"""
-Tests for the Temporary Spotify Profile
-"""
 class TestTemporarySpotifyProfile(TestCase):
+    """
+    Tests for the Temporary Spotify Profile
+    """
     @patch('spotify_app.models.requests.get')
     def test_fetch_top_tracks(self, mock_get):
         """
         Test fetch top tracks function in model
-        :param mock_get: This pretends to get an access code from the API and then a corresponding JSON object
+        :param mock_get: This pretends to get an access code from the API
+        and then a corresponding JSON object
         :return: Whether fetch top tracks is working
         """
         # Mock response with valid artist data for both tracks
@@ -48,7 +48,8 @@ class TestTemporarySpotifyProfile(TestCase):
     def test_fetch_top_artists(self, mock_get):
         """
         Test fetch top artists function in model
-        :param mock_get: This pretends to get an access code from the API and then a corresponding JSON object
+        :param mock_get: This pretends to get an access code from the API
+        and then a corresponding JSON object
         :return: Whether fetch top artists is working
         """
         mock_response = {
