@@ -75,7 +75,7 @@ class TestSpotifyLoginView(TestCase):
         )
 
         # Check that it redirects to Spotify's authorization page
-        self.assertRedirects(response, auth_url)  # Update with actual redirect URL if needed
+        self.assertRedirects(response, auth_url, fetch_redirect_response=False)  # Update with actual redirect URL if needed
 
 
 class TestSpotifyCallbackView(TestCase):
