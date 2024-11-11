@@ -116,7 +116,7 @@ class TestSpotifyCallbackView(TestCase):
         response = self.client.get(reverse('spotify_callback'), {'code': 'invalid_code'})
 
         # Check that the response contains the error message
-        self.assertContains(response, 'Authorization failed.')
+        self.assertContains(response, 'No access token returned')
         self.assertTemplateUsed(response, 'spotify_app/error.html')
 
 
