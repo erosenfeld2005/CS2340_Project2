@@ -101,13 +101,19 @@ class TestSpotifyLoginView(TestCase):
 class TestSpotifyCallbackView(TestCase):
     @patch('spotify_app.views.requests.post')
     def test_spotify_callback_success(self, mock_post):
+        # Simulate a successful response from Spotify API
         mock_post.return_value.json.return_value = {'access_token': 'valid_token'}
 
         # Simulate callback with a valid authorization code
         response = self.client.get(reverse('spotify_callback'), {'code': 'valid_code'})
 
-        # Check that it redirects correctly after successful token exchange
+        # Check for a successful redirect to the summary page
         self.assertRedirects(response, reverse('summary'))
+
+        # Ensure the TemporarySpotifyProfile was created
+        self.assertTrue(TemporarySpotifyProfile.objects.exists())
+        # Optionally, check that the session contains the temporary profile ID
+        self.assertIn('temporary_profile_id', self.client.session)
 
     @patch('spotify_app.views.requests.post')
     def test_spotify_callback_failure(self, mock_post):
