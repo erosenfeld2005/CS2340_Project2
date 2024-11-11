@@ -113,9 +113,12 @@ class TestSpotifyCallbackView(TestCase):
         # Simulate callback with a valid authorization code
         response = self.client.get(reverse('spotify_callback'), {'code': 'valid_code'})
 
-        # Check if the response redirects and contains the user's name
+        # Check if the response contains the user's name and the correct template is used
         self.assertTemplateUsed(response, 'spotify_app/summary.html')
         self.assertContains(response, 'testuser')
+
+        # Check if the session contains the temporary profile ID (indicating the profile was created)
+        self.assertIn('temporary_profile_id', self.client.session)
 
     @patch('spotify_app.views.requests.post')
     def test_spotify_callback_failure(self, mock_post):
