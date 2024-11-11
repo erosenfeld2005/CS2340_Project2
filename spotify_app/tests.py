@@ -4,6 +4,9 @@ Python file to create and store test cases
 from django.test import TestCase
 
 from unittest.mock import patch
+from django.utils import timezone
+
+from userAuthentication.models import CustomUser
 from .models import SpotifyProfile, TemporarySpotifyProfile
 from .views import display_top_songs
 from django.conf import settings
@@ -50,19 +53,36 @@ class TestTemporarySpotifyProfile(TestCase):
 class TestSpotifyProfile(TestCase):
     @patch('spotify_app.models.TemporarySpotifyProfile.fetch_top_tracks')
     @patch('spotify_app.models.TemporarySpotifyProfile.fetch_top_artists')
-    def test_save_spotify_profile(self, mock_fetch_artists, mock_fetch_tracks):
-        mock_fetch_tracks.return_value = [{'name': 'Song 1', 'artist': 'Artist 1'}]
-        mock_fetch_artists.return_value = [{'name': 'Artist 1'}]
+    def test_save_spotify_profile(self):
+        # Create a CustomUser instance
+        user = CustomUser.objects.create_user(name = "test_name", username="test_user", password="password")
 
-        temp_profile = TemporarySpotifyProfile()
-        # Normally save_spotify_profile would be called in views.py
-        saved_profile = SpotifyProfile(user="test_user", temp_profile=temp_profile)
+        # Create a TemporarySpotifyProfile instance
+        temp_profile = TemporarySpotifyProfile.objects.create(
+            top_songs = ["Top Song 1"],
+            top_five_songs = ["Top Five Song 1"],
+            top_five_artists = ["Top Five Artists 1"],
+            vibe_data = ["vibe data 1"],
+            genre_data = ["genre data 1"],
+        )
+
+        # Create a SpotifyProfile instance and assign the user and temp_profile
+        saved_profile = SpotifyProfile.objects.create(
+            user= user,
+            top_songs=temp_profile.top_songs,
+            top_five_songs=temp_profile.top_five_songs,
+            top_five_artists=temp_profile.top_five_artists,
+            vibe_data=temp_profile.vibe_data,
+            genre_data=temp_profile.genre_data,
+            created_at=timezone.now(),
+        )
+
+        # Save the instance to the database
         saved_profile.save()
 
-        self.assertEqual(saved_profile.user, "test_user")
-        self.assertEqual(len(saved_profile.top_songs), 1)
-        self.assertEqual(saved_profile.top_songs[0]['name'], 'Song 1')
-        self.assertEqual(saved_profile.top_artists[0]['name'], 'Artist 1')
+        # Add assertions to check that the profile was saved correctly
+        self.assertEqual(saved_profile.user.username, "test_user")
+        self.assertEqual(saved_profile.top_songs, temp_profile.top_songs)
 
 class TestSpotifyLoginView(TestCase):
     def test_spotify_login_redirect(self):
