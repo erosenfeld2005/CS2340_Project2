@@ -140,13 +140,23 @@ class TestDisplayTopSongsView(TestCase):
         self.assertRedirects(response, reverse('error'))
 
 class TestSaveSpotifyProfileView(TestCase):
-    def test_save_spotify_profile(self):
-        # Assuming a temporary profile exists in the session
-        temp_profile = TemporarySpotifyProfile.objects.create()
-        self.client.session['temporary_profile_id'] = temp_profile.id
+    def setUp(self):
+        # Create a user and log them in
+        self.user = CustomUser.objects.create_user(username='test_user', password='test_pass')
+        self.client.force_login(self.user)
 
+        # Create a temporary profile and save its ID in the session
+        self.temp_profile = TemporarySpotifyProfile.objects.create()
+        session = self.client.session
+        session['temporary_profile_id'] = self.temp_profile.id
+        session.save()
+
+    def test_save_spotify_profile(self):  # Add mock parameter here
+        # Send a POST request to save the Spotify profile
         response = self.client.post(reverse('save_spotify_profile'))
 
-        # Ensure the profile is saved and redirects to the history page
+        # Ensure the response redirects to the history page
         self.assertRedirects(response, reverse('history'))
-        self.assertTrue(SpotifyProfile.objects.filter(user='test_user').exists())
+
+        # Check that a SpotifyProfile was created for the logged-in user
+        self.assertTrue(SpotifyProfile.objects.filter(user=self.user).exists())
