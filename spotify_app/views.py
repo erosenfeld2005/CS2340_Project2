@@ -87,31 +87,31 @@ def exchange_code_for_token(code):
     return None, None
 
 
-def display_top_songs(request):
-    """
-    Function that displays the top songs page
-    :param request: Redirect input
-    :return: the appropriate page
-    """
-    temp_profile_id = request.session.get('temporary_profile_id')
-    # Retrieve the profile ID from the session
-
-    if temp_profile_id:
-        try:
-            temp_profile = TemporarySpotifyProfile.objects.get(id=temp_profile_id)
-            # Get the temporary profile by ID
-            if not temp_profile.top_songs:
-                return render(request, 'spotify_app/error.html',
-                              {"message": "No top songs found."})
-
-            return render(request, 'spotify_app/top_song.html',
-                          {"top_songs": temp_profile.top_songs})
-        except TemporarySpotifyProfile.DoesNotExist:
-            return render(request, 'spotify_app/error.html',
-                          {"message": "Temporary profile not found."})
-    else:
-        return render(request, 'spotify_app/error.html',
-                      {"message": "No temporary profile ID found in session."})
+# def display_top_songs(request):
+#     """
+#     Function that displays the top songs page
+#     :param request: Redirect input
+#     :return: the appropriate page
+#     """
+#     temp_profile_id = request.session.get('temporary_profile_id')
+#     # Retrieve the profile ID from the session
+#
+#     if temp_profile_id:
+#         try:
+#             temp_profile = TemporarySpotifyProfile.objects.get(id=temp_profile_id)
+#             # Get the temporary profile by ID
+#             if not temp_profile.top_songs:
+#                 return render(request, 'spotify_app/error.html',
+#                               {"message": "No top songs found."})
+#
+#             return render(request, 'spotify_app/top_song.html',
+#                           {"top_songs": temp_profile.top_songs})
+#         except TemporarySpotifyProfile.DoesNotExist:
+#             return render(request, 'spotify_app/error.html',
+#                           {"message": "Temporary profile not found."})
+#     else:
+#         return render(request, 'spotify_app/error.html',
+#                       {"message": "No temporary profile ID found in session."})
 
 
 def display_music_vibes(request):
