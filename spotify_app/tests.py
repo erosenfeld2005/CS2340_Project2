@@ -10,7 +10,7 @@ import requests
 from django.urls import reverse
 
 class TestTemporarySpotifyProfile(TestCase):
-    @patch('.models.requests.get')
+    @patch('spotify_app.models.requests.get')
     def test_fetch_top_tracks(self, mock_get):
         mock_response = {
             'items': [
@@ -28,7 +28,7 @@ class TestTemporarySpotifyProfile(TestCase):
         self.assertEqual(tracks[0]['name'], 'Song 1')
         self.assertEqual(tracks[1]['artist'], 'Artist 2')
 
-    @patch('.models.requests.get')
+    @patch('spotify_app.models.requests.get')
     def test_fetch_top_artists(self, mock_get):
         mock_response = {
             'items': [
@@ -47,8 +47,8 @@ class TestTemporarySpotifyProfile(TestCase):
         self.assertEqual(artists[1]['name'], 'Artist 2')
 
 class TestSpotifyProfile(TestCase):
-    @patch('.models.TemporarySpotifyProfile.fetch_top_tracks')
-    @patch('.models.TemporarySpotifyProfile.fetch_top_artists')
+    @patch('spotify_app.models.TemporarySpotifyProfile.fetch_top_tracks')
+    @patch('spotify_app.models.TemporarySpotifyProfile.fetch_top_artists')
     def test_save_spotify_profile(self, mock_fetch_artists, mock_fetch_tracks):
         mock_fetch_tracks.return_value = [{'name': 'Song 1', 'artist': 'Artist 1'}]
         mock_fetch_artists.return_value = [{'name': 'Artist 1'}]
@@ -78,7 +78,7 @@ class TestSpotifyLoginView(TestCase):
 
 
 class TestSpotifyCallbackView(TestCase):
-    @patch('.views.requests.post')
+    @patch('spotify_app.views.requests.post')
     def test_spotify_callback_success(self, mock_post):
         mock_post.return_value.json.return_value = {'access_token': 'valid_token'}
 
@@ -88,7 +88,7 @@ class TestSpotifyCallbackView(TestCase):
         # Check that it redirects correctly after successful token exchange
         self.assertRedirects(response, reverse('display_top_songs'))
 
-    @patch('.views.requests.post')
+    @patch('spotify_app.views.requests.post')
     def test_spotify_callback_failure(self, mock_post):
         mock_post.return_value.json.return_value = {'error': 'invalid_request'}
 
@@ -99,7 +99,7 @@ class TestSpotifyCallbackView(TestCase):
 
 
 class TestDisplayTopSongsView(TestCase):
-    @patch('.views.TemporarySpotifyProfile.fetch_top_tracks')
+    @patch('spotify_app.views.TemporarySpotifyProfile.fetch_top_tracks')
     def test_display_top_songs_with_valid_session(self, mock_fetch_tracks):
         mock_fetch_tracks.return_value = [{'name': 'Song 1'}]
 
