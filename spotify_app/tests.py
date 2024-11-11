@@ -53,7 +53,7 @@ class TestTemporarySpotifyProfile(TestCase):
 class TestSpotifyProfile(TestCase):
     @patch('spotify_app.models.TemporarySpotifyProfile.fetch_top_tracks')
     @patch('spotify_app.models.TemporarySpotifyProfile.fetch_top_artists')
-    def test_save_spotify_profile(self):
+    def test_save_spotify_profile(self, mock_fetch_top_tracks, mock_fetch_top_artists):
         # Create a CustomUser instance
         user = CustomUser.objects.create_user(name = "test_name", username="test_user", password="password")
 
@@ -151,12 +151,7 @@ class TestSaveSpotifyProfileView(TestCase):
         session['temporary_profile_id'] = self.temp_profile.id
         session.save()
 
-    @patch('spotify_app.models.TemporarySpotifyProfile.fetch_top_tracks')  # Mock any necessary API calls
-    @patch('spotify_app.models.TemporarySpotifyProfile.fetch_top_artists')
-    def test_save_spotify_profile(self, mock_fetch_top_tracks, mock_fetch_top_artists):
-        # Configure mocks if needed
-        mock_fetch_top_tracks.return_value = None
-        mock_fetch_top_artists.return_value = None
+    def test_save_spotify_profile_view(self):
 
         # Send a POST request to save the Spotify profile
         response = self.client.post(reverse('save_spotify_profile'))
