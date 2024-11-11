@@ -107,7 +107,7 @@ class TestSpotifyCallbackView(TestCase):
         response = self.client.get(reverse('spotify_callback'), {'code': 'valid_code'})
 
         # Check that it redirects correctly after successful token exchange
-        self.assertRedirects(response, reverse('display_top_songs'))
+        self.assertRedirects(response, reverse('summary'))
 
     @patch('spotify_app.views.requests.post')
     def test_spotify_callback_failure(self, mock_post):
@@ -143,31 +143,57 @@ class TestSpotifyCallbackView(TestCase):
 #         # Ensure the correct template is used
 #         self.assertTemplateUsed(response, 'spotify_app/top_song.html')
 
-    def test_display_top_songs_with_invalid_session(self):
-        # Test behavior when no temporary_profile_id is in the session
-        response = self.client.get(reverse('display_top_songs'))
+    # def test_display_top_songs_with_invalid_session(self):
+    #     # Test behavior when no temporary_profile_id is in the session
+    #     response = self.client.get(reverse('display_top_songs'))
+    #
+    #     # Expect an error page with a 200 status code if session data is missing
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertTemplateUsed(response, 'spotify_app/error.html')
+    #     self.assertContains(response, "No temporary profile ID found in session.")
 
-        # Expect an error page with a 200 status code if session data is missing
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'spotify_app/error.html')
-        self.assertContains(response, "No temporary profile ID found in session.")
+# class TestSaveSpotifyProfileView(TestCase):
+#     def setUp(self):
+#         # Create a user and log them in
+#         self.user = CustomUser.objects.create_user(username='test_user', password='test_pass')
+#         self.client.force_login(self.user)
+#
+#         # Create a temporary profile and save its ID in the session
+#         self.temp_profile = TemporarySpotifyProfile.objects.create()
+#         session = self.client.session
+#         session['temporary_profile_id'] = self.temp_profile.id
+#         session.save()
+#
+#     def test_save_spotify_profile_view(self):
+#         # Send a POST request to save the Spotify profile
+#         response = self.client.post(reverse('save_spotify_profile'))
+#
+#         # Ensure the response redirects to the history page
+#         self.assertRedirects(response, reverse('history'))
+#
+#         # Check that a SpotifyProfile was created for the logged-in user
+#         self.assertTrue(SpotifyProfile.objects.filter(user=self.user).exists())
 
 class TestSaveSpotifyProfileView(TestCase):
     def setUp(self):
-        # Create a user and log them in
+        # Create and log in a user
         self.user = CustomUser.objects.create_user(username='test_user', password='test_pass')
         self.client.force_login(self.user)
 
-        # Create a temporary profile and save its ID in the session
-        self.temp_profile = TemporarySpotifyProfile.objects.create()
-        session = self.client.session
-        session['temporary_profile_id'] = self.temp_profile.id
-        session.save()
+        # Create a temporary profile
+        self.temp_profile = TemporarySpotifyProfile.objects.create(
+            top_songs=[{'name': 'Song 1'}],
+            top_five_songs=['Song 1', 'Song 2'],
+            top_five_artists=['Artist 1', 'Artist 2'],
+            vibe_data={'mood': 'happy'},
+            genre_data={'genre': 'pop'}
+        )
 
     def test_save_spotify_profile_view(self):
-
-        # Send a POST request to save the Spotify profile
-        response = self.client.post(reverse('save_spotify_profile'))
+        # Send a POST request with the temporary_profile_id to save the Spotify profile
+        response = self.client.post(reverse('save_spotify_profile'), {
+            'temporary_profile_id': self.temp_profile.id
+        })
 
         # Ensure the response redirects to the history page
         self.assertRedirects(response, reverse('history'))
