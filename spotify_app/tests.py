@@ -16,10 +16,11 @@ from django.urls import reverse
 class TestTemporarySpotifyProfile(TestCase):
     @patch('spotify_app.models.requests.get')
     def test_fetch_top_tracks(self, mock_get):
+        # Include 'id' for each track as required by calculate_vibe_data
         mock_response = {
             'items': [
-                {'name': 'Song 1', 'artist': 'Artist 1'},
-                {'name': 'Song 2', 'artist': 'Artist 2'}
+                {'name': 'Song 1', 'artist': 'Artist 1', 'id': 'track_id_1'},
+                {'name': 'Song 2', 'artist': 'Artist 2', 'id': 'track_id_2'}
             ]
         }
         mock_get.return_value.status_code = 200
