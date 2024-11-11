@@ -115,8 +115,9 @@ class TestSpotifyCallbackView(TestCase):
 
         response = self.client.get(reverse('spotify_callback'), {'code': 'invalid_code'})
 
-        # Check for redirection to the error page if the API call fails
-        self.assertRedirects(response, reverse('error'))
+        # Check that the response contains the error message
+        self.assertContains(response, 'Authorization failed.')
+        self.assertTemplateUsed(response, 'spotify_app/error.html')
 
 
 # class TestDisplayTopSongsView(TestCase):
