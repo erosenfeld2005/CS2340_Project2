@@ -137,8 +137,10 @@ class TestDisplayTopSongsView(TestCase):
         # Test behavior when no temporary_profile_id is in the session
         response = self.client.get(reverse('display_top_songs'))
 
-        # Expect an error page if session data is missing
-        self.assertRedirects(response, reverse('error'))
+        # Expect an error page with a 200 status code if session data is missing
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'spotify_app/error.html')
+        self.assertContains(response, "No temporary profile ID found in session.")
 
 class TestSaveSpotifyProfileView(TestCase):
     def setUp(self):
