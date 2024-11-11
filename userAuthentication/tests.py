@@ -25,7 +25,7 @@ class UserAuthenticationTests(TestCase):
     def test_signup_valid(self):
         """Test if a new user can sign up successfully."""
         response = self.client.post(reverse('signup'), {
-            'Name': "name",
+            'name': "name",
             'username': 'newuser',
             'email': 'newuser@example.com',
             'password1': 'ppppp123444455555*******',
@@ -39,7 +39,7 @@ class UserAuthenticationTests(TestCase):
     def test_signup_invalid(self):
         """Test if signup fails with invalid data."""
         response = self.client.post(reverse('signup'), {
-            'Name': "name",
+            'name': "name",
             'username': self.username,  # Existing username
             'email': 'invalid_email',  # Invalid email
             'password1': 'password123',
@@ -105,7 +105,7 @@ class SignupFormTests(TestCase):
         :return: If the email works
         """
         form_data = {
-            'Name': "name",
+            'name': "name",
             'username': 'newuser',
             'email': '',  # No email provided
             'password1': 'password123',
@@ -121,7 +121,7 @@ class SignupFormTests(TestCase):
         :return: If the passwords match
         """
         form_data = {
-            'Name': "name",
+            'name': "name",
             'username': 'newuser',
             'email': 'newuser@example.com',
             'password1': 'password123',
@@ -141,7 +141,7 @@ class SignupFormTests(TestCase):
                                        email='existinguser@example.com', password='password123')
 
         form_data = {
-            'Name': "name",
+            'name': "name",
             'username': 'newuser',  # Same username as the existing user
             'email': 'newuser@example.com',
             'password1': 'password123',
@@ -157,7 +157,7 @@ class SignupFormTests(TestCase):
         :return: if the email is valid
         """
         form_data = {
-            'Name': "name",
+            'name': "name",
             'username': 'newuser',
             'email': 'invalidemail',  # Invalid email format
             'password1': 'password123',
