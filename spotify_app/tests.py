@@ -15,11 +15,11 @@ from django.urls import reverse
 class TestTemporarySpotifyProfile(TestCase):
     @patch('spotify_app.models.requests.get')
     def test_fetch_top_tracks(self, mock_get):
-        # Include 'id' for each track as required by calculate_vibe_data
+        # Mock response with valid artist data for both tracks
         mock_response = {
             'items': [
-                {'name': 'Song 1', 'artist': 'Artist 1', 'id': 'track_id_1'},
-                {'name': 'Song 2', 'artist': 'Artist 2', 'id': 'track_id_2'}
+                {'name': 'Song 1', 'artists': [{'name': 'Artist 1'}], 'id': 'track_id_1'},
+                {'name': 'Song 2', 'artists': [{'name': 'Artist 2'}], 'id': 'track_id_2'}
             ]
         }
         mock_get.return_value.status_code = 200
@@ -28,8 +28,11 @@ class TestTemporarySpotifyProfile(TestCase):
         temp_profile = TemporarySpotifyProfile()
         tracks = temp_profile.fetch_top_tracks('access_token')
 
+        # Assert that the fetched tracks match the mock data
         self.assertEqual(len(tracks), 2)
         self.assertEqual(tracks[0]['name'], 'Song 1')
+        self.assertEqual(tracks[0]['artist'], 'Artist 1')
+        self.assertEqual(tracks[1]['name'], 'Song 2')
         self.assertEqual(tracks[1]['artist'], 'Artist 2')
 
     @patch('spotify_app.models.requests.get')
