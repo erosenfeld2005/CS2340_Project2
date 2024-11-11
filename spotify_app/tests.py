@@ -8,7 +8,6 @@ from django.utils import timezone
 
 from userAuthentication.models import CustomUser
 from .models import SpotifyProfile, TemporarySpotifyProfile
-from .views import display_top_songs
 from django.conf import settings
 import requests
 from django.urls import reverse
