@@ -133,7 +133,7 @@ class TestDisplayTopSongsView(TestCase):
 
         # Set session data to simulate a valid session with a temporary profile ID
         self.client.session['temporary_profile_id'] = temp_profile.id
-        self.client.session.save()
+        self.client.session.save()  # Ensure session is saved after modification
 
         # Send the request to the view
         response = self.client.get(reverse('display_top_songs'))
