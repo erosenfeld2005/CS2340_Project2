@@ -7,10 +7,10 @@ import requests
 from requests.auth import HTTPBasicAuth
 
 from django.conf import settings
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.contrib.auth import logout
-
+from django.contrib import messages
 from .models import SpotifyProfile, TemporarySpotifyProfile
 
 def spotify_login(request):
@@ -295,3 +295,17 @@ def display_saved_summary_content(request, created_at):
     # else:
     #     return render(request, 'spotify_app/error.html',
     #                   {"message": "No temporary profile ID found in session."})
+
+
+def delete_profile(request, profile_id):
+    """
+    View to delete a specific Spotify profile based on profile_id.
+    """
+    profile = get_object_or_404(SpotifyProfile, id=profile_id, user=request.user)
+
+    # Delete the profile and show a success message
+    profile.delete()
+    messages.success(request, 'The saved profile was successfully deleted.')
+
+    # Redirect back to the history page
+    return redirect('history')
