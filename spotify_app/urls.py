@@ -18,5 +18,5 @@ urlpatterns = [
     path('signout/', views.signout, name='signout'),
     path('saved_summary/<str:created_at>/', views.display_saved_summary_content,
          name='saved_summary'),
-
+    path('delete_profile/<int:profile_id>/', views.delete_profile, name='delete_profile'),
 ]

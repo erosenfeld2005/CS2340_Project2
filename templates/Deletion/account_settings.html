@@ -18,40 +18,15 @@
         <nav class="navbar">
             <a href="{% url 'dashboard' %}">Dashboard</a>
             <a href="{% url 'account_settings' %}">Account</a>
-            <a href="{% url 'signout' %}" class="btn">Sign Out</a>
+            <a href="#" class="btn" data-toggle="modal" data-target="#logoutModal">Log Out</a>
         </nav>
     </header>
 
     <!-- Main Content -->
     <div id="account-settings-page" class="container my-5">
-    <h3 class="text-center">Account Details</h3>
+    <h3 class="text-center">Account Settings</h3>
     <form>
-        <!-- Form fields as before -->
-        <div class="row mb-4">
-            <div class="col">
-                <label for="first-name">First Name</label>
-                <input type="text" id="first-name" name="first_name" class="form-control">
-            </div>
-            <div class="col">
-                <label for="last-name">Last Name</label>
-                <input type="text" id="last-name" name="last_name" class="form-control">
-            </div>
-        </div>
-        <div class="mb-4">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" class="form-control">
-        </div>
-        <div class="mb-4">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" class="form-control">
-        </div>
-        <div class="mb-4">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" class="form-control">
-        </div>
-
         <div class="settings-container">
-            <h3>Settings</h3>
             <div class="form-group">
                 <label for="language-preference">Language Preference</label>
                 <select id="language-preference" class="form-control">
@@ -87,9 +62,6 @@ function confirmDelete() {
 }
 </script>
 
-</body>
-</html>
-
 <!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -113,3 +85,26 @@ function confirmDelete() {
         </div>
     </div>
 </div>
+
+<!-- Log Out Confirmation Modal -->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="logoutModalLabel">Confirm Log Out</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to log out?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <a href="{% url 'signout' %}" class="btn btn-primary">Log Out</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
