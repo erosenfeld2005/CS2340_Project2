@@ -239,45 +239,86 @@ class TestSaveSpotifyProfileView(TestCase):
         self.assertTrue(SpotifyProfile.objects.filter(user=self.user).exists())
 
 class TestSpotifyCallbackErrorHandling(TestCase):
+    """
+    Test spotify_callback's error handling
+    """
     def test_spotify_callback_no_code(self):
+        """
+        Test how spotify callback works if the authorization code doesn't work
+        :return: True if we get a "Authorization failed" on error.html
+        """
         response = self.client.get(reverse('spotify_callback'))
         self.assertContains(response, "Authorization failed.", status_code=200)
         self.assertTemplateUsed(response, 'spotify_app/error.html')
 
 class TestDisplaySummaryContentErrorHandling(TestCase):
+    """
+    Test if you can display the spotify summary without a temporary profile id
+    """
     def test_display_summary_content_missing_profile(self):
+        """
+        Test if you can display the spotify summary without a temporary profile id
+        :return: True if we get the error page and an error of no temp id
+        """
         response = self.client.get(reverse('summary'))
         self.assertContains(response, "No temporary profile ID found in session.")
         self.assertTemplateUsed(response, 'spotify_app/error.html')
 
 class TestSaveSpotifyProfileInvalidMethod(TestCase):
     def setUp(self):
+        """
+        Just set up a user and log them in
+        :return: Nothing
+        """
         self.user = CustomUser.objects.create_user(username='test_user', password='test_pass')
         self.client.force_login(self.user)
 
     def test_save_spotify_profile_invalid_method(self):
+        """
+        Test saved spotify profile with an invalid request method
+        :return: True if the request method was invalid
+        """
         response = self.client.get(reverse('save_spotify_profile'))
         self.assertContains(response, "Invalid request method.")
         self.assertTemplateUsed(response, 'spotify_app/error.html')
 
 class TestDisplaySavedSummaryContentErrorHandling(TestCase):
     def setUp(self):
+        """
+        Set up user and force log them in
+        :return: Nothing
+        """
         self.user = CustomUser.objects.create_user(username='test_user', password='test_pass')
         self.client.force_login(self.user)
 
     def test_display_saved_summary_content_invalid_profile(self):
+        """
+        Test if you can display saved summary content with an invalid profile
+        :return: True if they didn't find the given profile
+        """
         invalid_created_at = timezone.now()  # Timestamp unlikely to match any profile
         response = self.client.get(reverse('saved_summary', args=[invalid_created_at]))
         self.assertContains(response, "Profile not found for the given timestamp.")
         self.assertTemplateUsed(response, 'spotify_app/error.html')
 
 class TestDeleteProfileUnauthorizedAccess(TestCase):
+    """
+    Test how deleting a profile works if you are the wrong user
+    """
     def setUp(self):
+        """
+        Just sets up multiple users
+        :return: Nothing
+        """
         self.user1 = CustomUser.objects.create_user(username='user1', password='test_pass')
         self.user2 = CustomUser.objects.create_user(username='user2', password='test_pass')
         self.profile = SpotifyProfile.objects.create(user=self.user2)
 
     def test_delete_profile_unauthorized_access(self):
+        """
+        Test how deleting a profile works if you are the wrong user
+        :return: True if there is an error
+        """
         self.client.force_login(self.user1)
         response = self.client.post(reverse('delete_profile', args=[self.profile.id]))
         self.assertEqual(response.status_code, 404)
