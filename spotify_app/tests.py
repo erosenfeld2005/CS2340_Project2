@@ -291,7 +291,6 @@ class TestDisplaySummaryContent(TestCase):
 
         # Create a TemporarySpotifyProfile with complete data
         self.profile = TemporarySpotifyProfile.objects.create(
-            user=self.user,
             top_five_artists=['artist1', 'artist2', 'artist3', 'artist4', 'artist5'],
             top_songs=['song1', 'song2', 'song3', 'song4', 'song5'],
             vibe_data={'mood': 'happy', 'energy': 'high'},
