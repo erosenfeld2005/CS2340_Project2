@@ -86,65 +86,6 @@ def exchange_code_for_token(code):
         return response_data.get("access_token"), response_data.get("refresh_token")
     return None, None
 
-
-def display_top_songs(request):
-    """
-    Function that displays the top songs page
-    :param request: Redirect input
-    :return: the appropriate page
-    """
-    temp_profile_id = request.session.get('temporary_profile_id')
-    # Retrieve the profile ID from the session
-
-    if temp_profile_id:
-        try:
-            temp_profile = TemporarySpotifyProfile.objects.get(id=temp_profile_id)
-            # Get the temporary profile by ID
-            if not temp_profile.top_songs:
-                return render(request, 'spotify_app/error.html',
-                              {"message": "No top songs found."})
-
-            return render(request, 'spotify_app/top_song.html',
-                          {"top_songs": temp_profile.top_songs})
-        except TemporarySpotifyProfile.DoesNotExist:
-            return render(request, 'spotify_app/error.html',
-                          {"message": "Temporary profile not found."})
-    else:
-        return render(request, 'spotify_app/error.html',
-                      {"message": "No temporary profile ID found in session."})
-
-
-def display_music_vibes(request):
-    """
-    Function that displays the music vibes page using TemporarySpotifyProfile
-    :param request: Redirect input
-    :return: the appropriate page
-    """
-    temp_profile_id = request.session.get('temporary_profile_id')
-    # Retrieve the profile ID from the session
-
-    if temp_profile_id:
-        try:
-            temp_profile = TemporarySpotifyProfile.objects.get(id=temp_profile_id)
-            # Get the temporary profile by ID
-            if not temp_profile.vibe_data:
-                return render(request, 'spotify_app/error.html',
-                              {"message": "No vibe data found."})
-
-            # Combine both dictionaries into a single context dictionary
-            context = {
-                "vibe_data": temp_profile.vibe_data,
-                "temporary_profile_id": temp_profile_id
-            }
-            return render(request, 'spotify_app/music_vibes.html', context)
-        except TemporarySpotifyProfile.DoesNotExist:
-            return render(request, 'spotify_app/error.html',
-                          {"message": "Temporary profile not found."})
-    else:
-        return render(request, 'spotify_app/error.html',
-                      {"message": "No temporary profile ID found in session."})
-
-
 def display_summary_content(request):
     """
     Function that displays the top artists page
@@ -190,33 +131,6 @@ def display_summary_content(request):
         return render(request, 'spotify_app/error.html',
                       {"message": "No temporary profile ID found in session."})
 
-def display_top_genres(request):
-    """
-    Function that displays the top genres page
-    :param request: Redirect input
-    :return: the appropriate page
-    """
-    temp_profile_id = request.session.get('temporary_profile_id')
-    # Retrieve the profile ID from the session
-
-    if temp_profile_id:
-        try:
-            temp_profile = TemporarySpotifyProfile.objects.get(id=temp_profile_id)
-            # Get the temporary profile by ID
-            if not temp_profile.genre_data:
-                return render(request, 'spotify_app/error.html',
-                              {"message": "No genre data found."})
-
-            top_genres = list(temp_profile.genre_data.items())
-                # Convert dictionary to list of tuples
-            return render(request, 'summary.html', {"top_genres": top_genres})
-
-        except TemporarySpotifyProfile.DoesNotExist:
-            return render(request, 'spotify_app/error.html',
-                          {"message": "Temporary profile not found."})
-    else:
-        return render(request, 'spotify_app/error.html',
-                      {"message": "No temporary profile ID found in session."})
 
 def save_spotify_profile(request):
     """
@@ -252,12 +166,12 @@ def save_spotify_profile(request):
         # Handle the case where the request method is not POST
     return render(request, 'spotify_app/error.html', {"message": "Invalid request method."})
 
-def display_saved_profiles(request):
-    """
-    Function to display saved Spotify profiles
-    """
-    profiles = request.user.spotify_profiles.all()  # Retrieve all profiles for the logged-in user
-    return render(request, 'spotify_app/saved_profiles.html', {'profiles': profiles})
+# def display_saved_profiles(request):
+#     """
+#     Function to display saved Spotify profiles
+#     """
+#     profiles = request.user.spotify_profiles.all()  # Retrieve all profiles for the logged-in user
+#     return render(request, 'spotify_app/saved_profiles.html', {'profiles': profiles})
 
 def display_saved_summary_content(request, created_at):
     """
@@ -265,7 +179,12 @@ def display_saved_summary_content(request, created_at):
     :param request: Redirect input
     :return: the appropriate page
     """
-    temp_profile = SpotifyProfile.objects.get(created_at=created_at)
+
+    try:
+        temp_profile = SpotifyProfile.objects.get(created_at=created_at)
+    except SpotifyProfile.DoesNotExist:
+        return render(request, 'spotify_app/error.html',
+                      {"message": "Profile not found for the given timestamp."})
 
     if not temp_profile.top_five_artists or not temp_profile.genre_data:
         return render(request, 'spotify_app/error.html',
@@ -289,13 +208,14 @@ def display_saved_summary_content(request, created_at):
 
     return render(request, 'saved_summary.html', context)
 
-    # except TemporarySpotifyProfile.DoesNotExist:
-    #     return render(request, 'spotify_app/error.html',
-    #                   {"message": "Temporary profile not found."})
-    # else:
-    #     return render(request, 'spotify_app/error.html',
-    #                   {"message": "No temporary profile ID found in session."})
-
+def error_view(request):
+    """
+    View to display errors
+    :param request: User request to get to this page
+    :return: Renders the error
+    """
+    basicM = "basic message for an error"
+    return render(request, 'error.html', {'message': basicM})
 
 def delete_profile(request, profile_id):
     """

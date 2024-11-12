@@ -17,6 +17,8 @@ def landing_page(request):
     :param request: get the given html site
     :return: the landing page
     """
+    #BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    #print(os.path.join(BASE_DIR, 'templates'))
     return render(request, 'landing.html')
 
 @login_required
@@ -76,6 +78,7 @@ def delete_account_confirmed(request):
         return redirect('landing')
     return redirect('account_settings')
 
+@login_required
 def history(request):
     """
     Render the wrapped history page.
@@ -83,9 +86,12 @@ def history(request):
     :param request: The HTTP request object.
     :return: The rendered history.html page.
     """
+    if not request.user.is_authenticated:
+        # Redirect to the dashboard or any other page if the user is not logged in
+        return redirect('dashboard')
+
     profiles = SpotifyProfile.objects.filter(user=request.user)
     return render(request, 'history.html', {'profiles': profiles})
-
 
 def contact_developers(request):
     """

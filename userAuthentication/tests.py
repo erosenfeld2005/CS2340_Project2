@@ -22,22 +22,24 @@ class UserAuthenticationTests(TestCase):
         self.user = User.objects.create_user(username=self.username,
                                              email=self.email, password=self.password)
 
-    # def test_signup_valid(self):
-    #     """Test if a new user can sign up successfully."""
-    #     response = self.client.post(reverse('signup'), {
-    #         'Name': "name",
-    #         'username': 'newuser',
-    #         'email': 'newuser@example.com',
-    #         'password1': 'ppppp123444455555*******',
-    #         'password2': 'ppppp123444455555*******'
-    #     })
-    #     self.assertEqual(response.status_code, 302)  # Check if redirected
-    #     self.assertTrue(User.objects.filter(username='newuser').exists())  # Check if user exists
+    def test_signup_valid(self):
+        """Test if a new user can sign up successfully."""
+        response = self.client.post(reverse('signup'), {
+            'name': "name",
+            'username': 'newuser',
+            'email': 'newuser@example.com',
+            'password1': 'ppppp123444455555*******',
+            'password2': 'ppppp123444455555*******'
+        })
+        self.assertEqual(response.status_code, 302)  # Check if redirected
+        self.assertTrue(User.objects.filter(username='newuser').exists())  # Check if user exists
+        self.assertRedirects(response,
+                             reverse('dashboard'))
 
     def test_signup_invalid(self):
         """Test if signup fails with invalid data."""
         response = self.client.post(reverse('signup'), {
-            'Name': "name",
+            'name': "name",
             'username': self.username,  # Existing username
             'email': 'invalid_email',  # Invalid email
             'password1': 'password123',
@@ -49,15 +51,15 @@ class UserAuthenticationTests(TestCase):
         self.assertFormError(form, 'email', 'Enter a valid email address.')
         self.assertFormError(form, 'password2', 'The two password fields didn’t match.')
 
-    # def test_login_valid(self):
-    #     """Test if a user can log in with valid credentials."""
-    #     response = self.client.post(reverse('login'), {
-    #         'username': self.username,
-    #         'password': self.password
-    #     })
-    #     self.assertEqual(response.status_code, 302)  # Should redirect after successful login
-    #     #self.assertRedirects(response,
-    #                       reverse('signup_success'))  # Check if redirected to success page
+    def test_login_valid(self):
+        """Test if a user can log in with valid credentials."""
+        response = self.client.post(reverse('login'), {
+            'username': self.username,
+            'password': self.password
+        })
+        self.assertEqual(response.status_code, 302)  # Should redirect after successful login
+        self.assertRedirects(response,
+                          reverse('dashboard'))  # Check if redirected to dashboard page
 
     def test_login_invalid(self):
         """Test if login fails with invalid credentials."""
@@ -84,18 +86,22 @@ class SignupFormTests(TestCase):
     Tests for SignUp Form
     """
 
-    # def test_signup_form_valid(self):
-    #     form_data = {
-    #         'Name': "name",
-    #         'username': 'newuser',
-    #         'email': 'newuser@example.com',
-    #         'password1': 'ppppp1234444****ddd',
-    #         'password2': 'ppppp1234444****ddd'
-    #     }
-    #     form = SignupForm(data=form_data)
-    #     self.assertTrue(form.is_valid())
-    #     self.assertEqual(form.cleaned_data['username'], 'newuser')
-    #     self.assertEqual(form.cleaned_data['email'], 'newuser@example.com')
+    def test_signup_form_valid(self):
+        """
+        Test if the signup form is valid
+        :return: Whether the signup form is valid
+        """
+        form_data = {
+            'name': "name",
+            'username': 'newuser',
+            'email': 'newuser@example.com',
+            'password1': 'ppppp1234444****ddd',
+            'password2': 'ppppp1234444****ddd'
+        }
+        form = SignupForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data['username'], 'newuser')
+        self.assertEqual(form.cleaned_data['email'], 'newuser@example.com')
 
     def test_email_required(self):
         """
@@ -103,7 +109,7 @@ class SignupFormTests(TestCase):
         :return: If the email works
         """
         form_data = {
-            'Name': "name",
+            'name': "name",
             'username': 'newuser',
             'email': '',  # No email provided
             'password1': 'password123',
@@ -119,7 +125,7 @@ class SignupFormTests(TestCase):
         :return: If the passwords match
         """
         form_data = {
-            'Name': "name",
+            'name': "name",
             'username': 'newuser',
             'email': 'newuser@example.com',
             'password1': 'password123',
@@ -139,7 +145,7 @@ class SignupFormTests(TestCase):
                                        email='existinguser@example.com', password='password123')
 
         form_data = {
-            'Name': "name",
+            'name': "name",
             'username': 'newuser',  # Same username as the existing user
             'email': 'newuser@example.com',
             'password1': 'password123',
@@ -155,7 +161,7 @@ class SignupFormTests(TestCase):
         :return: if the email is valid
         """
         form_data = {
-            'Name': "name",
+            'name': "name",
             'username': 'newuser',
             'email': 'invalidemail',  # Invalid email format
             'password1': 'password123',
