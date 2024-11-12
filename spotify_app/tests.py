@@ -286,8 +286,12 @@ class TestDeleteProfileUnauthorizedAccess(TestCase):
 class TestDisplaySummaryContent(TestCase):
 
     def setUp(self):
+        # Create a test user
+        self.user = CustomUser.objects.create_user(username='testuser', password='testpassword')
+
         # Create a TemporarySpotifyProfile with complete data
         self.profile = TemporarySpotifyProfile.objects.create(
+            user=self.user,
             top_five_artists=['artist1', 'artist2', 'artist3', 'artist4', 'artist5'],
             top_songs=['song1', 'song2', 'song3', 'song4', 'song5'],
             vibe_data={'mood': 'happy', 'energy': 'high'},
@@ -300,6 +304,10 @@ class TestDisplaySummaryContent(TestCase):
         self.profile.save()
 
         self.client.login(username='testuser', password='testpassword')
+        # Add temporary_profile_id to the session
+        self.client.session['temporary_profile_id'] = self.profile.id
+        self.client.session.save()
+
         response = self.client.get(reverse('summary'))
 
         self.assertEqual(response.status_code, 200)
@@ -311,6 +319,10 @@ class TestDisplaySummaryContent(TestCase):
         self.profile.save()
 
         self.client.login(username='testuser', password='testpassword')
+        # Add temporary_profile_id to the session
+        self.client.session['temporary_profile_id'] = self.profile.id
+        self.client.session.save()
+
         response = self.client.get(reverse('summary'))
 
         self.assertEqual(response.status_code, 200)
@@ -322,6 +334,10 @@ class TestDisplaySummaryContent(TestCase):
         self.profile.save()
 
         self.client.login(username='testuser', password='testpassword')
+        # Add temporary_profile_id to the session
+        self.client.session['temporary_profile_id'] = self.profile.id
+        self.client.session.save()
+
         response = self.client.get(reverse('summary'))
 
         self.assertEqual(response.status_code, 200)
@@ -333,6 +349,10 @@ class TestDisplaySummaryContent(TestCase):
         self.profile.save()
 
         self.client.login(username='testuser', password='testpassword')
+        # Add temporary_profile_id to the session
+        self.client.session['temporary_profile_id'] = self.profile.id
+        self.client.session.save()
+
         response = self.client.get(reverse('summary'))
 
         self.assertEqual(response.status_code, 200)
