@@ -281,3 +281,63 @@ class TestDeleteProfileUnauthorizedAccess(TestCase):
         self.client.force_login(self.user1)
         response = self.client.post(reverse('delete_profile', args=[self.profile.id]))
         self.assertEqual(response.status_code, 404)
+
+
+class TestDisplaySummaryContent(TestCase):
+
+    def setUp(self):
+        # Create a test user
+        self.user = CustomUser.objects.create_user(username='testuser', password='testpassword')
+
+        # Create a TemporarySpotifyProfile with complete data
+        self.profile = TemporarySpotifyProfile.objects.create(
+            user=self.user,
+            top_five_artists=['artist1', 'artist2', 'artist3', 'artist4', 'artist5'],
+            top_songs=['song1', 'song2', 'song3', 'song4', 'song5'],
+            vibe_data={'mood': 'happy', 'energy': 'high'},
+            genre_data={'pop': 5, 'rock': 3}
+        )
+
+    def test_display_summary_content_missing_top_five_artists(self):
+        # Remove top_five_artists and check for error message
+        self.profile.top_five_artists = []
+        self.profile.save()
+
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.get(reverse('summary'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "No top artists and genres found.")
+
+    def test_display_summary_content_missing_top_songs(self):
+        # Remove top_songs and check for error message
+        self.profile.top_songs = []
+        self.profile.save()
+
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.get(reverse('summary'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "No top songs found.")
+
+    def test_display_summary_content_missing_vibe_data(self):
+        # Remove vibe_data and check for error message
+        self.profile.vibe_data = {}
+        self.profile.save()
+
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.get(reverse('summary'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "No vibe data found.")
+
+    def test_display_summary_content_missing_genre_data(self):
+        # Remove genre_data and check for error message
+        self.profile.genre_data = {}
+        self.profile.save()
+
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.get(reverse('summary'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "No top artists and genres found.")
