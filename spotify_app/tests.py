@@ -1,5 +1,5 @@
 """
-Python file to create and store test cases
+Python file to create and store test cases about the spotify_app
 """
 
 from unittest.mock import patch
@@ -237,3 +237,47 @@ class TestSaveSpotifyProfileView(TestCase):
 
         # Check that a SpotifyProfile was created for the logged-in user
         self.assertTrue(SpotifyProfile.objects.filter(user=self.user).exists())
+
+class TestSpotifyCallbackErrorHandling(TestCase):
+    def test_spotify_callback_no_code(self):
+        response = self.client.get(reverse('spotify_callback'))
+        self.assertContains(response, "Authorization failed.", status_code=200)
+        self.assertTemplateUsed(response, 'spotify_app/error.html')
+
+class TestDisplaySummaryContentErrorHandling(TestCase):
+    def test_display_summary_content_missing_profile(self):
+        response = self.client.get(reverse('display_summary_content'))
+        self.assertContains(response, "No temporary profile ID found in session.")
+        self.assertTemplateUsed(response, 'spotify_app/error.html')
+
+class TestSaveSpotifyProfileInvalidMethod(TestCase):
+    def setUp(self):
+        self.user = CustomUser.objects.create_user(username='test_user', password='test_pass')
+        self.client.force_login(self.user)
+
+    def test_save_spotify_profile_invalid_method(self):
+        response = self.client.get(reverse('save_spotify_profile'))
+        self.assertContains(response, "Invalid request method.")
+        self.assertTemplateUsed(response, 'spotify_app/error.html')
+
+class TestDisplaySavedSummaryContentErrorHandling(TestCase):
+    def setUp(self):
+        self.user = CustomUser.objects.create_user(username='test_user', password='test_pass')
+        self.client.force_login(self.user)
+
+    def test_display_saved_summary_content_invalid_profile(self):
+        invalid_created_at = timezone.now()  # Timestamp unlikely to match any profile
+        response = self.client.get(reverse('display_saved_summary_content', args=[invalid_created_at]))
+        self.assertContains(response, "No top artists and genres found.")
+        self.assertTemplateUsed(response, 'spotify_app/error.html')
+
+class TestDeleteProfileUnauthorizedAccess(TestCase):
+    def setUp(self):
+        self.user1 = CustomUser.objects.create_user(username='user1', password='test_pass')
+        self.user2 = CustomUser.objects.create_user(username='user2', password='test_pass')
+        self.profile = SpotifyProfile.objects.create(user=self.user2)
+
+    def test_delete_profile_unauthorized_access(self):
+        self.client.force_login(self.user1)
+        response = self.client.post(reverse('delete_profile', args=[self.profile.id]))
+        self.assertEqual(response.status_code, 404)
