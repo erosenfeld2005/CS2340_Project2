@@ -20,20 +20,27 @@
             background: linear-gradient(30deg, #A5CBC3 20%, #FFFFFF 100%);
         }
         .slideshow-container {
+            position: relative;
             width: 1000px;
             height: 550px;
-            text-align: center;
-            border: 1px solid #A5CBC3;
+            text-align: left;
+            /*border: 1px solid var(--light-background);*/
             border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            /*padding: 20px;*/
+            /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);*/
             margin-bottom: 20px;
-            background: var(--light-background);
+            /*background: var(--light-background);*/
         }
         .slide {
+            position: absolute;
             display: none;
             padding: 20px;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
             text-align: left;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background: var(--light-background);
         }
         .slide.active {
             display: block;
@@ -309,6 +316,93 @@
         .dot.active {
             background-color: #3F665E;
         }
+
+        /* Slide In & Out Animation */
+        @keyframes slide-out-left {
+            0% {
+                transform: translate(0, 0) scale(1);
+                z-index: 2;
+            }
+            49% {
+                z-index: 2; /* Outgoing slide stays on top until halfway */
+            }
+            50% {
+                transform: translate(-400px, 0) scale(0.9);
+                z-index: 1;
+            }
+            100% {
+                transform: translate(0, 0) scale(0.8);
+                z-index: 1;
+                opacity: 0;
+            }
+        }
+        @keyframes slide-in-right {
+            0% {
+                transform: translate(0, 0) scale(0.8);
+                z-index: 1;
+            }
+            49% {
+                z-index: 1; /* Incoming slide below outgoing slide initially */
+            }
+            50% {
+                transform: translate(400px, 0) scale(0.9);
+                z-index: 2;
+            }
+            100% {
+                transform: translate(0, 0) scale(1);
+                z-index: 2;
+            }
+        }
+        @keyframes slide-out-right {
+            0% {
+                transform: translate(0, 0) scale(1);
+                z-index: 2;
+            }
+            49% {
+                z-index: 2;
+            }
+            50% {
+                transform: translate(400px, 0) scale(0.9);
+                z-index: 1;
+            }
+            100% {
+                transform: translate(0, 0) scale(0.8);
+                z-index: 1;
+                opacity: 0;
+            }
+        }
+        @keyframes slide-in-left {
+            0% {
+                transform: translate(0, 0) scale(0.8);
+                z-index: 1;
+            }
+            49% {
+                z-index: 1;
+            }
+            50% {
+                transform: translate(-400px, 0) scale(0.9);
+                z-index: 2;
+            }
+            100% {
+                transform: translate(0, 0) scale(1);
+                z-index: 2;
+            }
+        }
+        .outgoing-left {
+            animation: slide-out-left 1.5s ease-in-out forwards;
+        }
+
+        .incoming-right {
+            animation: slide-in-right 1.5s ease-in-out forwards;
+        }
+
+        .outgoing-right {
+            animation: slide-out-right 1.5s ease-in-out forwards;
+        }
+
+        .incoming-left {
+            animation: slide-in-left 1.5s ease-in-out forwards;
+        }
     </style>
 </head>
 <body>
@@ -465,33 +559,63 @@
     </div>
 
     <script>
-        let slideIndex = 0;
+        let slideIndex = 0; // curr index
         const slides = document.querySelectorAll('.slide');
         const dots = document.querySelectorAll('.dot');
+        const animationDuration = 1500; // Duration in ms matching CSS animation
 
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                slide.classList.remove('active');
+        function showSlide(newIndex, direction) {
+            const outgoingSlide = slides[slideIndex];
+            const incomingSlide = slides[newIndex];
+
+            // Reset all slides to remove animations and hide them initially
+            slides.forEach(slide => {
+                slide.classList.remove('active', 'outgoing-left', 'incoming-right', 'outgoing-right', 'incoming-left');
                 slide.style.display = 'none';
-                dots[i].classList.remove('active');
             });
-            slides[index].classList.add('active');
-            slides[index].style.display = 'block';
-            dots[index].classList.add('active');
+
+            // Ensure the outgoing slide is visible before animating out
+            outgoingSlide.style.display = 'block';
+            outgoingSlide.style.zIndex = 2; // Set outgoing slide behind incoming
+
+            // Apply the correct animation classes based on direction
+            if (direction === 'next') {
+                outgoingSlide.classList.add('outgoing-left');
+                incomingSlide.classList.add('incoming-right');
+            } else {
+                outgoingSlide.classList.add('outgoing-right');
+                incomingSlide.classList.add('incoming-left');
+            }
+
+            // Ensure the incoming slide is above the outgoing slide and visible
+            incomingSlide.style.display = 'block';
+            incomingSlide.style.zIndex = 1;
+            incomingSlide.classList.add('active');
+
+            // Update dot navigation
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[newIndex].classList.add('active');
+
+            // Hide the outgoing slide after the animation completes
+            setTimeout(() => {
+                // outgoingSlide.style.display = 'none'; // Hide the outgoing slide
+                slideIndex = newIndex; // Update slideIndex after the transition completes
+            }, animationDuration);
         }
 
         function changeSlide(n) {
-            slideIndex = (slideIndex + n + slides.length) % slides.length;
-            showSlide(slideIndex);
+            const newSlideIndex = (slideIndex + n + slides.length) % slides.length;
+            const direction = n > 0 ? 'next' : 'prev';
+            showSlide(newSlideIndex, direction);
         }
 
         function currentSlide(index) {
-            slideIndex = index;
-            showSlide(slideIndex);
+            const direction = index > slideIndex ? 'next' : 'prev';
+            showSlide(index, direction);
         }
 
         // Initial display
-        showSlide(slideIndex);
+        showSlide(slideIndex, 'next');
 
         document.addEventListener('DOMContentLoaded', function () {
             const slideshowContainer = document.getElementById('slideshow-container');
