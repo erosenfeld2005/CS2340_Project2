@@ -19,7 +19,9 @@
             background: linear-gradient(30deg, #A5CBC3 20%, #FFFFFF 100%);
         }
         .slideshow-container {
-            width: 1000px;
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
             height: 550px;
             text-align: center;
             border: 1px solid #A5CBC3;
@@ -27,15 +29,37 @@
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             margin-bottom: 20px;
+            overflow: hidden;
             background: var(--light-background);
         }
+
+        /* for transition */
+        .slide-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            transform: translateX(100%); /* Start off-screen */
+        }
+        .slide-wrapper.active {
+            opacity: 1;
+            transform: translateX(0); /* Move on-screen when active */
+
+
+        }
+
         .slide {
             display: none;
             padding: 20px;
             text-align: left;
+            position: relative
         }
         .slide.active {
             display: block;
+            animation: fadeIn 0.5s ease-out, slideUp 1.5s ease-out;
         }
         .slide img {
             max-width: 50%;
@@ -308,6 +332,34 @@
         .dot.active {
             background-color: #3F665E;
         }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); }
+            to { transform: translateY(0); }
+        }
+
+        /* CSS for slide transitions */
+        @keyframes slideInFromRight {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                transform: translateX(-100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
     </style>
 </head>
 <body>
@@ -324,117 +376,134 @@
     <div class="main-content">
         <div id="slideshow-container" class="slideshow-container">
 
-            <!-- Slide 1 -->
-            <div class="slide active">
-                <h2>{{user_name}}, are you ready to explore your musical soul?</h2>
-                <p class="intro-text">Your musical journey awaits—discover your top tracks, artists, and genres.</p>
-                <div class="icon-container">
-                    <img src="{% static 'sound-icon.png' %}" alt="sound waves" class="intro-icon">
-                </div>
-            </div>
-
-            <!-- Slide 2 -->
-            <div class="slide">
-                <h2>Your top artist is...</h2>
-                <div class="artist-info">
-                    <div class="artist-details">
-                        <h3>{{ top_five_artists.0.name }}</h3>
-                        <img src="{{ top_five_artists.0.image_url }}" alt="top artist image" class="top-artist-photo">
-                    </div>
-                    <div class="artist-stats">
-                        <h4>Genre: {{ top_five_artists.0.genres|join:", " }}</h4> <!-- the join gets rid of the [' '] -->
-                        <h4>Popularity: {{ top_five_artists.0.popularity }}</h4>
-<!--                        <h4>Top Songs: </h4>-->
+            <div class="slide-wrapper active">
+                <!-- Slide 1 -->
+                <div class="slide active">
+                    <h2>{{user_name}}, are you ready to explore your musical soul?</h2>
+                    <p class="intro-text">Your musical journey awaits—discover your top tracks, artists, and genres.</p>
+                    <div class="icon-container">
+                        <img src="{% static 'sound-icon.png' %}" alt="sound waves" class="intro-icon">
                     </div>
                 </div>
             </div>
 
-            <!-- Slide 3 -->
-            <div class="slide">
-                <h2>Your top 5 artists are...</h2>
-                <div class="artist-container">
-                    {% for artist in top_five_artists %}
-                        <div class="artist">
-                            <p1>#{{ forloop.counter }}. {{ artist.name }}</p1>
-                            <img src="{{ artist.image_url }}" alt="artist image" class="artist-photo">
+            <div class="slide-wrapper">
+                <!-- Slide 2 -->
+                <div class="slide">
+                    <h2>Your top artist is...</h2>
+                    <div class="artist-info">
+                        <div class="artist-details">
+                            <h3>{{ top_five_artists.0.name }}</h3>
+                            <img src="{{ top_five_artists.0.image_url }}" alt="top artist image" class="top-artist-photo">
                         </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <!-- Slide 4 -->
-            <div class="slide">
-                <h2>Your top song is...</h2>
-                <div class="song-info">
-                    <div class="song-details1" style="display: flex; flex-direction: column; align-items: center;">
-                        <h6>{{ top_five_songs.0.name }}</h6>
-                        <img src="{{ top_five_songs.0.image_url }}" alt="top song image" class="top-song-photo">
-                        <div class="other-icon-container">
-<!--                            <img src="{% static 'playback icon.png' %}" alt="playback" class="other-icon">-->
+                        <div class="artist-stats">
+                            <h4>Genre: {{ top_five_artists.0.genres|join:", " }}</h4> <!-- the join gets rid of the [' '] -->
+                            <h4>Popularity: {{ top_five_artists.0.popularity }}</h4>
+    <!--                        <h4>Top Songs: </h4>-->
                         </div>
                     </div>
-                    <div class="song-stats">
-                        <h5>Popularity: {{ top_five_songs.0.popularity }}</h5>
-<!--                        <h5>Dance Vibes: {{ top_five_songs.0.average_danceability }}</h5>-->
+                </div>
+            </div>
+
+            <div class="slide-wrapper">
+                <!-- Slide 3 -->
+                <div class="slide">
+                    <h2>Your top 5 artists are...</h2>
+                    <div class="artist-container">
+                        {% for artist in top_five_artists %}
+                            <div class="artist">
+                                <p1>#{{ forloop.counter }}. {{ artist.name }}</p1>
+                                <img src="{{ artist.image_url }}" alt="artist image" class="artist-photo">
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
 
-            <!-- Slide 5 -->
-            <div class="slide">
-                <h2>Your top 5 songs are...</h2>
-                <div class="song-container">
-                    {% for song in top_five_songs %}
-                        <div class="song">
-                            <p1>#{{ forloop.counter }}. {{ song.name }}</p1>
-                            <img src="{{ song.image_url }}" alt="song image" class="song-photo">
+            <div class="slide-wrapper">
+                <!-- Slide 4 -->
+                <div class="slide">
+                    <h2>Your top song is...</h2>
+                    <div class="song-info">
+                        <div class="song-details1" style="display: flex; flex-direction: column; align-items: center;">
+                            <h6>{{ top_five_songs.0.name }}</h6>
+                            <img src="{{ top_five_songs.0.image_url }}" alt="top song image" class="top-song-photo">
+                            <div class="other-icon-container">
+    <!--                            <img src="{% static 'playback icon.png' %}" alt="playback" class="other-icon">-->
+                            </div>
                         </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <!-- Slide 6 -->
-            <div class="slide">
-                <h2>Your top 5 genres are...</h2>
-                <div class="artist-container">
-                    {% for genre, count in top_genres.items %}
-                        <div class="artist">
-                            <p1>#{{ forloop.counter }}. {{ genre }}</p1>
-                            <p>Count: {{ count }}</p> <!-- Display how often each genre appears -->
+                        <div class="song-stats">
+                            <h5>Popularity: {{ top_five_songs.0.popularity }}</h5>
+    <!--                        <h5>Dance Vibes: {{ top_five_songs.0.average_danceability }}</h5>-->
                         </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <!-- Slide 7 -->
-            <div class="slide">
-                <h2>Your vibe data...</h2>
-                <div class="artist-info">
-                    <div class="vibes-details">
-                        <h4>Danceability: {{ vibe_data.average_danceability|floatformat:2 }}%</h4>
-                        <h4>Valence: {{ vibe_data.average_valence|floatformat:2 }}%</h4>
-                        <h4>Energy: {{ vibe_data.average_energy|floatformat:2 }}%</h4>
                     </div>
                 </div>
             </div>
 
-            <!-- Slide 8 -->
-            <div class="slide">
-                <h3>Your Musical Soul at a Glance...</h3>
-                <div class="glance-info">
-                    <div class="glance-details">
-                        <h7>Top Artist: {{top_five_artists.0.name}} </h7>
-                        <img src="{{ top_five_artists.0.image_url }}" alt="top artist image" class="artist-photo">
-                    </div>
-                    <div class="glance-details">
-                        <h7>Top Song: {{top_five_songs.0.name}} </h7>
-                        <img src="{{ top_five_artists.1.image_url }}" alt="top artist image" class="artist-photo">
-                    </div>
-                    <div class="glance-details">
-                        <h7>Top Genre: {{top_1_genre}} </h7>
-                        <img src="{{ top_five_artists.2.image_url }}" alt="top artist image" class="artist-photo">
+            <div class="slide-wrapper">
+                <!-- Slide 5 -->
+                <div class="slide">
+                    <h2>Your top 5 songs are...</h2>
+                    <div class="song-container">
+                        {% for song in top_five_songs %}
+                            <div class="song">
+                                <p1>#{{ forloop.counter }}. {{ song.name }}</p1>
+                                <img src="{{ song.image_url }}" alt="song image" class="song-photo">
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
+            </div>
+
+            <div class="slide-wrapper">
+                <!-- Slide 6 -->
+                <div class="slide">
+                    <h2>Your top 5 genres are...</h2>
+                    <div class="artist-container">
+                        {% for genre, count in top_genres.items %}
+                            <div class="artist">
+                                <p1>#{{ forloop.counter }}. {{ genre }}</p1>
+                                <p>Count: {{ count }}</p> <!-- Display how often each genre appears -->
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-wrapper">
+                <!-- Slide 7 -->
+                <div class="slide">
+                    <h2>Your vibe data...</h2>
+                    <div class="artist-info">
+                        <div class="vibes-details">
+                            <h4>Danceability: {{ vibe_data.average_danceability|floatformat:2 }}%</h4>
+                            <h4>Valence: {{ vibe_data.average_valence|floatformat:2 }}%</h4>
+                            <h4>Energy: {{ vibe_data.average_energy|floatformat:2 }}%</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slide-wrapper">
+                <!-- Slide 8 -->
+                <div class="slide">
+                    <h3>Your Musical Soul at a Glance...</h3>
+                    <div class="glance-info">
+                        <div class="glance-details">
+                            <h7>Top Artist: {{top_five_artists.0.name}} </h7>
+                            <img src="{{ top_five_artists.0.image_url }}" alt="top artist image" class="artist-photo">
+                        </div>
+                        <div class="glance-details">
+                            <h7>Top Song: {{top_five_songs.0.name}} </h7>
+                            <img src="{{ top_five_artists.1.image_url }}" alt="top artist image" class="artist-photo">
+                        </div>
+                        <div class="glance-details">
+                            <h7>Top Genre: {{top_1_genre}} </h7>
+                            <img src="{{ top_five_artists.2.image_url }}" alt="top artist image" class="artist-photo">
+                        </div>
+                    </div>
+                </div>
+
                 <div style="text-align: center; margin-top: 50px;">
                     <form method="post" action="{% url 'save_spotify_profile' %}">
                         {% csrf_token %}
@@ -465,38 +534,60 @@
 
     <script>
         let slideIndex = 0;
-        const slides = document.querySelectorAll('.slide');
+        const slideWrappers = document.querySelectorAll('.slide-wrapper');
         const dots = document.querySelectorAll('.dot');
 
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                slide.classList.remove('active');
-                slide.style.display = 'none';
+        function showSlide(index, direction = 'next') {
+            slideWrappers.forEach((wrapper, i) => {
+                wrapper.classList.remove('active');
+                wrapper.style.display = 'block';
+                wrapper.style.animation = '';
                 dots[i].classList.remove('active');
             });
-            slides[index].classList.add('active');
-            slides[index].style.display = 'block';
+
+            if (direction === 'next') {
+                slideWrappers[index].style.transform = 'translateX(100%)';  // Start off-screen
+                requestAnimationFrame(() => {
+                    slideWrappers[index].style.animation = 'slideInFromRight 0.5s forwards';
+                    slideWrappers[index].classList.add('active');
+            });
+            } else {
+                slideWrappers[index].style.transform = 'translateX(-100%)';  // Start off-screen
+                requestAnimationFrame(() => {
+                    slideWrappers[index].style.animation = 'slideInFromLeft 0.5s forwards';
+                    slideWrappers[index].classList.add('active');
+                });
+            }
+
+            slideWrappers[index].classList.add('active');
+            slideWrappers[index].style.display = 'flex';
             dots[index].classList.add('active');
         }
 
         function changeSlide(n) {
-            slideIndex = (slideIndex + n + slides.length) % slides.length;
-            showSlide(slideIndex);
+            const direction = n > 0 ? 'next' : 'prev';
+            slideIndex = (slideIndex + n + slideWrappers.length) % slideWrappers.length;
+            showSlide(slideIndex, direction);
         }
 
         function currentSlide(index) {
+            const direction = index > slideIndex ? 'next' : 'prev';
             slideIndex = index;
-            showSlide(slideIndex);
+            showSlide(slideIndex, direction);
         }
 
         // Initial display
         showSlide(slideIndex);
 
+        // Event listeners for navigation buttons
+        document.querySelector('.prev').addEventListener('click', () => changeSlide(-1));
+        document.querySelector('.next').addEventListener('click', () => changeSlide(1));
+
         document.addEventListener('DOMContentLoaded', function () {
             const slideshowContainer = document.getElementById('slideshow-container');
 
             function updateLink() {
-                const activeSlide = document.querySelector('.slide.active');
+                const activeSlide = document.querySelector('.slide-wrapper.active');
                 if (activeSlide && activeSlide.querySelector('h2').innerText === 'Wrapped Summary') {
                     slideshowContainer.onclick = () => {
                         window.location.href = "{% url 'spotify_login' %}";
@@ -508,7 +599,7 @@
 
             // Set up a MutationObserver to detect class changes in slides
             const observer = new MutationObserver(updateLink);
-            slides.forEach(slide => observer.observe(slide, { attributes: true, attributeFilter: ['class'] }));
+            slideWrappers.forEach(wrapper => observer.observe(wrapper, { attributes: true, attributeFilter: ['class'] }));
 
             // Initial link setup
             updateLink();
