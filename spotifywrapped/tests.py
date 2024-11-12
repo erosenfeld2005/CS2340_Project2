@@ -11,13 +11,14 @@ class ASGITest(SimpleTestCase):
     def test_asgi_application_initialization(self):
         # Create mock receive and send functions to simulate ASGI
         async def mock_receive():
-            return {}
+            # Return a message with the required 'type' key
+            return {"type": "http.request"}
 
         async def mock_send(message):
             pass
 
         # Run the ASGI app with mock receive/send
-        scope = {"type": "http"}  # This is a simple HTTP request scope
+        scope = {"type": "http", "path": "/"}  # Ensure a valid scope is provided
         receive = mock_receive
         send = mock_send
 
