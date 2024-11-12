@@ -343,16 +343,20 @@ class TestDisplaySummaryContent(TestCase):
         self.assertContains(response, "No vibe data found.")
 
     def test_display_summary_content_missing_genre_data(self):
-        # Remove genre_data and check for error message
+        # Ensure the profile has missing genre data
         self.profile.genre_data = {}
         self.profile.save()
 
+        # Set up the session with the profile ID
         self.client.login(username='testuser', password='testpassword')
-        # Add temporary_profile_id to the session
         self.client.session['temporary_profile_id'] = self.profile.id
         self.client.session.save()
 
         response = self.client.get(reverse('summary'))
 
+        # Ensure the error page is rendered
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'spotify_app/error.html')
+
+        # Check for the correct error message
         self.assertContains(response, "No top artists and genres found.")
