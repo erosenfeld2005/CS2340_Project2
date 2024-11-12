@@ -268,7 +268,7 @@ class TestDisplaySavedSummaryContentErrorHandling(TestCase):
     def test_display_saved_summary_content_invalid_profile(self):
         invalid_created_at = timezone.now()  # Timestamp unlikely to match any profile
         response = self.client.get(reverse('saved_summary', args=[invalid_created_at]))
-        self.assertContains(response, "No top artists and genres found.")
+        self.assertContains(response, "Profile not found for the given timestamp.")
         self.assertTemplateUsed(response, 'spotify_app/error.html')
 
 class TestDeleteProfileUnauthorizedAccess(TestCase):

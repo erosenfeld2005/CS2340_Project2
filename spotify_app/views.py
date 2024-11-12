@@ -179,7 +179,12 @@ def display_saved_summary_content(request, created_at):
     :param request: Redirect input
     :return: the appropriate page
     """
-    temp_profile = SpotifyProfile.objects.get(created_at=created_at)
+
+    try:
+        temp_profile = SpotifyProfile.objects.get(created_at=created_at)
+    except SpotifyProfile.DoesNotExist:
+        return render(request, 'spotify_app/error.html',
+                      {"message": "Profile not found for the given timestamp."})
 
     if not temp_profile.top_five_artists or not temp_profile.genre_data:
         return render(request, 'spotify_app/error.html',
