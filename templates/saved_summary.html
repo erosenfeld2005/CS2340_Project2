@@ -453,6 +453,10 @@
         const slides = document.querySelectorAll('.slide');
         const dots = document.querySelectorAll('.dot');
 
+        /**
+         * This function controls the movement of the slides and displays the slide
+         * @param index The index of the slide we are accessing
+         */
         function showSlide(index) {
             slides.forEach((slide, i) => {
                 slide.classList.remove('active');
@@ -464,11 +468,19 @@
             dots[index].classList.add('active');
         }
 
+        /**
+         * This function change the slides
+         * @param n Used to move forward and calculate the new index
+         */
         function changeSlide(n) {
             slideIndex = (slideIndex + n + slides.length) % slides.length;
             showSlide(slideIndex);
         }
 
+        /**
+         * This function returns the render of the given slideIndex
+         * @param index The index of the slide we want to display
+         */
         function currentSlide(index) {
             slideIndex = index;
             showSlide(slideIndex);
@@ -480,6 +492,9 @@
         document.addEventListener('DOMContentLoaded', function () {
             const slideshowContainer = document.getElementById('slideshow-container');
 
+            /**
+             * This function updates the link to not work if not on wrapped summary
+             */
             function updateLink() {
                 const activeSlide = document.querySelector('.slide.active');
                 if (activeSlide && activeSlide.querySelector('h2').innerText === 'Wrapped Summary') {

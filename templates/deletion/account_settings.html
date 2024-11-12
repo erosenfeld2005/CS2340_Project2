@@ -46,20 +46,28 @@
         <div class="mb-4 text-center">
             <button type="button" class="btn btn-delete" data-toggle="modal" data-target="#deleteModal">Delete Account</button>
         </div>
+        </div>
     </form>
 </div>
 
 <script>
-function toggleDarkMode(element) {
-    element.classList.toggle("active");
-    document.body.classList.toggle("dark-mode");
-}
-
-function confirmDelete() {
-    if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
-        window.location.href = "{% url 'confirm_delete_account' %}";
+    /**
+     * This function controls the view of all our pages in turning dark mode off and on
+     * @param element The toggle element visible on the page
+     */
+    function toggleDarkMode(element) {
+        element.classList.toggle("active");
+        document.body.classList.toggle("dark-mode");
     }
-}
+
+    /**
+     * This function controls the button click if the user wants to remove their account
+     */
+    function confirmDelete() {
+        if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+            window.location.href = "{% url 'confirm_delete_account' %}";
+        }
+    }
 </script>
 
 <!-- Delete Confirmation Modal -->
