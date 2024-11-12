@@ -265,6 +265,9 @@ class TestDisplaySummaryContentErrorHandling(TestCase):
         self.assertTemplateUsed(response, 'spotify_app/error.html')
 
 class TestSaveSpotifyProfileInvalidMethod(TestCase):
+    """
+    Test how the save spotify profile method works with an invalid request method
+    """
     def setUp(self):
         """
         Just set up a user and log them in
@@ -283,6 +286,9 @@ class TestSaveSpotifyProfileInvalidMethod(TestCase):
         self.assertTemplateUsed(response, 'spotify_app/error.html')
 
 class TestDisplaySavedSummaryContentErrorHandling(TestCase):
+    """
+    Test display saved summary content's error handling
+    """
     def setUp(self):
         """
         Set up user and force log them in

@@ -1,3 +1,6 @@
+"""
+Python file to create and store test cases about the spotifywrapped app
+"""
 import os
 from django.test import SimpleTestCase
 from spotifywrapped.asgi import application
@@ -32,4 +35,3 @@ class ASGITest(SimpleTestCase):
         :return: Whether the ASGI application is callable
         """
         self.assertTrue(callable(application))
-
