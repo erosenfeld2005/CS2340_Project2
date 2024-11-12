@@ -71,7 +71,7 @@ class WrappedViewsTest(TestCase):
         self.client.login(username='testuser', password='testpassword')
         response = self.client.get(reverse('account_settings'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'deletion/account_settings.html')
+        self.assertTemplateUsed(response, 'Deletion/account_settings.html')
 
     # def test_account_settings_view_not_logged_in(self):
     #     response = self.client.get(reverse('account_settings'))
@@ -115,13 +115,13 @@ class WrappedViewsTest(TestCase):
         self.client.login(username='testuser', password='testpassword')
         response = self.client.get(reverse('confirm_delete_account'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'deletion/confirm_delete_account.html')
+        self.assertTemplateUsed(response, 'Deletion/confirm_delete_account.html')
 
     def test_account_deleted_view_logged_in(self):
         self.client.login(username='testuser', password='testpassword')
         response = self.client.get(reverse('account_deleted'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'deletion/account_deleted.html')
+        self.assertTemplateUsed(response, 'Deletion/account_deleted.html')
 
     def test_delete_account_confirmed_view_post(self):
         self.client.login(username='testuser', password='testpassword')
