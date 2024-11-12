@@ -10,6 +10,7 @@ from django.contrib import messages
 
 from spotify_app.models import SpotifyProfile
 
+import os
 
 def landing_page(request):
     """
@@ -17,6 +18,8 @@ def landing_page(request):
     :param request: get the given html site
     :return: the landing page
     """
+    #BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    #print(os.path.join(BASE_DIR, 'templates'))
     return render(request, 'landing.html')
 
 @login_required
@@ -45,7 +48,7 @@ def account_settings(request):
     :param request: The HTTP request object.
     :return: The rendered account_settings.html page.
     """
-    return render(request, 'Deletion/account_settings.html')
+    return render(request, 'deletion/account_settings.html')
 
 @login_required
 def confirm_delete_account(request):
@@ -54,14 +57,14 @@ def confirm_delete_account(request):
     :param request: The HTTP request object.
     :return: The rendered confirm page
     """
-    return render(request, 'Deletion/confirm_delete_account.html')
+    return render(request, 'deletion/confirm_delete_account.html')
 
 @login_required
 def account_deleted(request):
     """
     View to display a message that the account has been successfully deleted.
     """
-    return render(request, 'Deletion/account_deleted.html')
+    return render(request, 'deletion/account_deleted.html')
 
 @login_required
 def delete_account_confirmed(request):
