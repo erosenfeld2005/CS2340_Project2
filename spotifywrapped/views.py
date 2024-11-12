@@ -2,7 +2,7 @@
 Python file that renders the landing page when the website is opened
 """
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout, login
+from django.contrib.auth import logout
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.conf import settings
@@ -10,7 +10,6 @@ from django.contrib import messages
 
 from spotify_app.models import SpotifyProfile
 
-import os
 
 def landing_page(request):
     """
