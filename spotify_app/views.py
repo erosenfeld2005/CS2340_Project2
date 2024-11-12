@@ -166,12 +166,12 @@ def save_spotify_profile(request):
         # Handle the case where the request method is not POST
     return render(request, 'spotify_app/error.html', {"message": "Invalid request method."})
 
-def display_saved_profiles(request):
-    """
-    Function to display saved Spotify profiles
-    """
-    profiles = request.user.spotify_profiles.all()  # Retrieve all profiles for the logged-in user
-    return render(request, 'spotify_app/saved_profiles.html', {'profiles': profiles})
+# def display_saved_profiles(request):
+#     """
+#     Function to display saved Spotify profiles
+#     """
+#     profiles = request.user.spotify_profiles.all()  # Retrieve all profiles for the logged-in user
+#     return render(request, 'spotify_app/saved_profiles.html', {'profiles': profiles})
 
 def display_saved_summary_content(request, created_at):
     """
