@@ -18,7 +18,7 @@ class ASGITest(SimpleTestCase):
             pass
 
         # Run the ASGI app with mock receive/send
-        scope = {"type": "http", "path": "/"}  # Ensure a valid scope is provided
+        scope = {"type": "http", "path": "/", "method": "GET"}  # Include the 'method' key
         receive = mock_receive
         send = mock_send
 
