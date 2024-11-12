@@ -246,7 +246,7 @@ class TestSpotifyCallbackErrorHandling(TestCase):
 
 class TestDisplaySummaryContentErrorHandling(TestCase):
     def test_display_summary_content_missing_profile(self):
-        response = self.client.get(reverse('display_summary_content'))
+        response = self.client.get(reverse('summary'))
         self.assertContains(response, "No temporary profile ID found in session.")
         self.assertTemplateUsed(response, 'spotify_app/error.html')
 
@@ -267,7 +267,7 @@ class TestDisplaySavedSummaryContentErrorHandling(TestCase):
 
     def test_display_saved_summary_content_invalid_profile(self):
         invalid_created_at = timezone.now()  # Timestamp unlikely to match any profile
-        response = self.client.get(reverse('display_saved_summary_content', args=[invalid_created_at]))
+        response = self.client.get(reverse('saved_summary', args=[invalid_created_at]))
         self.assertContains(response, "No top artists and genres found.")
         self.assertTemplateUsed(response, 'spotify_app/error.html')
 
