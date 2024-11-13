@@ -564,6 +564,11 @@
         const dots = document.querySelectorAll('.dot');
         const animationDuration = 1500; // Duration in ms matching CSS animation
 
+        /**
+         * This function finds and displays in the new slide
+         * @param newIndex The new index of the slide we are displaying
+         * @param direction Either next or before, depending on which arrow was flicked
+         */
         function showSlide(newIndex, direction) {
             const outgoingSlide = slides[slideIndex];
             const incomingSlide = slides[newIndex];
@@ -603,12 +608,20 @@
             }, animationDuration);
         }
 
+        /**
+         * This function changes the slide given an amount to move
+         * @param n The amove we want to move
+         */
         function changeSlide(n) {
             const newSlideIndex = (slideIndex + n + slides.length) % slides.length;
             const direction = n > 0 ? 'next' : 'prev';
             showSlide(newSlideIndex, direction);
         }
 
+        /**
+         * This function displays the current slide
+         * @param index
+         */
         function currentSlide(index) {
             const direction = index > slideIndex ? 'next' : 'prev';
             showSlide(index, direction);
@@ -620,6 +633,9 @@
         document.addEventListener('DOMContentLoaded', function () {
             const slideshowContainer = document.getElementById('slideshow-container');
 
+            /**
+             * This function updates the link to not work if not on wrapped summary
+             */
             function updateLink() {
                 const activeSlide = document.querySelector('.slide.active');
                 if (activeSlide && activeSlide.querySelector('h2').innerText === 'Wrapped Summary') {

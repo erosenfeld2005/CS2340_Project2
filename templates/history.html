@@ -158,10 +158,17 @@
 <script>
         let profileToDeleteId;
 
+        /**
+         * This function sets the variable profile to delete to the input
+         * @param profileId the inputted profileId to be deleted
+         */
         function setProfileToDelete(profileId) {
             profileToDeleteId = profileId;
         }
 
+        /**
+         * This function confirms the deletion of the given profile
+         */
         function confirmDelete() {
             if (profileToDeleteId) {
                 window.location.href = `/spotify/delete_profile/${profileToDeleteId}/`;
