@@ -28,32 +28,6 @@ body {
     color: var(--text-dark);
 }
 
-.dark-mode body {
-    background-color: var(--dark-background); /* Override background in dark mode */
-    color: var(--text-light); /* Text color in dark mode */
-}
-
-/* Additional dark mode background adjustments for sections */
-.dark-mode .landing-page,
-.dark-mode .login,
-.dark-mode .login-contianer,
-.dark-mode .form input,
-.dark-mode .form button,
-.dark-mode .text-field,
-.dark-mode .button-alt-option {
-    background-color: var(--dark-background); /* Dark background override for main sections */
-    color: var(--text-light); /* Ensure text color is light in dark mode */
-}
-
-.dark-mode .btn {
-    background-color: var(--button-bg-dark);
-    color: var(--button-text-dark);
-}
-
-.dark-mode .btn:hover {
-    background-color: #3A4457;
-}
-
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
     font-family: 'DM Sans', sans-serif;
@@ -130,15 +104,6 @@ h6 {
     background-color: var(--primary-green-dark);
 }
 
-.dark-mode .btn {
-    background-color: var(--button-bg-dark);
-    color: var(--button-text-dark);
-}
-
-.dark-mode .btn:hover {
-    background-color: #3A4457;
-}
-
 /* Navbar */
 header {
     background-color: var(--navbar-bg-color);
@@ -146,10 +111,6 @@ header {
     top: 0;
     width: 100%;
     z-index: 1000;
-}
-
-.dark-mode header {
-    background-color: var(--dark-background);
 }
 
 .navbar {
@@ -170,14 +131,6 @@ header {
 
 .navbar a:hover {
     color: var(--primary-green);
-}
-
-.dark-mode .navbar a {
-    color: var(--text-light);
-}
-
-.dark-mode .navbar a:hover {
-    color: var(--button-text-light);
 }
 
 /* Responsive Nav */
@@ -207,14 +160,6 @@ header {
     font-size: 20px;
     margin: 20px 0;
     color: var(--text-dark);
-}
-
-.dark-mode .landing-page {
-    background-color: var(--dark-background);
-}
-
-.dark-mode .landing-page h1, .dark-mode .landing-page p {
-    color: var(--text-light);
 }
 
 /* Logo */
@@ -328,19 +273,6 @@ box-shadow: 0px 24px 65px 0px rgba(20, 20, 43, 0.16);
 
 .login-contianer form button:hover {
     background-color: var(--primary-green-dark);
-}
-
-.dark-mode .form input {
-    background-color: var(--button-bg-dark);
-    color: var(--text-light);
-}
-
-.dark-mode .form button {
-    background-color: var(--button-bg-dark);
-}
-
-.dark-mode .form button:hover {
-    background-color: #3A4457;
 }
 
 .text-field {
@@ -471,3 +403,46 @@ h3.text-center {
     transform: translateX(24px);
 }
 
+/* Dark mode styles */
+body.dark-mode {
+    background-color: var(--dark-background);
+    color: var(--text-light);
+}
+
+/* Navbar in dark mode */
+body.dark-mode header {
+    background-color: var(--background-dark-grey) !important; /* Dark navbar background */
+}
+
+body.dark-mode .navbar a {
+    color: var(--text-light) !important; /* Light text color for navbar links */
+}
+
+body.dark-mode .navbar a:hover {
+    color: var(--primary-green) !important; /* Light green hover color for navbar links */
+}
+
+body.dark-mode .container,
+body.dark-mode .settings-container,
+body.dark-mode .main-content {
+    background-color: var(--background-dark-grey); /* Or another dark background color */
+    color: var(--text-light);
+}
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode p {
+    color: var(--text-light);
+}
+
+/* Buttons in dark mode */
+body.dark-mode .btn {
+    background-color: var(--button-bg-dark) !important; /* Dark button background */
+    color: var(--button-text-light) !important; /* Light text color for buttons */
+    border: none; /* Remove border if there’s any unwanted outline */
+}
+
+body.dark-mode .btn:hover {
+    background-color: var(--primary-green-dark) !important; /* Darker hover color for buttons */
+}
