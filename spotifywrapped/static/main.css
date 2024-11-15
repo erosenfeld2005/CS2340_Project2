@@ -446,3 +446,25 @@ body.dark-mode .btn {
 body.dark-mode .btn:hover {
     background-color: var(--primary-green-dark) !important; /* Darker hover color for buttons */
 }
+
+.modal-content {
+    background-color: var(--text-light);;
+    color: var(--button-bg-dark);
+}
+
+/* Optional: Make modal text color white for dark mode */
+body.dark-mode .modal-content {
+    background-color: var(--button-bg-dark); /* Dark background for dark mode */
+    color: var(--text-light); /* White text for dark mode */
+}
+
+/* Button styling inside modal */
+.modal-footer .btn {
+    background-color: var(--button-bg-dark);
+    color: var(--text-light);
+    border: none;
+}
+
+.modal-footer .btn:hover {
+    background-color: var(--navbar-bg-color);
+}
