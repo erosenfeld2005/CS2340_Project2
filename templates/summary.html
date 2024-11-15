@@ -278,6 +278,15 @@
             flex-direction: column; /* Stack name and photo vertically */
         }
 
+        .quiz-options p {
+            font-size: 24px;
+            transition: transform 0.05s ease-in-out; /* Smooth transition */
+        }
+
+        .quiz-options p:hover {
+            transform: translate(10px, 0px);
+            font-weight: bold;
+        }
 
 
         /* Dots and Arrow Button Styling */
@@ -425,6 +434,18 @@
                 <p class="intro-text">Your musical journey awaits—discover your top tracks, artists, and genres.</p>
                 <div class="icon-container">
                     <img src="{% static 'sound-icon.png' %}" alt="sound waves" class="intro-icon">
+                </div>
+            </div>
+
+            <!-- Quiz Q1 -->
+            <div class="slide active">
+                <h2>Pop Quiz!</h2>
+                <h3>Who's your top artist?</h3>
+                <div class="quiz-options">
+                    <p class="quiz-options">a) {{ top_five_artists.4.name }}</p>
+                    <p class="quiz-options">b) {{ top_five_artists.0.name }}</p>
+                    <p class="quiz-options">c) {{ top_five_artists.1.name }}</p>
+                    <p class="quiz-options">d) {{ top_five_artists.2.name }}</p>
                 </div>
             </div>
 
