@@ -35,7 +35,8 @@ class TemporarySpotifyProfile(models.Model):
                 "popularity": track.get("popularity"),
                 "image_url": track["album"]["images"][0]["url"] if track.get("album") and
                                                                    track["album"].get(
-                    "images") else None
+                    "images") else None,
+                "preview_url": track.get("preview_url")
             } for track in top_tracks_data]
             self.top_songs = top_tracks
             self.calculate_vibe_data(top_tracks_data, headers)  # Update vibe data

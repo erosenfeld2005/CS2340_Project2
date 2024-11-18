@@ -7,6 +7,7 @@
     <title>Account Settings</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'main.css' %}">
+    <script src="{% static 'darkmode.js' %}"></script>
     <!-- jQuery and Bootstrap JavaScript (necessary for Bootstrap modal) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
@@ -44,22 +45,13 @@
 
           <!-- Delete Button -->
         <div class="mb-4 text-center">
-            <button type="button" class="btn btn-delete" data-toggle="modal" data-target="#deleteModal">Delete Account</button>
+            <button type="button" class="btn-delete" data-toggle="modal" data-target="#deleteModal">Delete Account</button>
         </div>
         </div>
     </form>
 </div>
 
 <script>
-    /**
-     * This function controls the view of all our pages in turning dark mode off and on
-     * @param element The toggle element visible on the page
-     */
-    function toggleDarkMode(element) {
-        element.classList.toggle("active");
-        document.body.classList.toggle("dark-mode");
-    }
-
     /**
      * This function controls the button click if the user wants to remove their account
      */
