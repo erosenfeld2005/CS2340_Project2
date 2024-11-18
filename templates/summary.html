@@ -7,7 +7,6 @@
     <title>Wrapped Summary</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'main.css' %}">
-    <script src="{% static 'darkmode.js' %}"></script>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* Centered Slideshow Playlist Style */
@@ -457,16 +456,18 @@
                     <div class="song-details1" style="display: flex; flex-direction: column; align-items: center;">
                         <h6>{{ top_five_songs.0.name }}</h6>
                         <img src="{{ top_five_songs.0.image_url }}" alt="top song image" class="top-song-photo">
-                        <div class="audio-container">
-                            <!-- Audio Player for Top Song -->
-                            <audio controls class="audio-player">
+                        {% if top_five_songs.0.preview_url %}
+                            <audio id="audio-top-song">
                                 <source src="{{ top_five_songs.0.preview_url }}" type="audio/mpeg">
                                 Your browser does not support the audio element.
                             </audio>
-                        </div>
-                        <div class="other-icon-container">
-<!--                            <img src="{% static 'playback icon.png' %}" alt="playback" class="other-icon">-->
-                        </div>
+                            <!-- Play/pause btn -->
+                            <button class="play-pause-button btn btn-primary mt-2" data-audio-id="audio-top-song">
+                                ▶
+                            </button>
+                        {% else %}
+                            <p class="text-muted">No preview available</p>
+                        {% endif %}
                     </div>
                     <div class="song-stats">
                         <h5>Popularity: {{ top_five_songs.0.popularity }}</h5>
@@ -484,15 +485,17 @@
                             <p1>#{{ forloop.counter }}. {{ song.name }}</p1>
                             <img src="{{ song.image_url }}" alt="song image" class="song-photo">
                             {% if song.preview_url %}
-                                <div class="audio-container mb-3">
-                                    <!-- Audio Player for Each Song -->
-                                    <audio controls class="audio-player w-100">
-                                        <source src="{{ song.preview_url }}" type="audio/mpeg">
-                                        Your browser does not support the audio element.
-                                    </audio>
-                                </div>
+                                <!-- Hidden Audio Element -->
+                                <audio id="audio-{{ forloop.counter }}">
+                                    <source src="{{ song.preview_url }}" type="audio/mpeg">
+                                    Your browser does not support the audio element.
+                                </audio>
+                                <!-- Play/Pause Button -->
+                                <button class="play-pause-button btn btn-primary mt-2" data-audio-id="audio-{{ forloop.counter }}">
+                                    Play
+                                </button>
                             {% else %}
-                                <p> No preview available </p>
+                                <p class="text-muted">No preview available</p>
                             {% endif %}
                         </div>
                     {% endfor %}
@@ -554,7 +557,7 @@
         </div>
 
         <div class="dots-container">
-            <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
+            <a class="prev">&#10094;</a>
             <div class="dots">
                 <span class="dot active" onclick="currentSlide(0)"></span>
                 <span class="dot" onclick="currentSlide(1)"></span>
@@ -565,7 +568,7 @@
                 <span class="dot" onclick="currentSlide(6)"></span>
                 <span class="dot" onclick="currentSlide(7)"></span>
             </div>
-            <a class="next" onclick="changeSlide(1)">&#10095;</a>
+            <a class="next">&#10095;</a>
         </div>
     </div>
 
@@ -596,6 +599,7 @@
 <!-- Bootstrap JavaScript Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+<script src="{% static 'darkmode.js' %}"></script>
 <script src="{% static 'summary.js' %}"></script>
 </body>
 </html>
