@@ -478,7 +478,7 @@ body.dark-mode .modal-body {
 body.dark-mode .landing-page, body.dark-mode .login {
     background-color: var(--dark-background);
     color: var(--text-light);
-    border-radius: 10px;
+    border-radius: 9.9px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
