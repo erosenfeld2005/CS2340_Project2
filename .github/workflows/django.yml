@@ -58,7 +58,7 @@ jobs:
         SPOTIFY_CLIENT_SECRET: ${{secrets.SPOTIFY_CLIENT_SECRET}}
       run: |
         coverage run --source='.' manage.py test --keepdb
-        coverage report --fail-under=50  # Replace with 80 for final tests
+        coverage report --fail-under=95  # Replace with 80 for final tests
 
     - name: Analyzing code with pylint
       run: |
