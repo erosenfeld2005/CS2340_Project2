@@ -424,7 +424,8 @@ body.dark-mode .navbar a:hover {
 
 body.dark-mode .container,
 body.dark-mode .settings-container,
-body.dark-mode .main-content {
+body.dark-mode .main-content,
+body.dark-mode .login-contianer {
     background-color: var(--background-dark-grey); /* Or another dark background color */
     color: var(--text-light);
 }
@@ -474,7 +475,7 @@ body.dark-mode .modal-body {
 
 /* Specific dark modes */
 /* Dark mode styles for containers */
-body.dark-mode .landing-page {
+body.dark-mode .landing-page, body.dark-mode .login {
     background-color: var(--dark-background);
     color: var(--text-light);
     border-radius: 10px;
