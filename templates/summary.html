@@ -288,6 +288,19 @@
             font-weight: bold;
         }
 
+        .quiz-options p.selected {
+            background-color: var(--primary-green-dark); /* Green */
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .quiz-options p.incorrect {
+            background-color: #a2455e;
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+        }
 
         /* Dots and Arrow Button Styling */
         .dots-container {
@@ -442,10 +455,10 @@
                 <h2>Pop Quiz!</h2>
                 <h3>Who's your top artist?</h3>
                 <div class="quiz-options">
-                    <p class="quiz-options">a) {{ top_five_artists.4.name }}</p>
-                    <p class="quiz-options">b) {{ top_five_artists.0.name }}</p>
-                    <p class="quiz-options">c) {{ top_five_artists.1.name }}</p>
-                    <p class="quiz-options">d) {{ top_five_artists.2.name }}</p>
+                    <p class="quiz-options" data-correct="false">a) {{ top_five_artists.4.name }}</p>
+                    <p class="quiz-options" data-correct="true">b) {{ top_five_artists.0.name }}</p>
+                    <p class="quiz-options" data-correct="false">c) {{ top_five_artists.1.name }}</p>
+                    <p class="quiz-options" data-correct="false">d) {{ top_five_artists.2.name }}</p>
                 </div>
             </div>
 
@@ -653,6 +666,7 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             const slideshowContainer = document.getElementById('slideshow-container');
+            const quizOptions = document.querySelectorAll('.quiz-options p');
 
             /**
              * This function updates the link to not work if not on wrapped summary
@@ -667,6 +681,38 @@
                     slideshowContainer.onclick = null; // Remove click event if not on "Wrapped Summary"
                 }
             }
+
+            /**
+             * Handles the quiz option click.
+             */
+            function handleQuizOptionClick(event) {
+                const selectedOption = event.target;
+
+                // Disable further clicks on all options
+                // const allOptions = selectedOption.parentNode.querySelectorAll('p');
+                // allOptions.forEach(option => option.style.pointerEvents = 'none');
+
+
+                if (selectedOption.dataset.correct === 'true') {
+                    // Highlight the correct answer
+                    selectedOption.classList.add('selected');
+                    setTimeout(() => {
+                        // Transition to the next slide
+                        changeSlide(1); // Move to the next slide
+                    }, 1000); // Wait for feedback before sliding
+                } else {
+                    // Highlight incorrect answer
+                    selectedOption.classList.add('incorrect');
+                }
+            }
+            /**
+             * Adds event listeners to quiz options.
+             */
+            quizOptions.forEach(option => {
+                option.addEventListener('click', handleQuizOptionClick);
+            });
+
+
 
             // Set up a MutationObserver to detect class changes in slides
             const observer = new MutationObserver(updateLink);
