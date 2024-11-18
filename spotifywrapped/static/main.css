@@ -557,3 +557,14 @@ body.dark-mode .navbar a {
 body.dark-mode .navbar a:hover {
     color: var(--navbar-bg-color);
 }
+
+/* Audio containers */
+.audio-container {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.audio-player {
+    width: 100%; /* Make the player responsive */
+    max-width: 300px; /* Limit maximum width */
+}
