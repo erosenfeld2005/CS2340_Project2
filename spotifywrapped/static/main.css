@@ -6,7 +6,7 @@
     --primary-green: #CFE3E1; /* Pastel green buttons/accents */
     --primary-green-dark: #98B9B5; /* Darker pastel green hover */
     --button-bg-light: #7ba39a;
-    --button-bg-dark: #4A5672;
+    --button-bg-dark: #576385;
     --button-text-light: #FFFFFF;
     --button-text-dark: #FFFFFF;
     --shadow-light: rgba(0, 0, 0, 0.1);
@@ -358,7 +358,7 @@ h3.text-center {
     font-size: 18px;
     font-weight: bold;
     color: #fff;
-    background-color: #D9534F;
+    background-color: #D9534F !important;
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -367,7 +367,7 @@ h3.text-center {
 }
 
 .btn-delete:hover {
-    background-color: #C9302C;
+    background-color: #C9302C !important;
 }
 
 /* Dark mode switch styling */
@@ -447,18 +447,21 @@ body.dark-mode .btn:hover {
     background-color: var(--primary-green-dark) !important; /* Darker hover color for buttons */
 }
 
-.modal-content {
-    background-color: var(--text-light);;
-    color: var(--button-bg-dark);
-}
-
-/* Optional: Make modal text color white for dark mode */
+/* Modal dark mode */
 body.dark-mode .modal-content {
-    background-color: var(--button-bg-dark); /* Dark background for dark mode */
-    color: var(--text-light); /* White text for dark mode */
+    background-color: var(--button-bg-dark);
+    color: var(--text-light);
 }
 
-/* Button styling inside modal */
+body.dark-mode .modal-body {
+    background-color: #4b5a70;
+    color: var(--text-light);
+    padding: 20px;
+    border-top: 1px solid var(--shadow-dark);
+    border-bottom: 1px solid var(--shadow-dark);
+}
+
+/* Modal buttons */
 .modal-footer .btn {
     background-color: var(--button-bg-dark);
     color: var(--text-light);
@@ -467,4 +470,89 @@ body.dark-mode .modal-content {
 
 .modal-footer .btn:hover {
     background-color: var(--navbar-bg-color);
+}
+
+/* Specific dark modes */
+/* Dark mode styles for containers */
+body.dark-mode .landing-page {
+    background-color: var(--dark-background);
+    color: var(--text-light);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .settings-container {
+    background-color: var(--dark-background);
+    border: 1px solid var(--navbar-bg-color);
+    border-radius: 8px;
+    color: var(--text-light);
+}
+
+/* Summary */
+
+summary.main-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    background: linear-gradient(30deg, #A5CBC3 20%, #FFFFFF 100%);
+}
+
+summary.main-content, .slideshow-container {
+    margin: 0 auto; /* Centers horizontally */
+}
+
+summary.main-content.dark-mode {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    background: linear-gradient(30deg, #A5CBC3 20%, #FFFFFF 100%);
+}
+
+/* Slide and button dark mode */
+body.dark-mode .slide {
+    background-color: var(--dark-background);
+    color: var(--text-light);
+}
+
+body.dark-mode .slide h4, body.dark-mode .slide h3, body.dark-mode .slide h5, body.dark-mode .slide h6 {
+    color: var(--text-light)
+}
+
+body.dark-mode .slide h4, body.dark-mode .slide h2, body.dark-mode .slide h7 {
+    color: var(--primary-green)
+}
+
+body.dark-mode .slide p1 {
+    color: var(--button-bg-light);
+}
+
+body.dark-mode h3.text-center {
+    color: var(--text-light); /* Text color for titles */
+}
+
+body.dark-mode .btn {
+    background-color: var(--navbar-bg-color);
+    color: var(--text-light);
+}
+
+body.dark-mode .btn:hover {
+    background-color: #2D4A4D;
+}
+
+body.dark-mode header {
+    background-color: var(--background-dark-grey);
+}
+
+body.dark-mode .navbar a {
+    color: var(--text-light);
+}
+
+body.dark-mode .navbar a:hover {
+    color: var(--navbar-bg-color);
 }
