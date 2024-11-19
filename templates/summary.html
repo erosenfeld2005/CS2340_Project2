@@ -278,6 +278,10 @@
             flex-direction: column; /* Stack name and photo vertically */
         }
 
+        .slide.quiz {
+            background: var(--primary-green);
+        }
+
         .quiz-options p {
             font-size: 24px;
             transition: transform 0.05s ease-in-out; /* Smooth transition */
@@ -451,7 +455,7 @@
             </div>
 
             <!-- Quiz Q1 -->
-            <div class="slide active">
+            <div class="slide quiz">
                 <h2>Pop Quiz!</h2>
                 <h3>Who's your top artist?</h3>
                 <div class="quiz-options">
@@ -488,6 +492,18 @@
                             <img src="{{ artist.image_url }}" alt="artist image" class="artist-photo">
                         </div>
                     {% endfor %}
+                </div>
+            </div>
+
+            <!-- Quiz Q2 -->
+            <div class="slide quiz">
+                <h2>Pop Quiz!</h2>
+                <h3>Which is your top song?</h3>
+                <div class="quiz-options">
+                    <p class="quiz-options" data-correct="false">a) {{ top_five_songs.4.name }}</p>
+                    <p class="quiz-options" data-correct="true">b) {{ top_five_songs.0.name }}</p>
+                    <p class="quiz-options" data-correct="false">c) {{ top_five_songs.1.name }}</p>
+                    <p class="quiz-options" data-correct="false">d) {{ top_five_songs.2.name }}</p>
                 </div>
             </div>
 
@@ -587,6 +603,8 @@
                 <span class="dot" onclick="currentSlide(5)"></span>
                 <span class="dot" onclick="currentSlide(6)"></span>
                 <span class="dot" onclick="currentSlide(7)"></span>
+                <span class="dot" onclick="currentSlide(8)"></span>
+                <span class="dot" onclick="currentSlide(9)"></span>
             </div>
             <a class="next" onclick="changeSlide(1)">&#10095;</a>
         </div>
@@ -699,7 +717,7 @@
                     setTimeout(() => {
                         // Transition to the next slide
                         changeSlide(1); // Move to the next slide
-                    }, 1000); // Wait for feedback before sliding
+                    }, 500); // Wait for feedback before sliding
                 } else {
                     // Highlight incorrect answer
                     selectedOption.classList.add('incorrect');
