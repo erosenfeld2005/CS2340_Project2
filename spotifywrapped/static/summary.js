@@ -142,4 +142,52 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    document.getElementById('instagram-share-btn').addEventListener('click', function () {
+    captureSlideAndShare('instagram');
+    });
+
+    document.getElementById('twitter-share-btn').addEventListener('click', function () {
+        captureSlideAndShare('twitter');
+    });
+
+    document.getElementById('linkedin-share-btn').addEventListener('click', function () {
+        captureSlideAndShare('linkedin');
+    });
+
+    function captureSlideAndShare(platform) {
+        const slide8 = document.querySelector('#slide-8'); // Select Slide 8
+        const saveButton = slide8.querySelector('.save-button'); // Select the Save Button
+
+        // Temporarily hide the Save Button
+        saveButton.style.display = 'none';
+
+        // Use html2canvas to capture the slide
+        html2canvas(slide8).then(canvas => {
+            const image = canvas.toDataURL('image/png');
+
+            // Restore the Save Button
+            saveButton.style.display = 'block';
+
+            // Share the image based on the platform
+            if (platform === 'instagram') {
+                // Instagram-specific logic (manual upload since API limitations exist)
+                downloadImage(image, 'wrapped-summary.png');
+            } else if (platform === 'twitter') {
+                const twitterUrl = `https://twitter.com/intent/tweet?text=Check%20out%20my%20Wrapped%20Summary!&url=${image}`;
+                window.open(twitterUrl, '_blank');
+            } else if (platform === 'linkedin') {
+                const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${image}`;
+                window.open(linkedinUrl, '_blank');
+            }
+        });
+    }
+
+    function downloadImage(dataUrl, filename) {
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = filename;
+        link.click();
+    }
+
 });

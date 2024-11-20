@@ -308,6 +308,27 @@
             background-color: #3F665E;
         }
 
+        #social-media-share-slide {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .social-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-buttons .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+
         /* Slide In & Out Animation */
         @keyframes slide-out-left {
             0% {
@@ -554,6 +575,27 @@
                     </form>
                 </div>
             </div>
+
+            <!-- Social Media Sharing Slide -->
+            <div class="slide" id="social-media-share-slide">
+                <h2>Share Your Wrapped Summary</h2>
+                <p>Show your friends your top music moments by sharing your Wrapped Summary image!</p>
+                <div class="social-buttons">
+                    <!-- Instagram Share Button -->
+                    <a href="#" id="instagram-share-btn" class="btn btn-secondary">
+                        <i class="fab fa-instagram"></i> Share on Instagram
+                    </a>
+                    <!-- Twitter Share Button -->
+                    <a href="#" id="twitter-share-btn" class="btn btn-info">
+                        <i class="fab fa-twitter"></i> Share on Twitter
+                    </a>
+                    <!-- LinkedIn Share Button -->
+                    <a href="#" id="linkedin-share-btn" class="btn btn-primary">
+                        <i class="fab fa-linkedin-in"></i> Share on LinkedIn
+                    </a>
+                </div>
+            </div>
+
         </div>
 
         <div class="dots-container">
@@ -567,10 +609,13 @@
                 <span class="dot" onclick="currentSlide(5)"></span>
                 <span class="dot" onclick="currentSlide(6)"></span>
                 <span class="dot" onclick="currentSlide(7)"></span>
+                <span class="dot" onclick="currentSlide(8)"></span>
             </div>
             <a class="next">&#10095;</a>
         </div>
     </div>
+
+
 
 <!-- Log Out Confirmation Modal -->
 <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
@@ -594,6 +639,8 @@
     </div>
 </div>
 
+
+
 <!-- jQuery (Optional for Bootstrap 5, but required if you use any jQuery plugins) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Bootstrap JavaScript Bundle -->
@@ -601,5 +648,9 @@
 
 <script src="{% static 'darkmode.js' %}"></script>
 <script src="{% static 'summary.js' %}"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+
 </body>
 </html>
