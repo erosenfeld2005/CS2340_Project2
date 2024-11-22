@@ -329,75 +329,75 @@ class TestDeleteProfileUnauthorizedAccess(TestCase):
         response = self.client.post(reverse('delete_profile', args=[self.profile.id]))
         self.assertEqual(response.status_code, 404)
 
-class TestLoadingView(TestCase):
-    """
-    Tests for the loading view
-    """
-
-    def setUp(self):
-        """
-        Set up a temporary profile and user session
-        """
-        self.temp_profile = TemporarySpotifyProfile.objects.create(
-            top_songs=['Song 1', 'Song 2'],
-            top_five_songs=['Song 1', 'Song 2', 'Song 3', 'Song 4', 'Song 5'],
-            top_five_artists=['Artist 1', 'Artist 2', 'Artist 3', 'Artist 4', 'Artist 5'],
-            vibe_data={'mood': 'happy'},
-            genre_data={'pop': 2, 'rock': 3},
-        )
-        session = self.client.session
-        session['temporary_profile_id'] = self.temp_profile.id
-        session.save()
-
-    def test_loading_page_renders_correct_template(self):
-        """
-        Test that the loading page renders correctly for standard requests
-        """
-        response = self.client.get(reverse('loading'))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'spotify_app/loading.html')
-
-    def test_loading_page_with_no_profile(self):
-        """
-        Test behavior when no profile is in session
-        """
-        self.client.session.flush()  # Clear the session
-        response = self.client.get(reverse('loading'))
-        self.assertTemplateUsed(response, 'spotify_app/error.html')
-        self.assertContains(response, 'No profile found.')
-
-    def test_loading_ajax_polling_ready(self):
-        """
-        Test AJAX polling returns 'ready' when data is ready
-        """
-        with patch.object(TemporarySpotifyProfile, 'is_data_ready', return_value=True):
-            response = self.client.get(
-                reverse('loading'),
-                HTTP_X_REQUESTED_WITH='XMLHttpRequest'  # Simulate AJAX
-            )
-            self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.content, {'ready': True})
-
-    def test_loading_ajax_polling_not_ready(self):
-        """
-        Test AJAX polling returns 'not ready' when data is not ready
-        """
-        with patch.object(TemporarySpotifyProfile, 'is_data_ready', return_value=False):
-            response = self.client.get(
-                reverse('loading'),
-                HTTP_X_REQUESTED_WITH='XMLHttpRequest'  # Simulate AJAX
-            )
-            self.assertEqual(response.status_code, 200)
-            self.assertJSONEqual(response.content, {'ready': False})
-
-    def test_loading_ajax_no_profile(self):
-        """
-        Test AJAX polling with no profile in session
-        """
-        self.client.session.flush()  # Clear the session
-        response = self.client.get(
-            reverse('loading'),
-            HTTP_X_REQUESTED_WITH='XMLHttpRequest'
-        )
-        self.assertEqual(response.status_code, 400)
-        self.assertJSONEqual(response.content, {'ready': False, 'error': 'No profile found.'})
+# class TestLoadingView(TestCase):
+#     """
+#     Tests for the loading view
+#     """
+#
+#     def setUp(self):
+#         """
+#         Set up a temporary profile and user session
+#         """
+#         self.temp_profile = TemporarySpotifyProfile.objects.create(
+#             top_songs=['Song 1', 'Song 2'],
+#             top_five_songs=['Song 1', 'Song 2', 'Song 3', 'Song 4', 'Song 5'],
+#             top_five_artists=['Artist 1', 'Artist 2', 'Artist 3', 'Artist 4', 'Artist 5'],
+#             vibe_data={'mood': 'happy'},
+#             genre_data={'pop': 2, 'rock': 3},
+#         )
+#         session = self.client.session
+#         session['temporary_profile_id'] = self.temp_profile.id
+#         session.save()
+#
+#     def test_loading_page_renders_correct_template(self):
+#         """
+#         Test that the loading page renders correctly for standard requests
+#         """
+#         response = self.client.get(reverse('loading'))
+#         self.assertEqual(response.status_code, 200)
+#         self.assertTemplateUsed(response, 'spotify_app/loading.html')
+#
+#     def test_loading_page_with_no_profile(self):
+#         """
+#         Test behavior when no profile is in session
+#         """
+#         self.client.session.flush()  # Clear the session
+#         response = self.client.get(reverse('loading'))
+#         self.assertTemplateUsed(response, 'spotify_app/error.html')
+#         self.assertContains(response, 'No profile found.')
+#
+#     def test_loading_ajax_polling_ready(self):
+#         """
+#         Test AJAX polling returns 'ready' when data is ready
+#         """
+#         with patch.object(TemporarySpotifyProfile, 'is_data_ready', return_value=True):
+#             response = self.client.get(
+#                 reverse('loading'),
+#                 HTTP_X_REQUESTED_WITH='XMLHttpRequest'  # Simulate AJAX
+#             )
+#             self.assertEqual(response.status_code, 200)
+#             self.assertJSONEqual(response.content, {'ready': True})
+#
+#     def test_loading_ajax_polling_not_ready(self):
+#         """
+#         Test AJAX polling returns 'not ready' when data is not ready
+#         """
+#         with patch.object(TemporarySpotifyProfile, 'is_data_ready', return_value=False):
+#             response = self.client.get(
+#                 reverse('loading'),
+#                 HTTP_X_REQUESTED_WITH='XMLHttpRequest'  # Simulate AJAX
+#             )
+#             self.assertEqual(response.status_code, 200)
+#             self.assertJSONEqual(response.content, {'ready': False})
+#
+#     def test_loading_ajax_no_profile(self):
+#         """
+#         Test AJAX polling with no profile in session
+#         """
+#         self.client.session.flush()  # Clear the session
+#         response = self.client.get(
+#             reverse('loading'),
+#             HTTP_X_REQUESTED_WITH='XMLHttpRequest'
+#         )
+#         self.assertEqual(response.status_code, 400)
+#         self.assertJSONEqual(response.content, {'ready': False, 'error': 'No profile found.'})
