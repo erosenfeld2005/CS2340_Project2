@@ -118,17 +118,6 @@ class WrappedViewsTest(TestCase):
         })
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('contact_developers'))
-        messages = list(get_messages(response.wsgi_request))
-        #self.assertEqual(str(messages[0]), "Thank you for your feedback!")
-
-    # def test_loading_view(self):
-    #     """
-    #     Test that the loading view
-    #     :return: True if renders loading.html
-    #     """
-    #     response = self.client.get(reverse('loading'))
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertTemplateUsed(response, 'loading.html')
 
     def test_history_view_logged_in(self):
         """
