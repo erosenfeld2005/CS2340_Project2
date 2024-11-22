@@ -10,6 +10,15 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* Centered Slideshow Playlist Style */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+            /*background: linear-gradient(30deg, #A5CBC3 20%, #FFFFFF 100%);*/
+        }
         .slideshow-container {
             position: relative;
             width: 1000px;
@@ -269,7 +278,33 @@
             flex-direction: column; /* Stack name and photo vertically */
         }
 
+        .slide.quiz {
+            background: var(--primary-green);
+        }
 
+        .quiz-options p {
+            font-size: 24px;
+            transition: transform 0.05s ease-in-out; /* Smooth transition */
+        }
+
+        .quiz-options p:hover {
+            transform: translate(10px, 0px);
+            font-weight: bold;
+        }
+
+        .quiz-options p.selected {
+            background-color: var(--primary-green-dark); /* Green */
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .quiz-options p.incorrect {
+            background-color: #a2455e;
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+        }
 
         /* Dots and Arrow Button Styling */
         .dots-container {
@@ -417,7 +452,18 @@
                 <div class="icon-container">
                     <img src="{% static 'sound-icon.png' %}" alt="sound waves" class="intro-icon">
                 </div>
-                <button id="start-button" class="btn btn-primary mt-3">Yes!</button>
+            </div>
+
+            <!-- Quiz Q1 -->
+            <div class="slide quiz">
+                <h2>Pop Quiz!</h2>
+                <h3>Who's your top artist?</h3>
+                <div class="quiz-options">
+                    <p class="quiz-options" data-correct="false">a) {{ top_five_artists.4.name }}</p>
+                    <p class="quiz-options" data-correct="true">b) {{ top_five_artists.0.name }}</p>
+                    <p class="quiz-options" data-correct="false">c) {{ top_five_artists.1.name }}</p>
+                    <p class="quiz-options" data-correct="false">d) {{ top_five_artists.2.name }}</p>
+                </div>
             </div>
 
             <!-- Slide 2 -->
@@ -449,9 +495,21 @@
                 </div>
             </div>
 
+            <!-- Quiz Q2 -->
+            <div class="slide quiz">
+                <h2>Pop Quiz!</h2>
+                <h3>Which is your top song?</h3>
+                <div class="quiz-options">
+                    <p class="quiz-options" data-correct="false">a) {{ top_five_songs.4.name }}</p>
+                    <p class="quiz-options" data-correct="true">b) {{ top_five_songs.0.name }}</p>
+                    <p class="quiz-options" data-correct="false">c) {{ top_five_songs.1.name }}</p>
+                    <p class="quiz-options" data-correct="false">d) {{ top_five_songs.2.name }}</p>
+                </div>
+            </div>
+
             <!-- Slide 4 -->
             <div class="slide">
-                <h2 class =>Your top song is...</h2>
+                <h2>Your top song is...</h2>
                 <div class="song-info">
                     <div class="song-details1" style="display: flex; flex-direction: column; align-items: center;">
                         <h6>{{ top_five_songs.0.name }}</h6>
@@ -468,6 +526,9 @@
                         {% else %}
                             <p class="text-muted">No preview available</p>
                         {% endif %}
+                        <div class="other-icon-container">
+<!--                            <img src="{% static 'playback icon.png' %}" alt="playback" class="other-icon">-->
+                        </div>
                     </div>
                     <div class="song-stats">
                         <h5>Popularity: {{ top_five_songs.0.popularity }}</h5>
@@ -545,11 +606,10 @@
                     </div>
                 </div>
                 <div style="text-align: center; margin-top: 50px;">
-                    <form method="post" action="{% url 'save_spotify_profile' %}">
+                    <form method="post" action="{% url 'history' %}">
                         {% csrf_token %}
-                        <input type="hidden" name="temporary_profile_id" value="{{ temp_profile_id }}">
                         <button type="submit" style="padding: 10px 20px; background-color: #3F665E; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                            Save this Profile
+                            Return to History
                         </button>
                     </form>
                 </div>
@@ -557,7 +617,7 @@
         </div>
 
         <div class="dots-container">
-            <a class="prev">&#10094;</a>
+            <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
             <div class="dots">
                 <span class="dot active" onclick="currentSlide(0)"></span>
                 <span class="dot" onclick="currentSlide(1)"></span>
@@ -567,10 +627,143 @@
                 <span class="dot" onclick="currentSlide(5)"></span>
                 <span class="dot" onclick="currentSlide(6)"></span>
                 <span class="dot" onclick="currentSlide(7)"></span>
+                <span class="dot" onclick="currentSlide(8)"></span>
+                <span class="dot" onclick="currentSlide(9)"></span>
             </div>
-            <a class="next">&#10095;</a>
+            <a class="next" onclick="changeSlide(1)">&#10095;</a>
         </div>
     </div>
+
+    <script>
+        let slideIndex = 0; // curr index
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        const animationDuration = 1500; // Duration in ms matching CSS animation
+
+        /**
+         * This function finds and displays in the new slide
+         * @param newIndex The new index of the slide we are displaying
+         * @param direction Either next or before, depending on which arrow was flicked
+         */
+        function showSlide(newIndex, direction) {
+            const outgoingSlide = slides[slideIndex];
+            const incomingSlide = slides[newIndex];
+
+            // Reset all slides to remove animations and hide them initially
+            slides.forEach(slide => {
+                slide.classList.remove('active', 'outgoing-left', 'incoming-right', 'outgoing-right', 'incoming-left');
+                slide.style.display = 'none';
+            });
+
+            // Ensure the outgoing slide is visible before animating out
+            outgoingSlide.style.display = 'block';
+            outgoingSlide.style.zIndex = 2; // Set outgoing slide behind incoming
+
+            // Apply the correct animation classes based on direction
+            if (direction === 'next') {
+                outgoingSlide.classList.add('outgoing-left');
+                incomingSlide.classList.add('incoming-right');
+            } else {
+                outgoingSlide.classList.add('outgoing-right');
+                incomingSlide.classList.add('incoming-left');
+            }
+
+            // Ensure the incoming slide is above the outgoing slide and visible
+            incomingSlide.style.display = 'block';
+            incomingSlide.style.zIndex = 1;
+            incomingSlide.classList.add('active');
+
+            // Update dot navigation
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[newIndex].classList.add('active');
+
+            // Hide the outgoing slide after the animation completes
+            setTimeout(() => {
+                // outgoingSlide.style.display = 'none'; // Hide the outgoing slide
+                slideIndex = newIndex; // Update slideIndex after the transition completes
+            }, animationDuration);
+        }
+
+        /**
+         * This function changes the slide given an amount to move
+         * @param n The amove we want to move
+         */
+        function changeSlide(n) {
+            const newSlideIndex = (slideIndex + n + slides.length) % slides.length;
+            const direction = n > 0 ? 'next' : 'prev';
+            showSlide(newSlideIndex, direction);
+        }
+
+        /**
+         * This function displays the current slide
+         * @param index
+         */
+        function currentSlide(index) {
+            const direction = index > slideIndex ? 'next' : 'prev';
+            showSlide(index, direction);
+        }
+
+        // Initial display
+        showSlide(slideIndex, 'next');
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const slideshowContainer = document.getElementById('slideshow-container');
+            const quizOptions = document.querySelectorAll('.quiz-options p');
+
+            /**
+             * This function updates the link to not work if not on wrapped summary
+             */
+            function updateLink() {
+                const activeSlide = document.querySelector('.slide.active');
+                if (activeSlide && activeSlide.querySelector('h2').innerText === 'Wrapped Summary') {
+                    slideshowContainer.onclick = () => {
+                        window.location.href = "{% url 'spotify_login' %}";
+                    };
+                } else {
+                    slideshowContainer.onclick = null; // Remove click event if not on "Wrapped Summary"
+                }
+            }
+
+            /**
+             * Handles the quiz option click.
+             */
+            function handleQuizOptionClick(event) {
+                const selectedOption = event.target;
+
+                // Disable further clicks on all options
+                // const allOptions = selectedOption.parentNode.querySelectorAll('p');
+                // allOptions.forEach(option => option.style.pointerEvents = 'none');
+
+
+                if (selectedOption.dataset.correct === 'true') {
+                    // Highlight the correct answer
+                    selectedOption.classList.add('selected');
+                    /*setTimeout(() => {
+                        // Transition to the next slide
+                        changeSlide(1); // Move to the next slide
+                    }, 500); // Wait for feedback before sliding*/
+                } else {
+                    // Highlight incorrect answer
+                    selectedOption.classList.add('incorrect');
+                }
+            }
+            /**
+             * Adds event listeners to quiz options.
+             */
+            quizOptions.forEach(option => {
+                option.addEventListener('click', handleQuizOptionClick);
+            });
+
+
+
+            // Set up a MutationObserver to detect class changes in slides
+            const observer = new MutationObserver(updateLink);
+            slides.forEach(slide => observer.observe(slide, { attributes: true, attributeFilter: ['class'] }));
+
+            // Initial link setup
+            updateLink();
+        });
+    </script>
 
 <!-- Log Out Confirmation Modal -->
 <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
@@ -601,5 +794,6 @@
 
 <script src="{% static 'darkmode.js' %}"></script>
 <script src="{% static 'summary.js' %}"></script>
+
 </body>
 </html>
