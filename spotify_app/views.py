@@ -250,7 +250,6 @@ def submit_feedback(request):
                 from_email=email,
                 recipient_list=[settings.CONTACT_EMAIL],
             )
-            messages.success(request, "Your feedback has been sent successfully!")
-        except Exception as e:
-            messages.error(request, f"Error sending feedback: {e}")
+        finally:
+            pass
     return redirect('contact_developers')
