@@ -3,8 +3,8 @@ Python file to create and store test cases about the spotify_app
 """
 import time
 from unittest.mock import patch
+from django.test import TestCase, Client, TransactionTestCase
 
-from django.test import TestCase, TransactionTestCase
 from django.utils import timezone
 from django.conf import settings
 from django.urls import reverse
@@ -328,6 +328,40 @@ class TestDeleteProfileUnauthorizedAccess(TestCase):
         response = self.client.post(reverse('delete_profile', args=[self.profile.id]))
         self.assertEqual(response.status_code, 404)
 
+class SubmitFeedbackTests(TestCase):
+    """
+    Class about Feedback Test
+    """
+    def setUp(self):
+        """
+        Set up for feedback tests
+        :return: Nothing
+        """
+        self.client = Client()
+        self.url = reverse('submit_feedback')  # Replace with your URL name for the view
+        self.valid_data = {
+            'name': 'Test User',
+            'email': 'test@example.com',
+            'message': 'This is a test feedback message.'
+        }
+
+    @patch('spotify_app.views.send_mail')
+    def test_submit_feedback_missing_fields(self, mock_send_mail):
+        """
+        Test for submitting feedback with missing fields
+        :param mock_send_mail: Mocking the sending of an email
+        :return: True if the feedback email did not go through
+        """
+        incomplete_data = {
+            'name': 'Test User',
+            'email': '',  # Missing email
+            'message': 'This is a test feedback message.'
+        }
+        response = self.client.post(self.url, data=incomplete_data)
+        self.assertEqual(response.status_code, 302)
+            # Redirects regardless of validation in your code
+        self.assertRedirects(response, reverse('contact_developers'))
+        mock_send_mail.assert_not_called()
 class TestLoadingView(TestCase):
     """
     Tests for the loading view

@@ -49,6 +49,7 @@ jobs:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
         SPOTIFY_CLIENT_ID: ${{secrets.SPOTIFY_CLIENT_ID}}
         SPOTIFY_CLIENT_SECRET: ${{secrets.SPOTIFY_CLIENT_SECRET}}
+        EMAIL_HOST_PASSWORD: ${{secrets.EMAIL_HOST_PASSWORD}}
       run: python manage.py migrate
 
     - name: Run Tests with Coverage
@@ -56,6 +57,7 @@ jobs:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
         SPOTIFY_CLIENT_ID: ${{secrets.SPOTIFY_CLIENT_ID}}
         SPOTIFY_CLIENT_SECRET: ${{secrets.SPOTIFY_CLIENT_SECRET}}
+        EMAIL_HOST_PASSWORD: ${{secrets.EMAIL_HOST_PASSWORD}}
       run: |
         coverage run --source='.' manage.py test --keepdb
         coverage report --fail-under=50  # Replace with 80 for final tests

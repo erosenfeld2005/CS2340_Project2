@@ -18,6 +18,7 @@ urlpatterns = [
     path('signout/', views.signout, name='signout'),
     path('saved_summary/<str:created_at>/', views.display_saved_summary_content,
          name='saved_summary'),
+    path('submit_feedback/', views.submit_feedback, name='submit_feedback'),
     path('delete_profile/<int:profile_id>/', views.delete_profile, name='delete_profile'),
     path('loading/', views.loading, name='loading')
 
