@@ -12,6 +12,7 @@ from django.utils import timezone
 from django.contrib.auth import logout
 from django.contrib import messages
 from django.core.mail import send_mail
+from django.shortcuts import render
 
 from .models import SpotifyProfile, TemporarySpotifyProfile
 
@@ -235,7 +236,6 @@ def delete_profile(request, profile_id):
 
     # Redirect back to the history page
     return redirect('history')
-from django.shortcuts import render
 
 def submit_feedback(request):
     """
