@@ -1,6 +1,8 @@
 """
 Python file that holds how user interacts with spotify_wrapped section
 """
+from threading import Thread
+
 # views.py
 import requests
 
@@ -13,7 +15,7 @@ from django.contrib.auth import logout
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.shortcuts import render
-
+from django.http import JsonResponse
 from .models import SpotifyProfile, TemporarySpotifyProfile
 
 
@@ -39,9 +41,7 @@ def signout(request):
 
 def spotify_callback(request):
     """
-    Function that redirects to the top_songs page if it successfully gets the access token
-    :param request: Request from the redirected URL
-    :return: The appropriate redirect to the top songs page if it successfully gets the access token
+    Handles the Spotify callback and initiates data fetching.
     """
     code = request.GET.get("code")
     if not code:
@@ -53,23 +53,34 @@ def spotify_callback(request):
 
     # Create a TemporarySpotifyProfile instance for the current user
     temp_profile = TemporarySpotifyProfile.objects.create(
-        top_songs=[],  # Initialize with empty data or whatever your default is
+        top_songs=[],  # Initialize with empty data
         top_five_songs=[],
         top_five_artists=[],
-        vibe_data=None,  # Initialize as needed
+        vibe_data=None,
         genre_data={},
-        # Note: No user field as per your design
     )
 
-    # Fetch and populate the data into the temporary profile
-    temp_profile.fetch_top_tracks(access_token)
-    temp_profile.fetch_top_artists(access_token)
-
-    # Optionally, you can store the temporary profile to the session for later retrieval
+    # Store the profile ID and access token in the session
     request.session['temporary_profile_id'] = temp_profile.id
-    return redirect('summary')
+    request.session['access_token'] = access_token
 
+    # Start asynchronous data fetching
+    Thread(target=fetch_spotify_data, args=(temp_profile.id, access_token)).start()
 
+    # Redirect to the loading page
+    return redirect('loading')
+
+def fetch_spotify_data(profile_id, access_token):
+    """
+    Fetch Spotify data in the background for the given profile.
+    """
+    try:
+        temp_profile = TemporarySpotifyProfile.objects.get(id=profile_id)
+        temp_profile.fetch_top_tracks(access_token)
+        temp_profile.fetch_top_artists(access_token)
+    except TemporarySpotifyProfile.DoesNotExist:
+        # Handle the case where the profile doesn't exist
+        pass
 def exchange_code_for_token(code):
     """
     Function that exchanges a authorization code for an access token
@@ -236,7 +247,6 @@ def delete_profile(request, profile_id):
 
     # Redirect back to the history page
     return redirect('history')
-
 def submit_feedback(request):
     """
     Function that controls the feedback form in contact developers
@@ -257,3 +267,41 @@ def submit_feedback(request):
         finally:
             pass
     return redirect('contact_developers')
+
+def loading(request):
+    """
+    Renders the loading page and checks if the Spotify data is ready.
+    Supports both standard rendering and AJAX polling.
+    """
+    profile_id = request.session.get('temporary_profile_id')
+    is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest'
+
+    response_data = None
+    status = 200  # Default status for successful responses
+    template = None
+
+    if not profile_id:
+        if is_ajax:
+            response_data = {"ready": False, "error": "No profile found."}
+            status = 400
+        else:
+            template = 'spotify_app/error.html'
+            response_data = {"message": "No profile found."}
+    else:
+        try:
+            temp_profile = TemporarySpotifyProfile.objects.get(id=profile_id)
+            if is_ajax:
+                response_data = {"ready": temp_profile.is_data_ready()}
+            else:
+                template = 'loading.html'
+        except TemporarySpotifyProfile.DoesNotExist:
+            if is_ajax:
+                response_data = {"ready": False, "error": "Temporary profile not found."}
+                status = 404
+            else:
+                template = 'spotify_app/error.html'
+                response_data = {"message": "Temporary profile not found."}
+
+    if is_ajax:
+        return JsonResponse(response_data, status=status)
+    return render(request, template, response_data)

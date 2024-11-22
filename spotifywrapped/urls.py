@@ -36,6 +36,4 @@ urlpatterns = [
     path('account/delete/', views.delete_account_confirmed, name='delete_account'),
     path('history/', views.history, name='history'),
     path('contact_developers/', views.contact_developers, name='contact_developers'),
-    path('submit_feedback/', views.submit_feedback, name='submit_feedback'),
-    path('loading/', views.loading, name='loading')
-]
+    path('submit_feedback/', views.submit_feedback, name='submit_feedback'),]

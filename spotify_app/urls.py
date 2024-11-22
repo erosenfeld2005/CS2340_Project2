@@ -20,4 +20,6 @@ urlpatterns = [
          name='saved_summary'),
     path('submit_feedback/', views.submit_feedback, name='submit_feedback'),
     path('delete_profile/<int:profile_id>/', views.delete_profile, name='delete_profile'),
+    path('loading/', views.loading, name='loading')
+
 ]
