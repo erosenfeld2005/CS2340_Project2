@@ -48,5 +48,31 @@
         <img src="{% static 'spotify wrapped icon.png' %}" alt="loading..." class="img">
         <div class="loading-text">Loading, please wait...</div>
     </div>
+    <script>
+        function checkDataStatus() {
+            fetch("{% url 'loading' %}", {
+                method: "GET",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"  // Indicates AJAX request
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ready) {
+                    // Redirect to the summary page when data is ready
+                    window.location.href = "{% url 'summary' %}";
+                } else if (data.error) {
+                    // Show an error message if something goes wrong
+                    document.getElementById("error-message").innerText = data.error;
+                }
+            })
+            .catch(err => {
+                console.error("Error polling data status:", err);
+            });
+        }
+
+        // Poll every 2 seconds
+        setInterval(checkDataStatus, 2000);
+    </script>
 </body>
 </html>

@@ -107,6 +107,19 @@ class TemporarySpotifyProfile(models.Model):
             return top_artists
         return []
 
+    def is_data_ready(self):
+        """
+        Method that confirms if all the data has been received and stored from the
+        spotify api.
+        :return: True if it has and false otherwise
+        """
+        return all([
+            self.top_songs,
+            self.top_five_songs,
+            self.top_five_artists,
+            self.vibe_data is not None,
+            self.genre_data,
+        ])
 class SpotifyProfile(models.Model):
     """
         Model for the Saved Spotify Profile
