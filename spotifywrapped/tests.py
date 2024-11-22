@@ -64,7 +64,7 @@ class WrappedViewsTest(TestCase):
         Test that the landing page loads correctly
         :return:
         """
-        response = self.client.get(reverse('landing'))
+        response = self.client.get(reverse('spotify/landing'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'landing.html')
 
