@@ -252,22 +252,34 @@ def loading(request):
     Supports both standard rendering and AJAX polling.
     """
     profile_id = request.session.get('temporary_profile_id')
+    is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest'
+
+    response_data = None
+    status = 200  # Default status for successful responses
+    template = None
+
     if not profile_id:
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            return JsonResponse({"ready": False, "error": "No profile found."}, status=400)
-        return render(request, 'spotify_app/error.html', {"message": "No profile found."})
+        if is_ajax:
+            response_data = {"ready": False, "error": "No profile found."}
+            status = 400
+        else:
+            template = 'spotify_app/error.html'
+            response_data = {"message": "No profile found."}
+    else:
+        try:
+            temp_profile = TemporarySpotifyProfile.objects.get(id=profile_id)
+            if is_ajax:
+                response_data = {"ready": temp_profile.is_data_ready()}
+            else:
+                template = 'loading.html'
+        except TemporarySpotifyProfile.DoesNotExist:
+            if is_ajax:
+                response_data = {"ready": False, "error": "Temporary profile not found."}
+                status = 404
+            else:
+                template = 'spotify_app/error.html'
+                response_data = {"message": "Temporary profile not found."}
 
-    try:
-        temp_profile = TemporarySpotifyProfile.objects.get(id=profile_id)
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':  # Check for AJAX
-            if temp_profile.is_data_ready():  # Method to check if all data is fetched
-                return JsonResponse({"ready": True})
-            return JsonResponse({"ready": False})
-
-        # For non-AJAX requests, render the loading page
-        return render(request, 'loading.html')
-
-    except TemporarySpotifyProfile.DoesNotExist:
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            return JsonResponse({"ready": False, "error": "Temporary profile not found."}, status=404)
-        return render(request, 'spotify_app/error.html', {"message": "Temporary profile not found."})
+    if is_ajax:
+        return JsonResponse(response_data, status=status)
+    return render(request, template, response_data)

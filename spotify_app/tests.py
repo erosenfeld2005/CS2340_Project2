@@ -1,7 +1,7 @@
 """
 Python file to create and store test cases about the spotify_app
 """
-
+import time
 from unittest.mock import patch
 
 from django.test import TestCase, TransactionTestCase
@@ -172,11 +172,10 @@ class TestSpotifyCallbackView(TransactionTestCase):
 
         # Check if the response is a redirect to 'summary' (the page after success)
         self.assertRedirects(response, reverse('loading'))
-
         # Check that the TemporarySpotifyProfile was created
         temp_profile = TemporarySpotifyProfile.objects.first()
         self.assertIsNotNone(temp_profile)
-
+        time.sleep(15)
         # Ensure the profile data was fetched (mocked methods)
         mock_fetch_tracks.assert_called_once_with('valid_token')
         mock_fetch_artists.assert_called_once_with('valid_token')
