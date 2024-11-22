@@ -7,15 +7,14 @@ import requests
 from requests.auth import HTTPBasicAuth
 
 from django.conf import settings
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404
 from django.utils import timezone
 from django.contrib.auth import logout
 from django.contrib import messages
+from django.core.mail import send_mail
+
 from .models import SpotifyProfile, TemporarySpotifyProfile
 
-from django.core.mail import send_mail
-from django.http import HttpResponse
-from django.shortcuts import redirect
 
 def spotify_login(request):
     """
@@ -239,6 +238,11 @@ def delete_profile(request, profile_id):
 from django.shortcuts import render
 
 def submit_feedback(request):
+    """
+    Function that controls the feedback form in contact developers
+    :param request:
+    :return:
+    """
     if request.method == 'POST':
         name = request.POST.get('name')
         email = request.POST.get('email')

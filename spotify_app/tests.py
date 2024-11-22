@@ -330,7 +330,14 @@ class TestDeleteProfileUnauthorizedAccess(TestCase):
         self.assertEqual(response.status_code, 404)
 
 class SubmitFeedbackTests(TestCase):
+    """
+    Class about Feedback Test
+    """
     def setUp(self):
+        """
+        Set up for feedback tests
+        :return: Nothing
+        """
         self.client = Client()
         self.url = reverse('submit_feedback')  # Replace with your URL name for the view
         self.valid_data = {
@@ -339,40 +346,20 @@ class SubmitFeedbackTests(TestCase):
             'message': 'This is a test feedback message.'
         }
 
-    # @patch('spotify_app.views.send_mail')  # Replace `your_app_name` with the app name containing the view
-    # def test_submit_feedback_successful(self, mock_send_mail):
-    #     mock_send_mail.return_value = 1  # Simulate successful email send
-    #     response = self.client.post(self.url, data=self.valid_data)
-    #     self.assertEqual(response.status_code, 302)
-    #     self.assertRedirects(response, reverse('contact_developers'))
-    #     mock_send_mail.assert_called_once_with(
-    #         subject='Feedback from Test User',
-    #         message='This is a test feedback message.',
-    #         from_email='test@example.com',
-    #         recipient_list=[settings.CONTACT_EMAIL],
-    #    )
-
     @patch('spotify_app.views.send_mail')
     def test_submit_feedback_missing_fields(self, mock_send_mail):
+        """
+        Test for submitting feedback with missing fields
+        :param mock_send_mail: Mocking the sending of an email
+        :return: True if the feedback email did not go through
+        """
         incomplete_data = {
             'name': 'Test User',
             'email': '',  # Missing email
             'message': 'This is a test feedback message.'
         }
         response = self.client.post(self.url, data=incomplete_data)
-        self.assertEqual(response.status_code, 302)  # Redirects regardless of validation in your code
+        self.assertEqual(response.status_code, 302)
+            # Redirects regardless of validation in your code
         self.assertRedirects(response, reverse('contact_developers'))
         mock_send_mail.assert_not_called()
-
-    # @patch('spotify_app.views.send_mail')
-    # def test_submit_feedback_send_mail_exception(self, mock_send_mail):
-    #     mock_send_mail.side_effect = Exception("SMTP Error")
-    #     response = self.client.post(self.url, data=self.valid_data)
-    #     self.assertEqual(response.status_code, 302)
-    #     self.assertRedirects(response, reverse('contact_developers'))
-    #     mock_send_mail.assert_called_once_with(
-    #         subject='Feedback from Test User',
-    #         message='This is a test feedback message.',
-    #         from_email='test@example.com',
-    #         recipient_list=[settings.CONTACT_EMAIL],
-    #     )
