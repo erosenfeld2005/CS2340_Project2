@@ -7,7 +7,6 @@ from django.test import SimpleTestCase
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from django.contrib.messages import get_messages
 
 from spotifywrapped.asgi import application
 from spotifywrapped.wsgi import application
