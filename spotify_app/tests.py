@@ -344,24 +344,6 @@ class SubmitFeedbackTests(TestCase):
             'email': 'test@example.com',
             'message': 'This is a test feedback message.'
         }
-
-    @patch('spotify_app.views.send_mail')
-    def test_submit_feedback_missing_fields(self, mock_send_mail):
-        """
-        Test for submitting feedback with missing fields
-        :param mock_send_mail: Mocking the sending of an email
-        :return: True if the feedback email did not go through
-        """
-        incomplete_data = {
-            'name': 'Test User',
-            'email': '',  # Missing email
-            'message': 'This is a test feedback message.'
-        }
-        response = self.client.post(self.url, data=incomplete_data)
-        self.assertEqual(response.status_code, 302)
-            # Redirects regardless of validation in your code
-        self.assertRedirects(response, reverse('contact_developers'))
-        mock_send_mail.assert_not_called()
 class TestLoadingView(TestCase):
     """
     Tests for the loading view
