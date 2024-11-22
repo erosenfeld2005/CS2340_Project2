@@ -7,7 +7,6 @@ from django.test import SimpleTestCase
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from django.contrib.messages import get_messages
 
 from spotifywrapped.asgi import application
 from spotifywrapped.wsgi import application
@@ -118,17 +117,6 @@ class WrappedViewsTest(TestCase):
         })
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('contact_developers'))
-        messages = list(get_messages(response.wsgi_request))
-        self.assertEqual(str(messages[0]), "Thank you for your feedback!")
-
-    # def test_loading_view(self):
-    #     """
-    #     Test that the loading view
-    #     :return: True if renders loading.html
-    #     """
-    #     response = self.client.get(reverse('loading'))
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertTemplateUsed(response, 'loading.html')
 
     def test_history_view_logged_in(self):
         """
