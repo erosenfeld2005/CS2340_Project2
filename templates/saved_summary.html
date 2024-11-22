@@ -643,7 +643,7 @@
         /**
          * This function finds and displays in the new slide
          * @param newIndex The new index of the slide we are displaying
-         * @param direction Either next or before, depending on which arrow was flicked
+         * @param direction Either next or before, depending on which arrow was clicked
          */
         function showSlide(newIndex, direction) {
             const outgoingSlide = slides[slideIndex];
@@ -686,7 +686,7 @@
 
         /**
          * This function changes the slide given an amount to move
-         * @param n The amove we want to move
+         * @param n The amount we want to move
          */
         function changeSlide(n) {
             const newSlideIndex = (slideIndex + n + slides.length) % slides.length;
@@ -696,7 +696,7 @@
 
         /**
          * This function displays the current slide
-         * @param index
+         * @param index the index of the current slide
          */
         function currentSlide(index) {
             const direction = index > slideIndex ? 'next' : 'prev';
@@ -726,6 +726,7 @@
 
             /**
              * Handles the quiz option click.
+             * @param event the click event that is occurring
              */
             function handleQuizOptionClick(event) {
                 const selectedOption = event.target;
