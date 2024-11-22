@@ -6,8 +6,6 @@ from django.contrib.auth import logout
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.conf import settings
-from django.contrib import messages
-
 from spotify_app.models import SpotifyProfile
 
 
@@ -105,25 +103,26 @@ def contact_developers(request):
 
 def submit_feedback(request):
     """
-        Submists a request.
-
-        :param request: The HTTP request object.
-        :return: submission.
-        """
+    Function that controls the feedback form in contact developers
+    :param request:
+    :return:
+    """
     if request.method == 'POST':
-        name = request.POST['name']
-        email = request.POST['email']
-        message = request.POST['message']
-
-        # Email the feedback
-        send_mail(
-            f"Feedback from {name}",
-            message,
-            email,
-            [settings.CONTACT_EMAIL],
-            fail_silently=False,
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        email_body = (
+            f"Feedback from {name} ({email}):\n\n"
+            f"{message}\n\n"
+            "You can reply to this email address to follow up."
         )
-        messages.success(request, "Thank you for your feedback!")
-        return redirect('contact_developers')  # Ensure this matches the correct URL name
-
-    return render(request, 'contact_developers.html')
+        try:
+            send_mail(
+                subject=f"Feedback from {name}",
+                message=email_body,
+                from_email=email,
+                recipient_list=[settings.CONTACT_EMAIL],
+            )
+        finally:
+            pass
+    return redirect('contact_developers')

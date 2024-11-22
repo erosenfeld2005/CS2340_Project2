@@ -13,7 +13,6 @@ from django.shortcuts import redirect, get_object_or_404
 from django.utils import timezone
 from django.contrib.auth import logout
 from django.contrib import messages
-from django.core.mail import send_mail
 from django.shortcuts import render
 from django.http import JsonResponse
 from .models import SpotifyProfile, TemporarySpotifyProfile
@@ -247,26 +246,6 @@ def delete_profile(request, profile_id):
 
     # Redirect back to the history page
     return redirect('history')
-def submit_feedback(request):
-    """
-    Function that controls the feedback form in contact developers
-    :param request:
-    :return:
-    """
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        message = request.POST.get('message')
-        try:
-            send_mail(
-                subject=f"Feedback from {name}",
-                message=message,
-                from_email=email,
-                recipient_list=[settings.CONTACT_EMAIL],
-            )
-        finally:
-            pass
-    return redirect('contact_developers')
 
 def loading(request):
     """
