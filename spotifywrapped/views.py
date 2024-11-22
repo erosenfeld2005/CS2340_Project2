@@ -129,11 +129,4 @@ def submit_feedback(request):
     return render(request, 'contact_developers.html')
 
 
-def loading(request):
-    """
-    Render loading page.
 
-    :param request: The HTTP request object.
-    :return: The rendered loading.html page.
-    """
-    return render(request, 'loading.html')
