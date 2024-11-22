@@ -127,6 +127,3 @@ def submit_feedback(request):
         return redirect('contact_developers')  # Ensure this matches the correct URL name
 
     return render(request, 'contact_developers.html')
-
-
-

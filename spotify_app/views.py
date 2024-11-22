@@ -5,7 +5,6 @@ from threading import Thread
 
 # views.py
 import requests
-from django.http import JsonResponse
 
 from requests.auth import HTTPBasicAuth
 
@@ -14,6 +13,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.contrib.auth import logout
 from django.contrib import messages
+from django.http import JsonResponse
 from .models import SpotifyProfile, TemporarySpotifyProfile
 
 def spotify_login(request):
