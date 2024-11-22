@@ -13,6 +13,10 @@ from django.contrib.auth import logout
 from django.contrib import messages
 from .models import SpotifyProfile, TemporarySpotifyProfile
 
+from django.core.mail import send_mail
+from django.http import HttpResponse
+from django.shortcuts import redirect
+
 def spotify_login(request):
     """
     Function that redirects to the login/authorization page
@@ -232,3 +236,21 @@ def delete_profile(request, profile_id):
 
     # Redirect back to the history page
     return redirect('history')
+from django.shortcuts import render
+
+def submit_feedback(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        try:
+            send_mail(
+                subject=f"Feedback from {name}",
+                message=message,
+                from_email=email,
+                recipient_list=[settings.CONTACT_EMAIL],
+            )
+            messages.success(request, "Your feedback has been sent successfully!")
+        except Exception as e:
+            messages.error(request, f"Error sending feedback: {e}")
+    return redirect('contact_developers')

@@ -162,11 +162,10 @@ AUTH_USER_MODEL = 'userAuthentication.CustomUser'
 LOGIN_REDIRECT_URL = '/dashboard/'
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+CONTACT_EMAIL = 'spdootwrapped2340@gmail.com'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_USE_TLS = True  # Enable TLS
-EMAIL_USE_SSL = False  # Disable SSL
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-CONTACT_EMAIL = 'group12cs2340@gmail.com'  # Email to receive feedback
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'spdootwrapped2340@gmail.com'
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')

@@ -155,12 +155,15 @@
     <div class="main-content">
         <h1 class="contact-title">Contact the Developers</h1>
 
-        <!-- Success Message (Thank You Popup) -->
-        {% if messages %}
-            <div class="alert">
-                {% for message in messages %}
-                    <p>{{ message }}</p>
-                {% endfor %}
+        <!-- Success/Error Messages -->
+        {% if success_message %}
+            <div class="alert success">
+                <p>{{ success_message }}</p>
+            </div>
+        {% endif %}
+        {% if error_message %}
+            <div class="alert error">
+                <p>{{ error_message }}</p>
             </div>
         {% endif %}
 
