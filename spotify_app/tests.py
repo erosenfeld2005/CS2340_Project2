@@ -4,7 +4,7 @@ Python file to create and store test cases about the spotify_app
 
 from unittest.mock import patch
 
-from django.test import TestCase
+from django.test import TestCase, TransactionTestCase
 from django.utils import timezone
 from django.conf import settings
 from django.urls import reverse
@@ -137,53 +137,53 @@ class TestSpotifyLoginView(TestCase):
                         # Update with actual redirect URL if needed
 
 
-class TestSpotifyCallbackView(TestCase):
+class TestSpotifyCallbackView(TransactionTestCase):
     """
     This holds the tests for spotify callback view
     """
-    # @patch('spotify_app.views.exchange_code_for_token')
-    # @patch('spotify_app.views.TemporarySpotifyProfile.fetch_top_tracks')
-    # @patch('spotify_app.views.TemporarySpotifyProfile.fetch_top_artists')
-    # def test_spotify_callback_success(self,
-    #                                   mock_fetch_artists,
-    #                                   mock_fetch_tracks,
-    #                                   mock_exchange_token):
-    #     """
-    #     Tests a successful spotify callback view
-    #     :param mock_fetch_artists: A mock return from the API
-    #     :param mock_fetch_tracks:  A mock return from the API
-    #     :param mock_exchange_token:  A mock return from the API
-    #     :return: True if successful spotify callback view is working and
-    #         redirecting to summary.html
-    #     """
-    #
-    #     # Log the user in
-    #     self.client.login(username='testuser', password='password')
-    #
-    #     # Mock the exchange of the code for a valid access token
-    #     mock_exchange_token.return_value = ('valid_token', 'valid_refresh_token')
-    #
-    #     # Mock fetching top tracks and artists
-    #     mock_fetch_tracks.return_value = None  # Simulate successful fetch
-    #     mock_fetch_artists.return_value = None
-    #
-    #     # Simulate callback with a valid authorization code
-    #     response = self.client.get(reverse('spotify_callback'), {'code': 'valid_code'})
-    #
-    #     # Check if the response is a redirect to 'summary' (the page after success)
-    #     self.assertRedirects(response, reverse('loading'))
-    #
-    #     # Check that the TemporarySpotifyProfile was created
-    #     temp_profile = TemporarySpotifyProfile.objects.first()
-    #     self.assertIsNotNone(temp_profile)
-    #
-    #     # Ensure the profile data was fetched (mocked methods)
-    #     mock_fetch_tracks.assert_called_once_with('valid_token')
-    #     mock_fetch_artists.assert_called_once_with('valid_token')
-    #
-    #     # Check that the temporary_profile_id is stored in the session
-    #     self.assertIn('temporary_profile_id', self.client.session)
-    #     self.assertEqual(self.client.session['temporary_profile_id'], temp_profile.id)
+    @patch('spotify_app.views.exchange_code_for_token')
+    @patch('spotify_app.views.TemporarySpotifyProfile.fetch_top_tracks')
+    @patch('spotify_app.views.TemporarySpotifyProfile.fetch_top_artists')
+    def test_spotify_callback_success(self,
+                                      mock_fetch_artists,
+                                      mock_fetch_tracks,
+                                      mock_exchange_token):
+        """
+        Tests a successful spotify callback view
+        :param mock_fetch_artists: A mock return from the API
+        :param mock_fetch_tracks:  A mock return from the API
+        :param mock_exchange_token:  A mock return from the API
+        :return: True if successful spotify callback view is working and
+            redirecting to summary.html
+        """
+
+        # Log the user in
+        self.client.login(username='testuser', password='password')
+
+        # Mock the exchange of the code for a valid access token
+        mock_exchange_token.return_value = ('valid_token', 'valid_refresh_token')
+
+        # Mock fetching top tracks and artists
+        mock_fetch_tracks.return_value = None  # Simulate successful fetch
+        mock_fetch_artists.return_value = None
+
+        # Simulate callback with a valid authorization code
+        response = self.client.get(reverse('spotify_callback'), {'code': 'valid_code'})
+
+        # Check if the response is a redirect to 'summary' (the page after success)
+        self.assertRedirects(response, reverse('loading'))
+
+        # Check that the TemporarySpotifyProfile was created
+        temp_profile = TemporarySpotifyProfile.objects.first()
+        self.assertIsNotNone(temp_profile)
+
+        # Ensure the profile data was fetched (mocked methods)
+        mock_fetch_tracks.assert_called_once_with('valid_token')
+        mock_fetch_artists.assert_called_once_with('valid_token')
+
+        # Check that the temporary_profile_id is stored in the session
+        self.assertIn('temporary_profile_id', self.client.session)
+        self.assertEqual(self.client.session['temporary_profile_id'], temp_profile.id)
 
     @patch('spotify_app.views.requests.post')
     def test_spotify_callback_failure(self, mock_post):
