@@ -21,6 +21,7 @@ from userAuthentication import views as accounts_views  # Import the views from 
 from . import views
 #from django.contrib.auth import views as auth_views
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.landing_page, name='landing'),
