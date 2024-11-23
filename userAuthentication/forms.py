@@ -14,6 +14,7 @@ class SignupForm(UserCreationForm):
     """
     email = forms.EmailField(max_length=200, help_text='Required')
     name = forms.CharField(max_length=150, required=True,
+                           label = 'First Name',
                            help_text='Required')  # Add name as required
 
     class Meta:
