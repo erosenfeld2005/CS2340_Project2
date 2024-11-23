@@ -133,7 +133,8 @@ def display_summary_content(request):
                 "top_genres": temp_profile.genre_data,  # Pass genre data
                 "top_1_genre": top_genre,
                 "vibe_data": temp_profile.vibe_data,  # Pass vibe data
-                "temp_profile_id": temp_profile_id
+                "temp_profile_id": temp_profile_id,
+                "is_saved": False
             }
 
             return render(request, 'summary.html', context)
@@ -221,9 +222,10 @@ def display_saved_summary_content(request, created_at):
         "top_genres": temp_profile.genre_data,  # Pass genre data
         "top_1_genre": top_genre,
         "vibe_data": temp_profile.vibe_data,  # Pass vibe data
+        "is_saved": True
     }
 
-    return render(request, 'saved_summary.html', context)
+    return render(request, 'summary.html', context)
 
 def error_view(request):
     """
