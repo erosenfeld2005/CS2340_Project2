@@ -17,12 +17,13 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .models import SpotifyProfile, TemporarySpotifyProfile
 
-
 def spotify_login(request):
     """
     Function that redirects to the login/authorization page
     :return: redirect to the code page
     """
+    request.session['time_frame'] = request.POST.get('time_frame')
+    print(request.session['time_frame'])
     scopes = 'user-top-read'
     auth_url = (
         f"https://accounts.spotify.com/authorize?"
@@ -57,6 +58,7 @@ def spotify_callback(request):
         top_five_artists=[],
         vibe_data=None,
         genre_data={},
+        time_range='',
     )
 
     # Store the profile ID and access token in the session
@@ -64,19 +66,21 @@ def spotify_callback(request):
     request.session['access_token'] = access_token
 
     # Start asynchronous data fetching
-    Thread(target=fetch_spotify_data, args=(temp_profile.id, access_token)).start()
+    Thread(target=fetch_spotify_data, args=(request,temp_profile.id, access_token)).start()
 
     # Redirect to the loading page
     return redirect('loading')
 
-def fetch_spotify_data(profile_id, access_token):
+def fetch_spotify_data(request, profile_id, access_token):
     """
     Fetch Spotify data in the background for the given profile.
     """
     try:
+        time_frame = request.session.get('time_frame')
+        print(time_frame)
         temp_profile = TemporarySpotifyProfile.objects.get(id=profile_id)
-        temp_profile.fetch_top_tracks(access_token)
-        temp_profile.fetch_top_artists(access_token)
+        temp_profile.fetch_top_tracks(access_token, time_frame)
+        temp_profile.fetch_top_artists(access_token, time_frame)
     except TemporarySpotifyProfile.DoesNotExist:
         # Handle the case where the profile doesn't exist
         pass
@@ -169,6 +173,7 @@ def save_spotify_profile(request):
                 vibe_data=temp_profile.vibe_data,
                 genre_data=temp_profile.genre_data,
                 created_at=timezone.now(),
+                time_range=temp_profile.time_range,
             )
             return redirect('history')  # Redirect to the history page
         except TemporarySpotifyProfile.DoesNotExist:
@@ -286,3 +291,5 @@ def loading(request):
     if is_ajax:
         return JsonResponse(response_data, status=status)
     return render(request, template, response_data)
+def time_frame(request):
+    return render(request, 'time_frame.html')
