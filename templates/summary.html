@@ -606,13 +606,24 @@
                     </div>
                 </div>
                 <div style="text-align: center; margin-top: 50px;">
-                    <form method="post" action="{% url 'save_spotify_profile' %}">
+                    {% if is_saved %}
+                        <div style="text-align: center; margin-top: 50px;">
+                        <form method="post" action="{% url 'history' %}">
+                            {% csrf_token %}
+                            <button type="submit" style="padding: 10px 20px; background-color: #3F665E; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                                Return to History
+                            </button>
+                        </form>
+                        </div>
+                    {% else %}
+                        <form method="post" action="{% url 'save_spotify_profile' %}">
                         {% csrf_token %}
                         <input type="hidden" name="temporary_profile_id" value="{{ temp_profile_id }}">
                         <button type="submit" style="padding: 10px 20px; background-color: #3F665E; color: white; border: none; border-radius: 5px; cursor: pointer;">
                             Save this Profile
                         </button>
-                    </form>
+                        </form>
+                    {% endif %}
                 </div>
             </div>
         </div>
