@@ -568,3 +568,35 @@ body.dark-mode .navbar a:hover {
     width: 100%; /* Make the player responsive */
     max-width: 300px; /* Limit maximum width */
 }
+
+.bar-container {
+    width: 100%;
+    height: 20px;
+    background-color: #e0e0e0; /* Light gray background for the container */
+    border-radius: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Individual bars */
+.bar {
+    height: 100%;
+    background-color: #3F665E; /* Customize with your preferred color */
+    border-radius: 10px;
+    transition: width 0.5s ease-in-out; /* Smooth animation for bar width */
+}
+
+/* Optional text for better alignment */
+.vibes-details span {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #2E4A47;
+    text-align: right; /* Align percentage text to the right */
+}
+.vibe-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}

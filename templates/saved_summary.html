@@ -191,12 +191,12 @@
             height: auto; /* Maintain aspect ratio */
         }
 
-        .vibes-details {
-            margin-right: 20px; /* Space between text and stats */
-            text-align: left; /* Center text and photo horizontally */
-            display: flex;
-            flex-direction: column; /* Stack name and photo vertically */
-        }
+        /*.vibes-details {*/
+        /*    margin-right: 20px; !* Space between text and stats *!*/
+        /*    text-align: left; !* Center text and photo horizontally *!*/
+        /*    display: flex;*/
+        /*    flex-direction: column; !* Stack name and photo vertically *!*/
+        /*}*/
 
         .other-icon-container {
             width: 100%;
@@ -578,15 +578,34 @@
 
             <!-- Slide 7 -->
             <div class="slide">
-                <h2>Your vibe data...</h2>
-                <div class="artist-info">
-                    <div class="vibes-details">
-                        <h4>Danceability: {{ vibe_data.average_danceability|floatformat:2 }}%</h4>
-                        <h4>Valence: {{ vibe_data.average_valence|floatformat:2 }}%</h4>
-                        <h4>Energy: {{ vibe_data.average_energy|floatformat:2 }}%</h4>
+    <h2>Your vibe data...</h2>
+    <div class="artist-info">
+        <div class="vibes-details">
+                    <!-- Danceability -->
+                <div class="vibe-item">
+                <h4>Danceability</h4>
+                <div class="bar-container">
+                    <div class="bar" style="width: {{ vibe_data.average_danceability|floatformat:2 }}%;"></div>
+                </div>
+                <span>{{ vibe_data.average_danceability|floatformat:2 }}%</span>
+            </div>
+
+                    <!-- Valence -->
+                    <h4>Valence</h4>
+                    <div class="bar-container">
+                        <div class="bar" style="width: {{ vibe_data.average_valence|floatformat:2 }}%;"></div>
                     </div>
+                    <span>{{ vibe_data.average_valence|floatformat:2 }}%</span>
+
+                    <!-- Energy -->
+                    <h4>Energy</h4>
+                    <div class="bar-container">
+                        <div class="bar" style="width: {{ vibe_data.average_energy|floatformat:2 }}%;"></div>
+                    </div>
+                    <span>{{ vibe_data.average_energy|floatformat:2 }}%</span>
                 </div>
             </div>
+        </div>
 
             <!-- Slide 8 -->
             <div class="slide">
