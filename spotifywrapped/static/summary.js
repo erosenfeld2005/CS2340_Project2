@@ -143,77 +143,71 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    document.getElementById('instagram-share-btn').addEventListener('click', function () {
-    console.log('Instagram button clicked');
-        captureSlideAndShare('instagram');
-    });
+    document.addEventListener('DOMContentLoaded', function () {
+        // Select the buttons
+        const instagramShareBtn = document.getElementById('instagram-share-btn');
+        const twitterShareBtn = document.getElementById('twitter-share-btn');
+        const linkedinShareBtn = document.getElementById('linkedin-share-btn');
 
-    document.getElementById('twitter-share-btn').addEventListener('click', function () {
-        console.log('Twitter button clicked');
-        captureSlideAndShare('twitter');
-    });
+        // Simulating the capture and upload process
+        function captureAndUploadImage() {
+            const slideToCapture = document.querySelector('#wrappedSummary');
+            if (!slideToCapture) {
+                alert("Slide not found!");
+                return Promise.reject("Slide not found!");
+            }
 
-    document.getElementById('linkedin-share-btn').addEventListener('click', function () {
-        console.log('LinkedIn button clicked');
-        captureSlideAndShare('linkedin');
-    });
-
-
-
-    function captureSlideAndShare(platform) {
-        const slide8 = document.querySelector('#slide-8'); // Select Slide 8
-        if (!slide8) {
-            console.error("Slide 8 not found!");
-            return;
+            return html2canvas(slideToCapture).then(canvas => {
+                const imageData = canvas.toDataURL('image/png');
+                return fetch('/upload-image', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image: imageData })
+                }).then(response => response.json());
+            });
         }
 
-        const saveButton = slide8.querySelector('.save-button'); // Temporarily hide Save Button
-        if (saveButton) saveButton.style.display = 'none';
+        // Share on Instagram
+        instagramShareBtn.addEventListener('click', function () {
+            captureAndUploadImage()
+                .then(data => {
+                    const imageUrl = data.imageUrl;
+                    alert(`To share on Instagram, manually upload the downloaded image.`); // Instagram doesn't support direct sharing.
+                    window.open(imageUrl, '_blank'); // Open the image in a new tab for download
+                })
+                .catch(error => {
+                    console.error('Error sharing on Instagram:', error);
+                });
+        });
 
-        html2canvas(slide8)
-            .then(canvas => {
-                const image = canvas.toDataURL('image/png');
-                if (saveButton) saveButton.style.display = 'block'; // Restore Save Button
+        // Share on Twitter
+        twitterShareBtn.addEventListener('click', function () {
+            captureAndUploadImage()
+                .then(data => {
+                    const imageUrl = data.imageUrl;
+                    const tweetText = encodeURIComponent("Check out my Wrapped Summary!");
+                    const twitterUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${imageUrl}`;
+                    window.open(twitterUrl, '_blank'); // Open Twitter share URL
+                })
+                .catch(error => {
+                    console.error('Error sharing on Twitter:', error);
+                });
+        });
 
-                switch (platform) {
-                    case 'instagram':
-                        downloadImage(image, 'wrapped-summary.png');
-                        break;
-                    case 'twitter':
-                        downloadImage(image, 'wrapped-summary.png'); // Placeholder for future Twitter logic
-                        break;
-                    case 'linkedin':
-                        alert("LinkedIn sharing requires image hosting logic.");
-                        break;
-                    default:
-                        console.error("Unsupported platform!");
-                }
-            })
-            .catch(error => {
-                console.error("Error capturing the slide:", error);
-                if (saveButton) saveButton.style.display = 'block'; // Restore Save Button on error
-            });
-    }
+        // Share on LinkedIn
+        linkedinShareBtn.addEventListener('click', function () {
+            captureAndUploadImage()
+                .then(data => {
+                    const imageUrl = data.imageUrl;
+                    const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(imageUrl)}`;
+                    window.open(linkedInUrl, '_blank'); // Open LinkedIn share URL
+                })
+                .catch(error => {
+                    console.error('Error sharing on LinkedIn:', error);
+                });
+        });
+    });
 
-
-    function downloadImage(dataUrl, filename) {
-        const link = document.createElement('a');
-        link.href = dataUrl;
-        link.download = filename;
-        link.click();
-    }
-
-    function shareOnTwitter(text, imageData) {
-        fetch(imageData)
-            .then(res => res.blob())
-            .then(blob => {
-                const file = new File([blob], "wrapped-summary.png", { type: blob.type });
-                alert("Twitter sharing requires an API backend to upload media.");
-            })
-            .catch(error => {
-                console.error("Error converting Base64 to Blob:", error);
-            });
-    }
 
 
 
