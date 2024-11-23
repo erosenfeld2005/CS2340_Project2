@@ -26,9 +26,11 @@ class TemporarySpotifyProfile(models.Model):
         :param time_range: generate long, medium or short term wrapped
         :return: The list of top songs
         """
-        headers = {"Authorization": f"Bearer {access_token}", "Content-Type": "application/json"}
+        headers = {"Authorization": f"Bearer {access_token}",
+                   "Content-Type": "application/json"}
         top_tracks_url = "https://api.spotify.com/v1/me/top/tracks"
-        response = requests.get(top_tracks_url, headers=headers, params={"time_range":time_range,"limit": 50}, timeout=15)
+        response = requests.get(top_tracks_url, headers=headers,
+                                params={"time_range":time_range,"limit": 50}, timeout=15)
         if response.status_code == 200:
             top_tracks_data = response.json().get("items", [])
             top_tracks = [{
@@ -84,9 +86,11 @@ class TemporarySpotifyProfile(models.Model):
         :return: list of top artists
         """
         ## Pulling from API
-        headers = {"Authorization": f"Bearer {access_token}", "Content-Type": "application/json"}
+        headers = {"Authorization": f"Bearer {access_token}",
+                   "Content-Type": "application/json"}
         top_artists_url = "https://api.spotify.com/v1/me/top/artists"
-        response = requests.get(top_artists_url, headers=headers, params={"time_range":time_range,"limit": 50}, timeout=15)
+        response = requests.get(top_artists_url, headers=headers,
+                                params={"time_range":time_range,"limit": 50}, timeout=15)
         if response.status_code == 200:
             top_artists_data = response.json().get("items", [])
             top_artists = [{

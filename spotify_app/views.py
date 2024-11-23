@@ -23,7 +23,6 @@ def spotify_login(request):
     :return: redirect to the code page
     """
     request.session['time_frame'] = request.POST.get('time_frame')
-    print(request.session['time_frame'])
     scopes = 'user-top-read'
     auth_url = (
         f"https://accounts.spotify.com/authorize?"
@@ -76,11 +75,10 @@ def fetch_spotify_data(request, profile_id, access_token):
     Fetch Spotify data in the background for the given profile.
     """
     try:
-        time_frame = request.session.get('time_frame')
-        print(time_frame)
+        time_frame_choice = request.session.get('time_frame')
         temp_profile = TemporarySpotifyProfile.objects.get(id=profile_id)
-        temp_profile.fetch_top_tracks(access_token, time_frame)
-        temp_profile.fetch_top_artists(access_token, time_frame)
+        temp_profile.fetch_top_tracks(access_token, time_frame_choice)
+        temp_profile.fetch_top_artists(access_token, time_frame_choice)
     except TemporarySpotifyProfile.DoesNotExist:
         # Handle the case where the profile doesn't exist
         pass
@@ -292,4 +290,9 @@ def loading(request):
         return JsonResponse(response_data, status=status)
     return render(request, template, response_data)
 def time_frame(request):
+    """
+    Method that controls the display of the page that asks what timeframe you want the summary to use
+    :param request: The user request
+    :return: Redirect to time_frame.html
+    """
     return render(request, 'time_frame.html')
