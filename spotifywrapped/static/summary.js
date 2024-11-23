@@ -144,44 +144,57 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     document.getElementById('instagram-share-btn').addEventListener('click', function () {
-    captureSlideAndShare('instagram');
+    console.log('Instagram button clicked');
+        captureSlideAndShare('instagram');
     });
 
     document.getElementById('twitter-share-btn').addEventListener('click', function () {
+        console.log('Twitter button clicked');
         captureSlideAndShare('twitter');
     });
 
     document.getElementById('linkedin-share-btn').addEventListener('click', function () {
+        console.log('LinkedIn button clicked');
         captureSlideAndShare('linkedin');
     });
 
+
+
     function captureSlideAndShare(platform) {
         const slide8 = document.querySelector('#slide-8'); // Select Slide 8
-        const saveButton = slide8.querySelector('.save-button'); // Select the Save Button
+        if (!slide8) {
+            console.error("Slide 8 not found!");
+            return;
+        }
 
-        // Temporarily hide the Save Button
-        saveButton.style.display = 'none';
+        const saveButton = slide8.querySelector('.save-button'); // Temporarily hide Save Button
+        if (saveButton) saveButton.style.display = 'none';
 
-        // Use html2canvas to capture the slide
-        html2canvas(slide8).then(canvas => {
-            const image = canvas.toDataURL('image/png');
+        html2canvas(slide8)
+            .then(canvas => {
+                const image = canvas.toDataURL('image/png');
+                if (saveButton) saveButton.style.display = 'block'; // Restore Save Button
 
-            // Restore the Save Button
-            saveButton.style.display = 'block';
-
-            // Share the image based on the platform
-            if (platform === 'instagram') {
-                // Instagram-specific logic (manual upload since API limitations exist)
-                downloadImage(image, 'wrapped-summary.png');
-            } else if (platform === 'twitter') {
-                const twitterUrl = `https://twitter.com/intent/tweet?text=Check%20out%20my%20Wrapped%20Summary!&url=${image}`;
-                window.open(twitterUrl, '_blank');
-            } else if (platform === 'linkedin') {
-                const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${image}`;
-                window.open(linkedinUrl, '_blank');
-            }
-        });
+                switch (platform) {
+                    case 'instagram':
+                        downloadImage(image, 'wrapped-summary.png');
+                        break;
+                    case 'twitter':
+                        downloadImage(image, 'wrapped-summary.png'); // Placeholder for future Twitter logic
+                        break;
+                    case 'linkedin':
+                        alert("LinkedIn sharing requires image hosting logic.");
+                        break;
+                    default:
+                        console.error("Unsupported platform!");
+                }
+            })
+            .catch(error => {
+                console.error("Error capturing the slide:", error);
+                if (saveButton) saveButton.style.display = 'block'; // Restore Save Button on error
+            });
     }
+
 
     function downloadImage(dataUrl, filename) {
         const link = document.createElement('a');
@@ -189,5 +202,19 @@ document.addEventListener('DOMContentLoaded', function () {
         link.download = filename;
         link.click();
     }
+
+    function shareOnTwitter(text, imageData) {
+        fetch(imageData)
+            .then(res => res.blob())
+            .then(blob => {
+                const file = new File([blob], "wrapped-summary.png", { type: blob.type });
+                alert("Twitter sharing requires an API backend to upload media.");
+            })
+            .catch(error => {
+                console.error("Error converting Base64 to Blob:", error);
+            });
+    }
+
+
 
 });
