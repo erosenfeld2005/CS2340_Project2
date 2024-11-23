@@ -291,7 +291,8 @@ def loading(request):
     return render(request, template, response_data)
 def time_frame(request):
     """
-    Method that controls the display of the page that asks what timeframe you want the summary to use
+    Method that controls the display of the page that asks
+    what timeframe you want the summary to use
     :param request: The user request
     :return: Redirect to time_frame.html
     """
