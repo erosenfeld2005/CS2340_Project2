@@ -208,6 +208,19 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+fetch('https://cs2340-project2-2.onrender.com', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ image: imageData })
+})
+  .then(response => response.json())
+  .then(data => {
+      console.log('Image uploaded:', data.imageUrl);
+      // Use the URL (data.imageUrl) for social media sharing
+  })
+  .catch(error => {
+      console.error('Error uploading image:', error);
+  });
 
 
 
