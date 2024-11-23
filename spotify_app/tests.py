@@ -35,7 +35,7 @@ class TestTemporarySpotifyProfile(TestCase):
         mock_get.return_value.json.return_value = mock_response
 
         temp_profile = TemporarySpotifyProfile()
-        tracks = temp_profile.fetch_top_tracks('access_token')
+        tracks = temp_profile.fetch_top_tracks('access_token', 'long_term')
 
         # Assert that the fetched tracks match the mock data
         self.assertEqual(len(tracks), 2)
@@ -62,7 +62,7 @@ class TestTemporarySpotifyProfile(TestCase):
         mock_get.return_value.json.return_value = mock_response
 
         temp_profile = TemporarySpotifyProfile()
-        artists = temp_profile.fetch_top_artists('access_token')
+        artists = temp_profile.fetch_top_artists('access_token', 'long_term')
 
         self.assertEqual(len(artists), 2)
         self.assertEqual(artists[0]['name'], 'Artist 1')
@@ -177,8 +177,8 @@ class TestSpotifyCallbackView(TransactionTestCase):
         self.assertIsNotNone(temp_profile)
         time.sleep(15)
         # Ensure the profile data was fetched (mocked methods)
-        mock_fetch_tracks.assert_called_once_with('valid_token')
-        mock_fetch_artists.assert_called_once_with('valid_token')
+        mock_fetch_tracks.assert_called_once_with('valid_token', None)
+        mock_fetch_artists.assert_called_once_with('valid_token', None)
 
         # Check that the temporary_profile_id is stored in the session
         self.assertIn('temporary_profile_id', self.client.session)

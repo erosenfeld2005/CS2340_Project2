@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Wrapped Period</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .form-container {
+            display: inline-block;
+            text-align: left;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .form-container h2 {
+            margin-bottom: 20px;
+        }
+        .form-container label {
+            display: block;
+            margin: 10px 0;
+        }
+        .form-container button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #1DB954;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #1a9541;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Select Your Wrapped Period</h2>
+        <form action="{% url 'spotify_login' %}" method="post">
+            {% csrf_token %}
+            <label>
+                <input type="radio" name="time_frame" value="short_term" required>
+                Short Term (last 4 weeks)
+            </label>
+            <label>
+                <input type="radio" name="time_frame" value="medium_term">
+                Medium Term (last 6 months)
+            </label>
+            <label>
+                <input type="radio" name="time_frame" value="long_term">
+                Long Term (last year)
+            </label>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

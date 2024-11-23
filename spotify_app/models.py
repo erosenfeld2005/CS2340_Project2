@@ -17,16 +17,20 @@ class TemporarySpotifyProfile(models.Model):
     top_five_artists = models.JSONField(default=list, blank=True)
     vibe_data = models.JSONField(default=dict, blank=True, null=True)
     genre_data = models.JSONField(default=dict, blank=True)
+    time_range = models.CharField(max_length=100, blank=True, null=True, default="medium_term")
 
-    def fetch_top_tracks(self, access_token):
+    def fetch_top_tracks(self, access_token, time_range):
         """
         Gathers the top tracks data from the Spotify API.
         :param access_token: user specific token
+        :param time_range: generate long, medium or short term wrapped
         :return: The list of top songs
         """
-        headers = {"Authorization": f"Bearer {access_token}", "Content-Type": "application/json"}
+        headers = {"Authorization": f"Bearer {access_token}",
+                   "Content-Type": "application/json"}
         top_tracks_url = "https://api.spotify.com/v1/me/top/tracks"
-        response = requests.get(top_tracks_url, headers=headers, params={"limit": 50}, timeout=15)
+        response = requests.get(top_tracks_url, headers=headers,
+                                params={"time_range":time_range,"limit": 50}, timeout=15)
         if response.status_code == 200:
             top_tracks_data = response.json().get("items", [])
             top_tracks = [{
@@ -40,6 +44,7 @@ class TemporarySpotifyProfile(models.Model):
             } for track in top_tracks_data]
             self.top_songs = top_tracks
             self.calculate_vibe_data(top_tracks_data, headers)  # Update vibe data
+            self.time_range = time_range
             self.save()
 
             #Top Five Songs
@@ -73,16 +78,19 @@ class TemporarySpotifyProfile(models.Model):
         }
         self.save()
 
-    def fetch_top_artists(self, access_token):
+    def fetch_top_artists(self, access_token, time_range):
         """
         Gathers the top artists data from the Spotify API.
         :param access_token: user specific data
+        :param time_range: generate long, medium or short term wrapped
         :return: list of top artists
         """
         ## Pulling from API
-        headers = {"Authorization": f"Bearer {access_token}", "Content-Type": "application/json"}
+        headers = {"Authorization": f"Bearer {access_token}",
+                   "Content-Type": "application/json"}
         top_artists_url = "https://api.spotify.com/v1/me/top/artists"
-        response = requests.get(top_artists_url, headers=headers, params={"limit": 50}, timeout=15)
+        response = requests.get(top_artists_url, headers=headers,
+                                params={"time_range":time_range,"limit": 50}, timeout=15)
         if response.status_code == 200:
             top_artists_data = response.json().get("items", [])
             top_artists = [{
@@ -131,3 +139,4 @@ class SpotifyProfile(models.Model):
     vibe_data = models.JSONField(default=dict, blank=True, null=True)
     genre_data = models.JSONField(default=dict, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)  # Timestamp for when the profile was saved
+    time_range = models.CharField(max_length=100, blank=True, null=True, default="medium_term")
