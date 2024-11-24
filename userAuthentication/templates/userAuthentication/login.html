@@ -25,7 +25,8 @@
             opacity: 0.9; /* Slight dimming on hover */
             background-color: #232f3c !important;
         }
-        body.dark-mode .btn:hover {
+        body.dark-mode .btn:hover,
+        body.dark-mode .button:hover {
             background-color: #8692b5 !important;
         }
     </style>
@@ -78,7 +79,7 @@
                 {% endif %}
 
                 <div class="button-alt-option">
-                    <button type="submit">Log In</button>
+                    <button type="submit" class="button">Log In</button>
                     <p>Don't have an account? <a href="{% url 'signup' %}" class="linkedText">Sign Up</a></p>
                 </div>
             </form>
