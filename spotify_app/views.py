@@ -5,6 +5,7 @@ from threading import Thread
 
 # views.py
 import requests
+import json
 
 from requests.auth import HTTPBasicAuth
 
@@ -107,12 +108,11 @@ def display_summary_content(request):
     :return: the appropriate page
     """
     temp_profile_id = request.session.get('temporary_profile_id')
-    # Retrieve the profile ID from the session
 
     if temp_profile_id:
         try:
             temp_profile = TemporarySpotifyProfile.objects.get(id=temp_profile_id)
-            # Get the temporary profile by ID
+
             if not temp_profile.top_five_artists or not temp_profile.genre_data:
                 return render(request, 'spotify_app/error.html',
                               {"message": "No top artists and genres found."})
@@ -130,9 +130,9 @@ def display_summary_content(request):
                 "user_name": user_name,
                 "top_five_artists": temp_profile.top_five_artists,
                 "top_five_songs": temp_profile.top_five_songs,
-                "top_genres": temp_profile.genre_data,  # Pass genre data
+                "top_genres": json.dumps(temp_profile.genre_data),  # Serialize genre data
                 "top_1_genre": top_genre,
-                "vibe_data": temp_profile.vibe_data,  # Pass vibe data
+                "vibe_data": temp_profile.vibe_data,
                 "temp_profile_id": temp_profile_id,
                 "is_saved": False
             }
@@ -286,3 +286,5 @@ def loading(request):
     if is_ajax:
         return JsonResponse(response_data, status=status)
     return render(request, template, response_data)
+
+
