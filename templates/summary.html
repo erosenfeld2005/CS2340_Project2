@@ -300,6 +300,10 @@
             border-radius: 5px;
         }
 
+        body.dark-mode .quiz-options p.selected {
+            background-color: #3F665E;
+        }
+
         .quiz-options p.incorrect {
             background-color: #a2455e;
             color: white;
@@ -346,6 +350,28 @@
         }
         .dot.active {
             background-color: #3F665E;
+        }
+
+        /* Hover State for Log Out Button in Navbar for Dark Mode */
+        body.dark-mode .navbar .btn:hover {
+            background-color: #8692b5 !important; /* Slightly lighter blue for hover */
+            color: #ffffff !important; /* Ensure text remains white */
+        }
+
+        body.dark-mode .main-content {
+            background-color: var(--dark-background);
+            box-shadow: none;
+        }
+
+        body.dark-mode .slide, .slide quiz, .slide active {
+            background-color: var(--background-dark-grey);
+        }
+
+        body.dark-mode .dot.active {
+            background-color: white;
+        }
+        body.dark-mode .dot {
+            background-color: #8692b5;
         }
 
         /* Slide In & Out Animation */
