@@ -547,6 +547,32 @@
         }
 
 
+        .vibes-details {
+            margin: 2vh 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px; /* Height of the progress bar */
+            background-color: #A5CBC3; /* Light background for the bar */
+            border-radius: 10px; /* Rounded corners */
+            margin-top: 5px;
+            margin-left: 5vh;
+        }
+
+        .progress {
+            height: 100%;
+            border-radius: 10px; /* Rounded corners for the filled part */
+            background-color: #3F665E; /* Color of the filled part */
+            text-align: left;
+            line-height: 20px; /* Align text vertically inside the bar */
+            color: white;
+            font-weight: bold;
+        }
+
+        h4 {
+            margin-bottom: 5px;
+        }
 
 
         body.dark-mode .chart-key {
@@ -795,11 +821,23 @@
                 <div class="artist-info">
                     <div class="vibes-details">
                         <h4>Danceability: {{ vibe_data.average_danceability|floatformat:2 }}%</h4>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: {{ vibe_data.average_danceability }}%"></div>
+                        </div>
+
                         <h4>Valence: {{ vibe_data.average_valence|floatformat:2 }}%</h4>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: {{ vibe_data.average_valence }}%"></div>
+                        </div>
+
                         <h4>Energy: {{ vibe_data.average_energy|floatformat:2 }}%</h4>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: {{ vibe_data.average_energy }}%"></div>
+                        </div>
                     </div>
                 </div>
             </div>
+
 
             <!-- Slide 8 -->
             <div class="slide">
