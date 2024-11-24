@@ -219,7 +219,7 @@ def display_saved_summary_content(request, created_at):
         "top_songs": temp_profile.top_songs,
         "top_five_artists": temp_profile.top_five_artists,
         "top_five_songs": temp_profile.top_five_songs,
-        "top_genres": temp_profile.genre_data,  # Pass genre data
+        "top_genres": json.dumps(temp_profile.genre_data),
         "top_1_genre": top_genre,
         "vibe_data": temp_profile.vibe_data,  # Pass vibe data
         "is_saved": True
