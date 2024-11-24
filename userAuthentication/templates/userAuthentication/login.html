@@ -7,6 +7,17 @@
     <link rel="stylesheet" href="{% static 'main.css' %}">
     <script src="{% static 'darkmode.js' %}"></script>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        body.dark-mode .login {
+            background-color: var(--dark-background);
+            box-shadow: none;
+        }
+
+        body.dark-mode .linkedText {
+            color: #8692b5;
+        }
+    </style>
 </head>
 <body>
 
@@ -57,7 +68,7 @@
 
                 <div class="button-alt-option">
                     <button type="submit">Log In</button>
-                    <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
+                    <p>Don't have an account? <a href="{% url 'signup' %}" class="linkedText">Sign Up</a></p>
                 </div>
             </form>
         </div>

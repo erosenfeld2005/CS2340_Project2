@@ -20,6 +20,15 @@
             padding-bottom: 60px;
         }
 
+        body.dark-mode .main-content {
+            background-color: var(--dark-background);
+        }
+
+        body.dark-mode .button {
+            background-color: var(--button-bg-dark);
+        }
+
+
         /* Decorative Title Styling */
         .contact-title {
             font-size: 36px;
@@ -215,7 +224,7 @@
                 <input type="text" name="name" placeholder="Your Name" required>
                 <input type="email" name="email" placeholder="Your Email" required>
                 <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
-                <button type="submit">Send Feedback</button>
+                <button type="submit" class="button">Send Feedback</button>
             </form>
         </div>
     </div>

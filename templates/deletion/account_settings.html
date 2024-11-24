@@ -12,6 +12,18 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
+    <style>
+        body.dark-mode .accountContainer {
+            background-color: var(--dark-background);
+            box-shadow: none;
+        }
+
+        body.dark-mode .settings-container {
+            background-color: var(--background-dark-grey);
+        }
+
+    </style>
+
 </head>
 <body>
     <!-- Navbar -->
@@ -24,7 +36,7 @@
     </header>
 
     <!-- Main Content -->
-    <div id="account-settings-page" class="container my-5">
+    <div id="account-settings-page" class="accountContainer">
     <h3 class="text-center">Account Settings</h3>
     <form>
         <div class="settings-container">
