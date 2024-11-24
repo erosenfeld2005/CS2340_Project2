@@ -158,8 +158,8 @@
         /* Adjusted image (intro-icon) */
         .intro-icon {
             width: 100%; /* Make the image responsive to container width */
-            height: auto; /* Ensure the image height adjusts accordingly */
-            max-width: 100%; /* Prevent the image from overflowing the container */
+            height: 100%; /* Make the height of the image fill the container */
+            max-width: 100%; /* Prevent the image from overflowing horizontally */
             max-height: 80vh; /* Limit the height to 80% of the viewport height */
             object-fit: contain; /* Ensure the entire image fits without being cropped */
             margin: 0;
@@ -167,11 +167,9 @@
 
 
 
-
         .icon-container {
             width: 120%;
             height: 90px; /* Adjust as needed for cropping */
-            overflow: hidden;
             margin-top: 50px;
             display: flex;
             justify-content: left;
@@ -1124,9 +1122,14 @@
         sortedGenres.slice(0, 5).forEach((item, index) => {
             const keyItem = document.createElement('div');
             keyItem.innerHTML = `<strong>${index + 1}.</strong> ${capitalizeWords(item.label)}: ${item.percentage}%`;
+
+            // Apply the corresponding color to each key item
+            keyItem.style.color = mutedColors[index];
+
             chartKey.appendChild(keyItem);
         });
     });
+
 
 </script>
 
