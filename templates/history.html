@@ -16,7 +16,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh; /* Allow content to expand naturally */
             width: 100%;
             background-color: #CFE3E1;
         }
@@ -242,14 +242,57 @@
         <div class="wrapped-container">
             <img src="{% static 'history.png' %}" alt="Wrapped History" class="wrapped-history-icon">
         </div>
+
+        <h2 class="subheading">Short Term Wraps</h2>
+
+        <div class="button-grid">
+            {% for profile in profiles %}
+                {% if profile.time_range == "short_term" %}
+                <div>
+                    <!-- Button linking to detailed summary page -->
+                    <button class="date-button" onclick="window.location.href='{% url 'saved_summary' profile.created_at %}'">
+                        {{ profile.created_at }}
+                    </button>
+
+                    <button class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setProfileToDelete({{ profile.id }})" style="margin-left: 10px;">
+                        X
+                    </button>
+                </div>
+                {% endif %}
+            {% empty %}
+                <p>No saved short term wrapped summaries available.</p>
+            {% endfor %}
+        </div>
+
+        <h2 class="subheading">Medium Term Wraps</h2>
+
+        <div class="button-grid">
+            {% for profile in profiles %}
+                {% if profile.time_range == "medium_term" %}
+                <div>
+                    <!-- Button linking to detailed summary page -->
+                    <button class="date-button" onclick="window.location.href='{% url 'saved_summary' profile.created_at %}'">
+                        {{ profile.created_at }}
+                    </button>
+
+                    <button class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setProfileToDelete({{ profile.id }})" style="margin-left: 10px;">
+                        X
+                    </button>
+                </div>
+                {% endif %}
+            {% empty %}
+                <p>No saved medium term wrapped summaries available.</p>
+            {% endfor %}
+        </div>
+
+        <h2 class="subheading">Long Term Wraps</h2>
+
+        <div class="button-grid">
         <div class="timeline">
             {% for profile in profiles %}
-                <div class="timeline-event {% if forloop.last %} most-recent {% endif %}">
-                    <!-- Most Recent Text -->
-                    {% if forloop.last %}
-                        <div class="most-recent-text">Most Recent!</div>
-                    {% endif %}
 
+                {% if profile.time_range == "long_term" %}
+                <div>
                     <!-- Button linking to detailed summary page -->
                     <button class="date-button" onclick="window.location.href='{% url 'saved_summary' profile.created_at %}'">
                         {{ profile.created_at }}
@@ -260,14 +303,12 @@
                         X
                     </button>
                 </div>
+                {% endif %}
             {% empty %}
-                <p>No saved wrapped summaries available.</p>
+                <p>No saved long term wrapped summaries available.</p>
             {% endfor %}
         </div>
     </div>
-
-
-
 
     <!-- Single Delete Confirmation Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
