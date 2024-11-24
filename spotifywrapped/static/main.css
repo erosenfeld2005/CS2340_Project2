@@ -115,18 +115,20 @@ header {
 
 .navbar {
     display: flex;
-    justify-content: space-between; /* Evenly Space*/
+    justify-content: space-between; /* Evenly space items */
     align-items: center;
-    height: 80px;
-    padding: 0 50px; /* Side padding */
+    height: 8vh; /* Use vh (viewport height) for a responsive height */
+    padding: 0 5vw; /* Side padding in vw (viewport width) for responsiveness */
+    box-sizing: border-box; /* Include padding in width/height calculations */
 }
 
 .navbar a {
     color: var(--text-light);
-    padding: 0 20px;
-    font-size: 24px;
+    padding: 1vw 2vw; /* Scalable padding */
+    font-size: 3vw; /* Responsive font size based on viewport width */
     font-weight: 700;
     text-decoration: none;
+    transition: color 0.3s ease; /* Smooth hover transition */
 }
 
 .navbar a:hover {
@@ -134,11 +136,30 @@ header {
 }
 
 /* Responsive Nav */
-@media (max-width: 600px) {
+@media (max-width: 1024px) {
+    .navbar {
+        height: 10vh; /* Adjust height for medium-sized screens */
+        padding: 0 4vw; /* Adjust padding */
+    }
+
     .navbar a {
-        font-size: 20px;
+        font-size: 4vw; /* Adjust font size for medium screens */
+        padding: 1vw 2vw; /* Adjust padding for better scaling */
     }
 }
+
+@media (max-width: 600px) {
+    .navbar {
+        height: 12vh; /* Increase height for smaller screens */
+        padding: 0 3vw; /* Less padding on smaller screens */
+    }
+
+    .navbar a {
+        font-size: 5vw; /* Larger font size on very small screens */
+        padding: 1.5vw 3vw; /* Adjust padding for smaller screens */
+    }
+}
+
 
 /* Landing Page */
 .landing-page {

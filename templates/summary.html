@@ -17,31 +17,60 @@
             align-items: center;
             height: 100vh;
             width: 100%;
-            /*background: linear-gradient(30deg, #A5CBC3 20%, #FFFFFF 100%);*/
+            overflow: hidden; /* Prevent content overflow */
         }
+
         .slideshow-container {
             position: relative;
-            width: 1000px;
-            height: 550px;
+            width: 70%;
+            max-width: 1200px; /* Ensure a maximum width */
+            height: 70%;
+            max-height: 800px; /* Limit the max height */
             text-align: left;
-            /*border: 1px solid var(--light-background);*/
             border-radius: 10px;
-            /*padding: 20px;*/
-            /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);*/
             margin-bottom: 20px;
-            /*background: var(--light-background);*/
+            box-sizing: border-box; /* Include padding in width/height calculations */
+            padding: 20px; /* Add padding to the container for spacing */
         }
+
         .slide {
             position: absolute;
-            display: none;
+            display: none; /* Hide the slide initially */
             padding: 20px;
             width: 100%;
             height: 100%;
+            max-width: 100%; /* Prevent overflow */
+            max-height: 100%; /* Prevent overflow */
             border-radius: 10px;
             text-align: left;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             background: var(--light-background);
+            box-sizing: border-box; /* Ensure padding is inside the slide area */
+            overflow: hidden; /* Prevent content from overflowing */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
+
+        @media (max-width: 768px) {
+            .slideshow-container {
+                height: 60%; /* Adjust height for smaller screens */
+            }
+            .slide {
+                padding: 10px; /* Reduce padding for smaller screens */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .slideshow-container {
+                height: 50%; /* Further reduce height for very small screens */
+            }
+            .slide {
+                padding: 5px; /* Further reduce padding for very small screens */
+            }
+        }
+
         .slide.active {
             display: block;
         }
@@ -52,74 +81,89 @@
             margin-bottom: 10px;
         }
 
+        /* Adjusted styles for slide content */
         .slide h2 {
             font-family: 'DM Sans', sans-serif;
             color: #1E1E1E;
-            font-size: 64px;
+            font-size: 5vw; /* Adjust font size for better scaling */
             line-height: 1.1;
-            margin-top: 30px;
-            margin-left: 70px;
-            margin-right: 50px;
+            margin-top: 2vw; /* Reduced margin for better fit */
+            margin-left: 3vw; /* Reduced margin for better fit */
+            margin-right: 3vw; /* Reduced margin for better fit */
         }
+
         .slide h3 {
             font-family: 'DM Sans', sans-serif;
             color: #3F665E;
-            font-size: 48px;
+            font-size: 4vw; /* Adjust font size for better scaling */
             line-height: 1.1;
-            margin-top: 30px;
-            margin-left: 70px;
-            margin-right: 50px;
+            margin-top: 2vw; /* Reduced margin for better fit */
+            margin-left: 3vw; /* Reduced margin for better fit */
+            margin-right: 3vw; /* Reduced margin for better fit */
         }
+
         .slide h4 {
             font-family: 'DM Sans', sans-serif;
             color: #3F665E;
-            font-size: 36px;
-            line-height: 0.8;
-            margin-top: 30px;
-            margin-left: 70px;
-            margin-right: 50px;
+            font-size: 3.5vw; /* Adjust font size for better scaling */
+            line-height: 0.9; /* Adjusted line-height for better readability */
+            margin-top: 2vw; /* Reduced margin for better fit */
+            margin-left: 3vw; /* Reduced margin for better fit */
+            margin-right: 3vw; /* Reduced margin for better fit */
         }
 
         .slide h5 {
             font-family: 'DM Sans', sans-serif;
             color: #3F665E;
-            font-size: 36px;
-            line-height: 0.8;
-            margin-top: 30px;
-            margin-right: 50px;
+            font-size: 3.5vw; /* Adjust font size for better scaling */
+            line-height: 0.9; /* Adjusted line-height for better readability */
+            margin-top: 2vw; /* Reduced margin for better fit */
+            margin-right: 3vw; /* Reduced margin for better fit */
         }
 
         .slide h6 {
             font-family: 'DM Sans', sans-serif;
             color: #3F665E;
-            font-size: 48px;
+            font-size: 4vw; /* Adjust font size for better scaling */
             line-height: 1.1;
-            margin-left: 70px;
-            margin-right: 50px;
+            margin-left: 3vw; /* Reduced margin for better fit */
+            margin-right: 3vw; /* Reduced margin for better fit */
         }
 
         .slide h7 {
             font-family: 'DM Sans', sans-serif;
             color: #3F665E;
-            font-size: 24px;
+            font-size: 1.5vw; /* Adjust font size for better scaling */
             line-height: 1.1;
-            margin: 30px;
+            margin: 2vw; /* Reduced margin for better fit */
         }
 
         .slide p {
             color: #3F665E;
-            font-size: 18px;
-            margin-top: 5px;
-            margin-left: 70px;
-            margin-right: 50px;
+            font-size: 1.5vw; /* Adjust font size for better scaling */
+            margin-top: 1.5vw; /* Reduced margin for better fit */
+            margin-left: 3vw; /* Reduced margin for better fit */
+            margin-right: 3vw; /* Reduced margin for better fit */
         }
 
         .slide p1 {
             color: #3F665E;
-            font-size: 14px;
-            margin-top: 5px;
+            font-size: 1vw; /* Adjust font size for better scaling */
+            margin-top: 1vw; /* Reduced margin for better fit */
             font-weight: bold;
         }
+
+        /* Adjusted image (intro-icon) */
+        .intro-icon {
+            width: 100%; /* Make the image responsive to container width */
+            height: auto; /* Ensure the image height adjusts accordingly */
+            max-width: 100%; /* Prevent the image from overflowing the container */
+            max-height: 80vh; /* Limit the height to 80% of the viewport height */
+            object-fit: contain; /* Ensure the entire image fits without being cropped */
+            margin: 0;
+        }
+
+
 
 
         .icon-container {
@@ -132,12 +176,7 @@
             align-items: center;
         }
 
-        .intro-icon {
-            width: auto; /* Adjust width/height as needed */
-            height: 100%;
-            object-fit: cover;
-            margin: 0;
-        }
+
 
         .artist-info {
             display: flex; /* Align items in a row */
@@ -214,6 +253,39 @@
             object-fit: cover;
         }
 
+        .play-pause-button {
+            font-size: 16px; /* Default font size */
+            padding: 10px 20px; /* Adjust button padding */
+            width: auto; /* Make the button width adjust based on content */
+            max-width: 100%; /* Ensure the button doesn't overflow its container */
+            height: auto; /* Adjust the height to fit the content */
+            box-sizing: border-box; /* Include padding in the width and height calculation */
+            text-align: center; /* Center text within the button */
+            border-radius: 5px; /* Rounded corners for the button */
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Add smooth transitions */
+        }
+
+        .play-pause-button:hover {
+            background-color: #007bff; /* Change background color on hover */
+            transform: scale(1.05); /* Slightly scale the button on hover */
+        }
+
+        /* Adjust button size for smaller screens */
+        @media (max-width: 768px) {
+            .play-pause-button {
+                font-size: 14px; /* Smaller font size on smaller screens */
+                padding: 8px 16px; /* Smaller padding for compact screens */
+            }
+        }
+
+        /* Adjust for very small screens like mobile */
+        @media (max-width: 480px) {
+            .play-pause-button {
+                font-size: 12px; /* Further reduce font size */
+                padding: 6px 12px; /* Further reduce padding */
+                width: 100%; /* Make the button take full width on very small screens */
+            }
+        }
 
 
         .artist-container {
@@ -311,6 +383,32 @@
             border-radius: 5px;
         }
 
+
+        .adjustable-button {
+            padding: 0.5em 1.5em; /* Reduced padding for a smaller height */
+            background-color: #3F665E;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1vw; /* Responsive font size (relative to viewport width) */
+            min-width: 50px; /* Minimum width for small screens */
+            max-width: 200px; /* Maximum width to prevent it from getting too large */
+            width: 50%; /* Button width adjusts based on container */
+            height: auto; /* Adjust height automatically based on padding */
+        }
+
+        /* Optional: Add responsiveness for smaller screens */
+        @media (max-width: 250px) {
+            .adjustable-button {
+                font-size: 5vw; /* Increase font size on smaller screens */
+                padding: 0.8em 1.8em; /* Slightly reduced padding for better readability */
+                width: 20%; /* Adjust width to fill more space on smaller screens */
+                max-width: 50px;
+            }
+        }
+
+
         /* Dots and Arrow Button Styling */
         .dots-container {
             display: flex;
@@ -361,6 +459,14 @@
         body.dark-mode .main-content {
             background-color: var(--dark-background);
             box-shadow: none;
+        }
+
+        /* Optional: Add hover effects */
+        body.dark-mode .btn-secondary:hover,
+        body.dark-mode .btn-primary:hover,
+        body.dark-mode .btn-danger:hover {
+            opacity: 0.9; /* Slight dimming on hover */
+            background-color: #232f3c !important;
         }
 
         body.dark-mode .slide, .slide quiz, .slide active {
@@ -650,7 +756,7 @@
                         <form method="post" action="{% url 'save_spotify_profile' %}">
                         {% csrf_token %}
                         <input type="hidden" name="temporary_profile_id" value="{{ temp_profile_id }}">
-                        <button type="submit" style="padding: 10px 20px; background-color: #3F665E; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        <button type="submit" class="adjustable-button">
                             Save this Profile
                         </button>
                         </form>
