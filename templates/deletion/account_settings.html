@@ -20,6 +20,44 @@
 
         body.dark-mode .settings-container {
             background-color: var(--background-dark-grey);
+            border-color: #8692b5 !important;
+        }
+
+        /* Dark Mode Styles for Cancel and Confirmation Buttons */
+        body.dark-mode .btn-secondary {
+            background-color: #2D3040;
+            color: #ffffff; /* White text for contrast */
+            border: none;
+        }
+
+        body.dark-mode .btn-primary {
+            background-color: #576385; /* Subtle blue for log out */
+            color: #ffffff;
+            border: none;
+        }
+
+        body.dark-mode .btn-danger {
+            background-color: #d9534f; /* Muted red for delete */
+            color: #ffffff;
+            border: none;
+        }
+
+         body.dark-mode .toggle-switch {
+            background-color: #576385; /* Subtle blue for log out */
+        }
+
+        /* Optional: Add hover effects */
+        body.dark-mode .btn-secondary:hover,
+        body.dark-mode .btn-primary:hover,
+        body.dark-mode .btn-danger:hover {
+            opacity: 0.9; /* Slight dimming on hover */
+            background-color: #232f3c !important;
+        }
+
+        /* Hover State for Log Out Button in Navbar for Dark Mode */
+        body.dark-mode .navbar .btn:hover {
+            background-color: #8692b5 !important; /* Slightly lighter blue for hover */
+            color: #ffffff !important; /* Ensure text remains white */
         }
 
     </style>
