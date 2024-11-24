@@ -18,6 +18,12 @@
             justify-content: center;
             height: 100vh;
             width: 100%;
+            background-color: #CFE3E1;
+        }
+
+        /* Ensuring Background is One Solid Color */
+        body {
+            background-color: #CFE3E1; /* Make sure the entire background is consistent */
         }
 
         body.dark-mode .main-content {
@@ -25,42 +31,8 @@
             box-shadow: none;
         }
 
-        /* Decorative Title */
-        .title {
-            font-size: 36px;
-            font-weight: bold;
-            color: #3F665E;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            position: relative;
-        }
-        .title::before,
-        .title::after {
-            content: '';
-            position: absolute;
-            width: 50px;
-            height: 3px;
-            background-color: #3F665E;
-            top: 50%;
-            transform: translateY(-50%);
-            margin-bottom: 60px;
-        }
-        .title::before {
-            left: -60px;
-        }
-        .title::after {
-            right: -60px;
-        }
-
-        .button-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3 columns */
-            gap: 30px;
-            width: 80%;
-        }
-
         .date-button, .delete-button {
-            font-size: 24px;
+            font-size: 3vh;
             font-weight: bold;
             color: #FFFFFF;
             padding: 20px;
@@ -73,7 +45,7 @@
         }
 
         .date-button {
-            background-color: #3F665E;
+            background: linear-gradient(45deg, #A5CBC3, #576385);
         }
 
         body.dark-mode .date-button {
@@ -142,6 +114,106 @@
             background-color: #8692b5;
         }
 
+        /* Timeline Container */
+        .timeline {
+            display: flex;
+            flex-direction: column-reverse; /* Reverse the order of timeline events */
+            align-items: center;
+            width: 100%;
+            position: relative;
+            padding: 50px 0;
+            margin-bottom: 40vh;
+        }
+
+
+        /* Timeline Event (Button) */
+        .timeline-event {
+            position: relative;
+            margin-bottom: 2vh;
+            width: 50%;
+            text-align: center;
+            display: flex; /* Use flexbox for horizontal alignment */
+            justify-content: space-between; /* Space between the buttons */
+            align-items: center; /* Vertically align the buttons */
+        }
+
+        .timeline-event .date-button {
+            font-size: 3vh;
+            font-weight: bold;
+            color: #FFFFFF;
+            padding: 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            display: block;
+            margin: 0;
+            width: calc(100% - 40px); /* Adjust the width to accommodate the delete button */
+        }
+
+        .timeline-event .delete-button {
+            background-color: #E63946; /* red for delete */
+            font-size: 18px;
+            font-weight: bold;
+            color: #FFFFFF;
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            margin-left: 10px; /* Space between the date button and delete button */
+        }
+
+        .timeline-event .date-button:hover, .timeline-event .delete-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .wrapped-container {
+            margin-top: 600px;
+            background: linear-gradient(-45deg, #A5CBC3, #576385);
+            width: 100vh;
+            height: 70vh;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+            border-radius: 5%;
+        }
+
+        .wrapped-history-icon {
+            width: 100%; /* Adjust width as necessary */
+            height: 100%; /* Maintain aspect ratio */
+            margin-bottom: 0;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        /* Highlight the most recent profile */
+        .most-recent {
+            border: 3px solid #FFD700; /* Gold border for the most recent */
+            background-color: #FFFAE1; /* Light yellow background */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Optional: stronger shadow to make it pop */
+            padding: 20px; /* Increase padding for a bigger box */
+            position: relative; /* To position the text absolutely */
+            margin-bottom: 20px; /* Space between this and the next item */
+        }
+
+        /* Text for Most Recent */
+        .most-recent-text {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #FFD700;
+            color: black;
+            font-weight: bold;
+            font-size: 15px;
+            padding: 5px 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow for text */
+            margin-top: 0;
+        }
+
 
 
     </style>
@@ -156,19 +228,26 @@
         </nav>
     </header>
 
-    <!-- Main Content Area with Title and Button Grid -->
+    <!-- Main Content Area with Title and Timeline -->
     <div class="main-content">
-        <h1 class="title">Your Wrapped History</h1>
-
-        <div class="button-grid">
+        <div class="wrapped-container">
+            <img src="{% static 'history.png' %}" alt="Wrapped History" class="wrapped-history-icon">
+        </div>
+        <div class="timeline">
             {% for profile in profiles %}
-                <div>
+                <div class="timeline-event {% if forloop.last %} most-recent {% endif %}">
+                    <!-- Most Recent Text -->
+                    {% if forloop.last %}
+                        <div class="most-recent-text">Most Recent!</div>
+                    {% endif %}
+
                     <!-- Button linking to detailed summary page -->
                     <button class="date-button" onclick="window.location.href='{% url 'saved_summary' profile.created_at %}'">
                         {{ profile.created_at }}
                     </button>
 
-                    <button class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setProfileToDelete({{ profile.id }})" style="margin-left: 10px;">
+                    <!-- Delete Button aligned to the right -->
+                    <button class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setProfileToDelete({{ profile.id }})">
                         X
                     </button>
                 </div>
@@ -177,6 +256,9 @@
             {% endfor %}
         </div>
     </div>
+
+
+
 
     <!-- Single Delete Confirmation Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
