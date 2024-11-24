@@ -20,6 +20,12 @@
             height: 100vh;
             width: 100%;
             overflow: hidden; /* Prevent content overflow */
+            background-color: #A5CBC3;
+        }
+
+        body.dark-mode .main-content {
+            background-color: var(--dark-background);
+            box-shadow: none;
         }
 
         .slideshow-container {
@@ -423,7 +429,7 @@
             font-size: 18px;
             user-select: none;
             border-radius: 50%;
-            background-color: #3F665E;
+            background-color: #3F665E !important;
             margin: 0 10px;
         }
 
@@ -489,8 +495,8 @@
 
         .popularity-bar-container {
             width: 100%; /* Full width of the container */
-            height: 10px; /* Height of the bar */
-            background-color: #e0e0e0; /* Light gray background */
+            height: 1vh; /* Height of the bar */
+            background-color: #A5CBC3; /* Light gray background */
             border-radius: 5px; /* Rounded corners */
             margin-top: 5px; /* Space above the bar */
         }
@@ -711,7 +717,10 @@
                     </div>
                     <div class="artist-stats">
                         <h4>Genre: {{ top_five_artists.0.genres|join:", " }}</h4> <!-- the join gets rid of the [' '] -->
-                        <h4>Popularity: {{ top_five_artists.0.popularity }}</h4>
+                        <h4>Popularity: </h4>
+                        <div class="popularity-bar-container" style="margin-left: 10%; max-width: 70%; margin-top: 1vh">
+                            <div class="popularity-bar" style="width: {{ top_five_songs.0.popularity }}%"></div>
+                        </div>
 <!--                        <h4>Top Songs: </h4>-->
                     </div>
                 </div>
@@ -766,7 +775,7 @@
                         </div>
                     </div>
                     <div class="song-stats">
-                        <h5>Popularity: {{ top_five_songs.0.popularity }}%</h5>
+                        <h5>Popularity: %</h5>
                         <div class="popularity-bar-container">
                             <div class="popularity-bar" style="width: {{ top_five_songs.0.popularity }}%"></div>
                         </div>
