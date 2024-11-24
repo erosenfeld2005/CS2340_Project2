@@ -4,8 +4,9 @@ Python file that holds how user interacts with spotify_wrapped section
 from threading import Thread
 
 # views.py
-import requests
 import json
+import requests
+
 
 from requests.auth import HTTPBasicAuth
 
