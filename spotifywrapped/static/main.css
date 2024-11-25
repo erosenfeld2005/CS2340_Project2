@@ -142,6 +142,17 @@ header {
     color: var(--primary-green);
 }
 
+.navbar .btn {
+    border-radius: 15px;
+    border: none;
+    padding: 15px 50px; /* Control width using padding */
+    height: auto; /* Makes the height adjustable based on content */
+    background-color: var(--button-bg-light);
+    color: var(--button-text-light);
+    white-space: nowrap; /* Prevent text wrapping */
+    transition: background-color 0.3s;
+}
+
 
 /* Logo if we end up using */
 .navbar .logo img {
