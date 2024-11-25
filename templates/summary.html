@@ -132,7 +132,6 @@
         .slide h6 {
             font-family: 'DM Sans', sans-serif;
             color: #3F665E;
-            font-size: 4vw; /* Adjust font size for better scaling */
             line-height: 1.1;
             margin-left: 3vw; /* Reduced margin for better fit */
             margin-right: 3vw; /* Reduced margin for better fit */
@@ -1163,6 +1162,28 @@
     });
 
 
+</script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const slides = document.querySelectorAll('.slide h6');
+
+        slides.forEach(slide => {
+            const textLength = slide.textContent.length;
+            let fontSize;
+
+            // Define font size based on text length
+            if (textLength < 20) {
+                fontSize = '4vw';  // Larger font for shorter text
+            } else if (textLength < 30) {
+                fontSize = '3.5vw'; // Medium font for moderately long text
+            } else {
+                fontSize = '2vw';  // Smaller font for longer text
+            }
+
+            slide.style.fontSize = fontSize;
+        });
+    });
 </script>
 
 
