@@ -1147,7 +1147,11 @@
 
         const chartKey = document.getElementById('chartKey');
 
-        // Helper function to capitalize the first letter of each word
+        /**
+         * Helper function to capitalize the first letter of each word
+         * @param text Text to be capitalized
+         * @returns The same text with the first letter of each word capitalized
+         */
         const capitalizeWords = (text) => text.replace(/\b\w/g, char => char.toUpperCase());
 
         sortedGenres.slice(0, 5).forEach((item, index) => {
