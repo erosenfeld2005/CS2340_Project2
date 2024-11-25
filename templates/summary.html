@@ -343,6 +343,15 @@
             margin-right: auto; /* Center alignment */
         }
 
+        .top-song-photo1 {
+            width: 50vh;
+            height: auto;
+            margin-top: 15px; /* Space between the image and the text */
+            display: block; /* Ensure that the image is a block element */
+            margin-left: auto; /* Center alignment */
+            margin-right: auto; /* Center alignment */
+        }
+
 
         .glance-info {
             display: flex; /* Align items in a row */
@@ -493,6 +502,12 @@
         }
         body.dark-mode .dot {
             background-color: #8692b5;
+        }
+
+        .song-details1 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
 
@@ -763,10 +778,10 @@
             <!-- Slide 4 -->
             <div class="slide">
                 <h2>Your top song is...</h2>
+                <h6>{{ top_five_songs.0.name }}</h6>
                 <div class="song-info">
-                    <div class="song-details1" style="display: flex; flex-direction: column; align-items: center;">
-                        <h6>{{ top_five_songs.0.name }}</h6>
-                        <img src="{{ top_five_songs.0.image_url }}" alt="top song image" class="top-song-photo">
+                    <div class="song-details1">
+                        <img src="{{ top_five_songs.0.image_url }}" alt="top song image" class="top-song-photo1">
                         {% if top_five_songs.0.preview_url %}
                             <audio id="audio-top-song">
                                 <source src="{{ top_five_songs.0.preview_url }}" type="audio/mpeg">
@@ -785,7 +800,7 @@
                     </div>
                     <div class="song-stats">
                         <h5>Popularity: </h5>
-                           <div class="popularity-bar-container" style="margin-left: 10%; max-width: 70%; margin-top: 1vh">
+                           <div class="popularity-bar-container" style="max-width: 70%; margin-top: 1vh">
                                 <div class="popularity-bar" style="width: {{ top_five_songs.0.popularity }}%"></div>
                             </div>
                     </div>
