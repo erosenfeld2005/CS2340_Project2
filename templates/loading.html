@@ -49,6 +49,10 @@
         <div class="loading-text">Loading, please wait...</div>
     </div>
     <script>
+        /**
+         * This function checks if all the data has been loading and redirects
+         * when read or when error
+         */
         function checkDataStatus() {
             fetch("{% url 'loading' %}", {
                 method: "GET",
