@@ -60,7 +60,7 @@ jobs:
         EMAIL_HOST_PASSWORD: ${{secrets.EMAIL_HOST_PASSWORD}}
       run: |
         coverage run --source='.' manage.py test --keepdb
-        coverage report --fail-under=50  # Replace with 80 for final tests
+        coverage report --fail-under=80
 
     - name: Analyzing code with pylint
       run: |
