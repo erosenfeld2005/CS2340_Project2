@@ -16,14 +16,15 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh; /* Allow content to expand naturally */
+            min-height: 100vh;
             width: 100%;
             background-color: #CFE3E1;
+            padding-top: 20px; /* Added padding to avoid gap at the top */
         }
 
         /* Ensuring Background is One Solid Color */
         body {
-            background-color: #CFE3E1; /* Make sure the entire background is consistent */
+            background-color: #CFE3E1;
         }
 
         body.dark-mode .main-content {
@@ -53,7 +54,7 @@
         }
 
         .delete-button {
-            background-color: #E63946; /* red for delete */
+            background-color: #E63946;
         }
 
         .date-button:hover, .delete-button:hover {
@@ -61,88 +62,24 @@
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
         }
 
-        /* Dark Mode Styles for Cancel and Confirmation Buttons */
-        body.dark-mode .btn-secondary {
-            background-color: #2D3040;
-            color: #ffffff; /* White text for contrast */
-            border: none;
-        }
-
-        body.dark-mode .btn-primary {
-            background-color: #576385; /* Subtle blue for log out */
-            color: #ffffff;
-            border: none;
-        }
-
-        body.dark-mode .btn-danger {
-            background-color: #d9534f; /* Muted red for delete */
-            color: #ffffff;
-            border: none;
-        }
-
-        /* Optional: Add hover effects */
-        body.dark-mode .btn-secondary:hover,
-        body.dark-mode .btn-primary:hover,
-        body.dark-mode .btn-danger:hover {
-            opacity: 0.9; /* Slight dimming on hover */
-            background-color: #232f3c !important;
-        }
-
-        body.dark-mode .prev, .next {
-            background-color: #576385;
-        }
-
-        /* Hover State for Log Out Button in Navbar for Dark Mode */
-        body.dark-mode .navbar .btn:hover {
-            background-color: #8692b5 !important; /* Slightly lighter blue for hover */
-            color: #ffffff !important; /* Ensure text remains white */
-        }
-
-        body.dark-mode .main-content {
-            background-color: var(--dark-background);
-            box-shadow: none;
-        }
-
-        body.dark-mode .slide, .slide quiz, .slide active {
-            background-color: var(--background-dark-grey);
-        }
-
-        body.dark-mode .dot.active {
-            background-color: white;
-        }
-        body.dark-mode .dot {
-            background-color: #8692b5;
-        }
-
-        .btn-primary, .btn-secondary {
-            background-color: #7ba39a !important;
-        }
-
-        .btn-primary:hover, .btn-secondary:hover {
-            background-color: #3F665E !important;
-        }
-
-        /* Timeline Container */
         .timeline {
             display: flex;
-            flex-direction: column-reverse; /* Reverse the order of timeline events */
+            flex-direction: column-reverse;
             align-items: center;
             width: 100%;
-            position: relative;
-            padding: 50px 0;
-            margin-bottom: 40vh;
+            padding: 0 10px; /* Added padding to the timeline */
         }
 
-
-        /* Timeline Event (Button) */
         .timeline-event {
             position: relative;
             margin-bottom: 2vh;
-            width: 50%;
+            width: 100%;
+            max-width: 600px; /* Set max width to prevent stretching */
             text-align: center;
-            display: flex; /* Use flexbox for horizontal alignment */
-            justify-content: space-between; /* Space between the buttons */
-            align-items: center; /* Vertically align the buttons */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px auto; /* Center the timeline events */
         }
 
         .timeline-event .date-button {
@@ -155,13 +92,11 @@
             transition: transform 0.3s, box-shadow 0.3s;
             text-align: center;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            display: block;
-            margin: 0;
-            width: calc(100% - 40px); /* Adjust the width to accommodate the delete button */
+            width: calc(100% - 40px);
         }
 
         .timeline-event .delete-button {
-            background-color: #E63946; /* red for delete */
+            background-color: #E63946;
             font-size: 18px;
             font-weight: bold;
             color: #FFFFFF;
@@ -169,44 +104,68 @@
             border-radius: 50%;
             cursor: pointer;
             transition: transform 0.3s, box-shadow 0.3s;
-            text-align: center;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            margin-left: 10px; /* Space between the date button and delete button */
-        }
-
-        .timeline-event .date-button:hover, .timeline-event .delete-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+            margin-left: 10px;
         }
 
         .wrapped-container {
-            margin-top: 600px;
+            margin-top: 40px; /* Reduced margin */
             background: linear-gradient(-45deg, #A5CBC3, #576385);
-            width: 100vh;
+            width: 100%;
+            max-width: 600px; /* Set max width */
             height: 70vh;
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
             border-radius: 5%;
+            margin-bottom: 20px; /* Added margin for spacing */
         }
 
         .wrapped-history-icon {
-            width: 100%; /* Adjust width as necessary */
-            height: 100%; /* Maintain aspect ratio */
-            margin-bottom: 0;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
             object-position: center;
         }
 
-        /* Highlight the most recent profile */
-        .most-recent {
-            border: 3px solid #FFD700; /* Gold border for the most recent */
-            background-color: #FFFAE1; /* Light yellow background */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Optional: stronger shadow to make it pop */
-            padding: 20px; /* Increase padding for a bigger box */
-            position: relative; /* To position the text absolutely */
-            margin-bottom: 20px; /* Space between this and the next item */
+        .subheading {
+            margin-top: 30px;
+            margin-bottom: 20px;
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            color: #2D4A4D;
         }
 
-        /* Text for Most Recent */
+        .empty-message {
+            background-color: #3F665E;
+            color: white;
+            border: 1px solid #7ba39a;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 50%; /* Full width for the empty message */
+            text-align: center;
+        }
+
+        body.dark-mode .empty-message {
+            background-color: #343a40;
+            color: #f8d7da;
+            border: 1px solid #6c757d;
+        }
+
+        /* Style for most recent profile */
+        .most-recent {
+            border: 3px solid #FFD700;
+            background-color: #FFFAE1;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
         .most-recent-text {
             position: absolute;
             top: -10px;
@@ -215,19 +174,13 @@
             background-color: #FFD700;
             color: black;
             font-weight: bold;
-            font-size: 15px;
+            font-size: 2vh;
             padding: 5px 10px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow for text */
-            margin-top: 0;
         }
-
-
-
     </style>
 </head>
 <body>
-    <!-- Header and Navbar -->
     <header>
         <nav class="navbar">
             <a href="{% url 'dashboard' %}">Dashboard</a>
@@ -237,120 +190,89 @@
         </nav>
     </header>
 
-    <!-- Main Content Area with Title and Timeline -->
     <div class="main-content">
         <div class="wrapped-container">
             <img src="{% static 'history.png' %}" alt="Wrapped History" class="wrapped-history-icon">
         </div>
 
-        <h2 class="subheading">Short Term Wraps</h2>
-
-        <div class="button-grid">
-            {% for profile in profiles %}
-                {% if profile.time_range == "short_term" %}
-                <div>
-                    <!-- Button linking to detailed summary page -->
-                    <button class="date-button" onclick="window.location.href='{% url 'saved_summary' profile.created_at %}'">
-                        {{ profile.created_at }}
-                    </button>
-
-                    <button class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setProfileToDelete({{ profile.id }})" style="margin-left: 10px;">
-                        X
-                    </button>
-                </div>
-                {% endif %}
-            {% empty %}
-                <p>No saved short term wrapped summaries available.</p>
-            {% endfor %}
-        </div>
-
-        <h2 class="subheading">Medium Term Wraps</h2>
-
-        <div class="button-grid">
-            {% for profile in profiles %}
-                {% if profile.time_range == "medium_term" %}
-                <div>
-                    <!-- Button linking to detailed summary page -->
-                    <button class="date-button" onclick="window.location.href='{% url 'saved_summary' profile.created_at %}'">
-                        {{ profile.created_at }}
-                    </button>
-
-                    <button class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setProfileToDelete({{ profile.id }})" style="margin-left: 10px;">
-                        X
-                    </button>
-                </div>
-                {% endif %}
-            {% empty %}
-                <p>No saved medium term wrapped summaries available.</p>
-            {% endfor %}
-        </div>
-
-        <h2 class="subheading">Long Term Wraps</h2>
-
-        <div class="button-grid">
+        <h3 class="subheading">Short Term Wraps</h3>
         <div class="timeline">
             {% for profile in profiles %}
-
-                {% if profile.time_range == "long_term" %}
-                <div>
-                    <!-- Button linking to detailed summary page -->
+                {% if profile.time_range == "short_term" %}
+                <div class="timeline-event {% if forloop.last %}most-recent{% endif %}">
+                    <span class="most-recent-text" style="{% if forloop.last %}display: block{% else %}display: none{% endif %}">Most Recent</span>
                     <button class="date-button" onclick="window.location.href='{% url 'saved_summary' profile.created_at %}'">
                         {{ profile.created_at }}
                     </button>
-
-                    <!-- Delete Button aligned to the right -->
-                    <button class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setProfileToDelete({{ profile.id }})">
-                        X
-                    </button>
+                    <button class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setProfileToDelete({{ profile.id }})">X</button>
                 </div>
                 {% endif %}
             {% empty %}
-                <p>No saved long term wrapped summaries available.</p>
+                <div class="empty-message">
+                    No saved short term wrapped summaries available.
+                </div>
             {% endfor %}
         </div>
-    </div>
 
-    <!-- Single Delete Confirmation Modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h3 class="subheading">Medium Term Wraps</h3>
+        <div class="timeline">
+            {% for profile in profiles %}
+                {% if profile.time_range == "medium_term" %}
+                <div class="timeline-event {% if forloop.last %}most-recent{% endif %}">
+                    <span class="most-recent-text" style="{% if forloop.last %}display: block{% else %}display: none{% endif %}">Most Recent</span>
+                    <button class="date-button" onclick="window.location.href='{% url 'saved_summary' profile.created_at %}'">
+                        {{ profile.created_at }}
+                    </button>
+                    <button class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setProfileToDelete({{ profile.id }})">X</button>
                 </div>
-                <div class="modal-body">
-                    Are you sure you want to delete this saved profile?
+                {% endif %}
+            {% empty %}
+                <div class="empty-message">
+                    No saved medium term wrapped summaries available.
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <!-- Call confirmDelete() directly when clicked -->
-                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+            {% endfor %}
+        </div>
+
+        <h3 class="subheading">Long Term Wraps</h3>
+        <div class="timeline">
+            {% for profile in profiles %}
+                {% if profile.time_range == "long_term" %}
+                <div class="timeline-event {% if forloop.last %}most-recent{% endif %}">
+                    <span class="most-recent-text" style="{% if forloop.last %}display: block{% else %}display: none{% endif %}">Most Recent</span>
+                    <button class="date-button" onclick="window.location.href='{% url 'saved_summary' profile.created_at %}'">
+                        {{ profile.created_at }}
+                    </button>
+                    <button class="delete-button" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setProfileToDelete({{ profile.id }})">X</button>
+                </div>
+                {% endif %}
+            {% empty %}
+                <div class="empty-message">
+                    No saved long term wrapped summaries available.
+                </div>
+            {% endfor %}
+        </div>
+        <!-- Modal for Deleting Profile -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Delete Profile</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this profile?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <form action="{% url 'delete_profile' 0 %}" method="POST" id="deleteForm">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-<!-- Log Out Confirmation Modal -->
-<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h5 class="modal-title" id="logoutModalLabel">Confirm Log Out</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <!-- Modal Body -->
-            <div class="modal-body">
-                Are you sure you want to log out?
-            </div>
-            <!-- Modal Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <a href="{% url 'signout' %}" class="btn btn-primary">Log Out</a>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- JavaScript to dynamically set the profile ID for deletion -->
 <script>
@@ -362,15 +284,7 @@
          */
         function setProfileToDelete(profileId) {
             profileToDeleteId = profileId;
-        }
-
-        /**
-         * This function confirms the deletion of the given profile
-         */
-        function confirmDelete() {
-            if (profileToDeleteId) {
-                window.location.href = `/spotify/delete_profile/${profileToDeleteId}/`;
-            }
+            document.getElementById('deleteForm').action = "/spotify/delete_profile/" + profileId + "/";
         }
 </script>
 
