@@ -145,7 +145,7 @@ header {
 .navbar .btn {
     border-radius: 15px;
     border: none;
-    padding: 15px 50px; /* Control width using padding */
+    padding: 2vh 4vw; /* Control width using padding */
     height: auto; /* Makes the height adjustable based on content */
     background-color: var(--button-bg-light);
     color: var(--button-text-light);
