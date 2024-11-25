@@ -133,6 +133,7 @@
             font-family: 'DM Sans', sans-serif;
             color: #3F665E;
             font-size: 4vw; /* Adjust font size for better scaling */
+            white-space: nowrap;
             line-height: 1.1;
             margin-left: 3vw; /* Reduced margin for better fit */
             margin-right: 3vw; /* Reduced margin for better fit */
@@ -784,7 +785,7 @@
                         </div>
                     </div>
                     <div class="song-stats">
-                        <h5>Popularity: {{ top_five_songs.0.popularity }}</h5>
+                        <h5>Popularity: </h5>
                            <div class="popularity-bar-container" style="margin-left: 10%; max-width: 70%; margin-top: 1vh">
                                 <div class="popularity-bar" style="width: {{ top_five_songs.0.popularity }}%"></div>
                             </div>
