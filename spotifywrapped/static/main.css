@@ -104,41 +104,72 @@ h6 {
     background-color: var(--primary-green-dark);
 }
 
-/* Navbar */
+/* Navbar Styles */
 header {
     background-color: var(--navbar-bg-color);
     position: sticky;
     top: 0;
     width: 100%;
     z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .navbar {
     display: flex;
-    justify-content: space-between; /* Evenly space items */
+    justify-content: space-between; /* Space items evenly */
     align-items: center;
+    padding: 0 5%; /* Dynamic padding */
     height: 80px;
-    padding: 0 50px; /* Side padding */
 }
 
 .navbar a {
     color: var(--text-light);
-    padding: 0 20px;
-    font-size: 24px;
-    font-weight: 700;
+    padding: 10px 15px;
+    font-size: 2vw;
+    line-height: 24px;
+    font-weight: 600;
     text-decoration: none;
-    transition: color 0.3s ease; /* Smooth hover transition */
+    transition: color 0.3s ease;
+    white-space: nowrap;
+    display: flex; /* Set flexbox for centering */
+    justify-content: center; /* Horizontal centering */
+    align-items: center; /* Vertical centering */
+    text-align: center; /* Ensure text is aligned properly */
 }
+
 
 .navbar a:hover {
     color: var(--primary-green);
 }
 
-/* Responsive Nav */
-@media (max-width: 600px) {
+
+/* Logo if we end up using */
+.navbar .logo img {
+    max-width: 150px;
+    height: auto;
+}
+
+/* Responsive Navbar for Small Screens */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0 20px;
+    }
 
     .navbar a {
-        font-size: 20px
+        font-size: 18px; /* Smaller font size */
+        margin-bottom: 10px; /* Add space between links */
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 0 10px;
+    }
+
+    .navbar a {
+        font-size: 16px; /* Adjust for very small screens */
     }
 }
 
