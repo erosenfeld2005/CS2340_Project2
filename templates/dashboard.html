@@ -41,6 +41,14 @@
             max-width: 1200px;
         }
 
+        body.dark-mode .main-content {
+            background-color: var(--dark-background);
+        }
+
+        body.dark-mode .icon-circle {
+            background-color: var(--dark-background);
+        }
+
         .icon-card {
             background: linear-gradient(30deg, #A5CBC3 20%, #FFFFFF 100%);
             text-align: center;
@@ -113,6 +121,28 @@
             .icon-card {
                 padding: 15px;
             }
+        }
+
+         /* Hover State for Log Out Button in Navbar for Dark Mode */
+        body.dark-mode .navbar .btn:hover {
+            background-color: #8692b5 !important; /* Slightly lighter blue for hover */
+            color: #ffffff !important; /* Ensure text remains white */
+        }
+
+        /* Optional: Add hover effects */
+        body.dark-mode .btn-secondary:hover,
+        body.dark-mode .btn-primary:hover,
+        body.dark-mode .btn-danger:hover {
+            opacity: 0.9; /* Slight dimming on hover */
+            background-color: #232f3c !important;
+        }
+
+        .btn-primary, .btn-secondary {
+            background-color: #7ba39a !important;
+        }
+        
+        .btn-primary:hover, .btn-secondary:hover {
+            background-color: #3F665E !important;
         }
     </style>
 </head>

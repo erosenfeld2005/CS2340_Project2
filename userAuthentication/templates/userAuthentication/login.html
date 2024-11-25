@@ -7,6 +7,37 @@
     <link rel="stylesheet" href="{% static 'main.css' %}">
     <script src="{% static 'darkmode.js' %}"></script>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        body.dark-mode .login {
+            background-color: var(--dark-background);
+            box-shadow: none;
+        }
+
+        body.dark-mode .linkedText {
+            color: #8692b5;
+        }
+
+        /* Optional: Add hover effects */
+        body.dark-mode .btn-secondary:hover,
+        body.dark-mode .btn-primary:hover,
+        body.dark-mode .btn-danger:hover {
+            opacity: 0.9; /* Slight dimming on hover */
+            background-color: #232f3c !important;
+        }
+        body.dark-mode .btn:hover,
+        body.dark-mode .button:hover {
+            background-color: #8692b5 !important;
+        }
+
+        .btn-primary, .btn-secondary {
+            background-color: #7ba39a !important;
+        }
+
+        .btn-primary:hover, .btn-secondary:hover {
+            background-color: #3F665E !important;
+        }
+    </style>
 </head>
 <body>
 
@@ -56,8 +87,8 @@
                 {% endif %}
 
                 <div class="button-alt-option">
-                    <button type="submit">Log In</button>
-                    <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
+                    <button type="submit" class="button">Log In</button>
+                    <p>Don't have an account? <a href="{% url 'signup' %}" class="linkedText">Sign Up</a></p>
                 </div>
             </form>
         </div>

@@ -11,6 +11,65 @@
     <!-- jQuery and Bootstrap JavaScript (necessary for Bootstrap modal) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        body.dark-mode .accountContainer {
+            background-color: var(--dark-background);
+            box-shadow: none;
+        }
+
+        body.dark-mode .settings-container {
+            background-color: var(--background-dark-grey);
+            border-color: #8692b5 !important;
+        }
+
+        /* Dark Mode Styles for Cancel and Confirmation Buttons */
+        body.dark-mode .btn-secondary {
+            background-color: #2D3040;
+            color: #ffffff; /* White text for contrast */
+            border: none;
+        }
+
+        body.dark-mode .btn-primary {
+            background-color: #576385; /* Subtle blue for log out */
+            color: #ffffff;
+            border: none;
+        }
+
+        body.dark-mode .btn-danger {
+            background-color: #d9534f; /* Muted red for delete */
+            color: #ffffff;
+            border: none;
+        }
+
+         body.dark-mode .toggle-switch {
+            background-color: #576385; /* Subtle blue for log out */
+        }
+
+        /* Optional: Add hover effects */
+        body.dark-mode .btn-secondary:hover,
+        body.dark-mode .btn-primary:hover,
+        body.dark-mode .btn-danger:hover {
+            opacity: 0.9; /* Slight dimming on hover */
+            background-color: #232f3c !important;
+        }
+
+        /* Hover State for Log Out Button in Navbar for Dark Mode */
+        body.dark-mode .navbar .btn:hover {
+            background-color: #8692b5 !important; /* Slightly lighter blue for hover */
+            color: #ffffff !important; /* Ensure text remains white */
+        }
+
+        .btn-primary, .btn-secondary {
+            background-color: #7ba39a !important;
+        }
+
+        .btn-primary:hover, .btn-secondary:hover {
+            background-color: #3F665E !important;
+        }
+
+    </style>
 
 </head>
 <body>
@@ -19,12 +78,13 @@
         <nav class="navbar">
             <a href="{% url 'dashboard' %}">Dashboard</a>
             <a href="{% url 'account_settings' %}">Account</a>
+            <a href="{% url 'contact_developers' %}">Contact</a>
             <a href="#" class="btn" data-toggle="modal" data-target="#logoutModal">Log Out</a>
         </nav>
     </header>
 
     <!-- Main Content -->
-    <div id="account-settings-page" class="container my-5">
+    <div id="account-settings-page" class="accountContainer">
     <h3 class="text-center">Account Settings</h3>
     <form>
         <div class="settings-container">

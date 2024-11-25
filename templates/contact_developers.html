@@ -20,6 +20,15 @@
             padding-bottom: 60px;
         }
 
+        body.dark-mode .main-content {
+            background-color: var(--dark-background);
+        }
+
+        body.dark-mode .button {
+            background-color: #8692b5;
+        }
+
+
         /* Decorative Title Styling */
         .contact-title {
             font-size: 36px;
@@ -138,6 +147,34 @@
             max-width: 700px;
             font-size: 18px;
         }
+
+        /* Hover State for Log Out Button in Navbar for Dark Mode */
+        body.dark-mode .navbar .btn:hover {
+            background-color: #8692b5 !important; /* Slightly lighter blue for hover */
+            color: #ffffff !important; /* Ensure text remains white */
+        }
+
+        /* Optional: Add hover effects */
+        body.dark-mode .button:hover {
+            opacity: 0.9; /* Slight dimming on hover */
+            background-color: #576385 !important;
+        }
+
+        /* Optional: Add hover effects */
+        body.dark-mode .btn-secondary:hover,
+        body.dark-mode .btn-primary:hover,
+        body.dark-mode .btn-danger:hover {
+            opacity: 0.9; /* Slight dimming on hover */
+            background-color: #232f3c !important;
+        }
+
+        .btn-primary, .btn-secondary {
+            background-color: #7ba39a !important;
+        }
+
+        .btn-primary:hover, .btn-secondary:hover {
+            background-color: #3F665E !important;
+        }
     </style>
 </head>
 <body>
@@ -202,9 +239,9 @@
 
         <div class="team-member">
             <h3>Joanne Gosal</h3>
-            <p>As a front end developer, Joanna helped to create the FIGMA for the design of our front end.
-            She also created all the icons used throughout the website and created the front-end for user dashboard,
-            the loading page, the contact developers page, Spotify Wrapped History and some of the Spotify Wrapped slides.</p>
+            <p>As a front end developer, Joanne created the front-end for the user dashboard, contact developers, spotify wrapped history,
+                spotify wrapped summary, and loading pages. She also designed all icons used throughout the website and helped establish the theme and typography on Figma.
+            Joanne worked to improve the UI and aesthetic of the website, including colors, size adjustability, animations, and hover effects. </p>
         </div>
 
         <!-- Feedback Form Container -->
@@ -215,7 +252,7 @@
                 <input type="text" name="name" placeholder="Your Name" required>
                 <input type="email" name="email" placeholder="Your Email" required>
                 <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
-                <button type="submit">Send Feedback</button>
+                <button type="submit" class="button">Send Feedback</button>
             </form>
         </div>
     </div>

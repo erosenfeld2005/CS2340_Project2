@@ -8,6 +8,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'main.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         /* Centered Slideshow Playlist Style */
         .main-content {
@@ -17,31 +19,66 @@
             align-items: center;
             height: 100vh;
             width: 100%;
-            /*background: linear-gradient(30deg, #A5CBC3 20%, #FFFFFF 100%);*/
+            overflow: hidden; /* Prevent content overflow */
+            background-color: #A5CBC3;
         }
+
+        body.dark-mode .main-content {
+            background-color: var(--dark-background);
+            box-shadow: none;
+        }
+
         .slideshow-container {
             position: relative;
-            width: 1000px;
-            height: 550px;
+            width: 70%;
+            max-width: 1200px; /* Ensure a maximum width */
+            height: 80%;
+            max-height: 550px; /* Limit the max height */
             text-align: left;
-            /*border: 1px solid var(--light-background);*/
             border-radius: 10px;
-            /*padding: 20px;*/
-            /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);*/
             margin-bottom: 20px;
-            /*background: var(--light-background);*/
+            box-sizing: border-box; /* Include padding in width/height calculations */
+            padding: 20px; /* Add padding to the container for spacing */
         }
+
         .slide {
             position: absolute;
-            display: none;
+            display: none; /* Hide the slide initially */
             padding: 20px;
             width: 100%;
             height: 100%;
+            max-width: 100%; /* Prevent overflow */
+            max-height: 100%; /* Prevent overflow */
             border-radius: 10px;
             text-align: left;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             background: var(--light-background);
+            box-sizing: border-box; /* Ensure padding is inside the slide area */
+            overflow: hidden; /* Prevent content from overflowing */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
+
+        @media (max-width: 768px) {
+            .slideshow-container {
+                height: 60%; /* Adjust height for smaller screens */
+            }
+            .slide {
+                padding: 10px; /* Reduce padding for smaller screens */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .slideshow-container {
+                height: 50%; /* Further reduce height for very small screens */
+            }
+            .slide {
+                padding: 5px; /* Further reduce padding for very small screens */
+            }
+        }
+
         .slide.active {
             display: block;
         }
@@ -52,91 +89,99 @@
             margin-bottom: 10px;
         }
 
+        /* Adjusted styles for slide content */
         .slide h2 {
             font-family: 'DM Sans', sans-serif;
             color: #1E1E1E;
-            font-size: 64px;
+            font-size: 5vw; /* Adjust font size for better scaling */
             line-height: 1.1;
-            margin-top: 30px;
-            margin-left: 70px;
-            margin-right: 50px;
+            margin-top: 2vw; /* Reduced margin for better fit */
+            margin-left: 3vw; /* Reduced margin for better fit */
+            margin-right: 3vw; /* Reduced margin for better fit */
         }
+
         .slide h3 {
             font-family: 'DM Sans', sans-serif;
             color: #3F665E;
-            font-size: 48px;
+            font-size: 4vw; /* Adjust font size for better scaling */
             line-height: 1.1;
-            margin-top: 30px;
-            margin-left: 70px;
-            margin-right: 50px;
+            margin-top: 2vw; /* Reduced margin for better fit */
+            margin-left: 3vw; /* Reduced margin for better fit */
+            margin-right: 3vw; /* Reduced margin for better fit */
         }
+
         .slide h4 {
             font-family: 'DM Sans', sans-serif;
             color: #3F665E;
-            font-size: 36px;
-            line-height: 0.8;
-            margin-top: 30px;
-            margin-left: 70px;
-            margin-right: 50px;
+            font-size: 3.5vw; /* Adjust font size for better scaling */
+            line-height: 0.9; /* Adjusted line-height for better readability */
+            margin-top: 2vw; /* Reduced margin for better fit */
+            margin-left: 3vw; /* Reduced margin for better fit */
+            margin-right: 3vw; /* Reduced margin for better fit */
         }
 
         .slide h5 {
             font-family: 'DM Sans', sans-serif;
             color: #3F665E;
-            font-size: 36px;
-            line-height: 0.8;
-            margin-top: 30px;
-            margin-right: 50px;
+            font-size: 3.5vw; /* Adjust font size for better scaling */
+            line-height: 0.9; /* Adjusted line-height for better readability */
+            margin-top: 2vw; /* Reduced margin for better fit */
+            margin-right: 3vw; /* Reduced margin for better fit */
         }
 
         .slide h6 {
             font-family: 'DM Sans', sans-serif;
             color: #3F665E;
-            font-size: 48px;
             line-height: 1.1;
-            margin-left: 70px;
-            margin-right: 50px;
+            margin-left: 3vw; /* Reduced margin for better fit */
+            margin-right: 3vw; /* Reduced margin for better fit */
         }
 
         .slide h7 {
             font-family: 'DM Sans', sans-serif;
             color: #3F665E;
-            font-size: 24px;
+            font-size: 1.5vw; /* Adjust font size for better scaling */
             line-height: 1.1;
-            margin: 30px;
+            margin: 2vw; /* Reduced margin for better fit */
         }
 
         .slide p {
             color: #3F665E;
-            font-size: 18px;
-            margin-top: 5px;
-            margin-left: 70px;
-            margin-right: 50px;
+            font-size: 1.5vw; /* Adjust font size for better scaling */
+            margin-top: 1.5vw; /* Reduced margin for better fit */
+            margin-left: 3vw; /* Reduced margin for better fit */
+            margin-right: 3vw; /* Reduced margin for better fit */
         }
 
         .slide p1 {
             color: #3F665E;
-            font-size: 14px;
-            margin-top: 5px;
+            font-size: 1vw; /* Adjust font size for better scaling */
+            margin-top: 1vw; /* Reduced margin for better fit */
             font-weight: bold;
         }
+
+        /* Adjusted image (intro-icon) */
+        .intro-icon {
+            width: 100%; /* Make the image responsive to container width */
+            height: 100%; /* Make the height of the image fill the container */
+            max-width: 100%; /* Prevent the image from overflowing horizontally */
+            max-height: 80vh; /* Limit the height to 80% of the viewport height */
+            object-fit: contain; /* Ensure the entire image fits without being cropped */
+            margin: 0;
+        }
+
+
 
         .icon-container {
             width: 120%;
             height: 90px; /* Adjust as needed for cropping */
-            overflow: hidden;
             margin-top: 50px;
             display: flex;
             justify-content: left;
             align-items: center;
         }
 
-        .intro-icon {
-            width: auto; /* Adjust width/height as needed */
-            height: 100%;
-            object-fit: cover;
-            margin: 0;
-        }
+
 
         .artist-info {
             display: flex; /* Align items in a row */
@@ -213,6 +258,39 @@
             object-fit: cover;
         }
 
+        .play-pause-button {
+            font-size: 16px; /* Default font size */
+            padding: 10px 20px; /* Adjust button padding */
+            width: auto; /* Make the button width adjust based on content */
+            max-width: 100%; /* Ensure the button doesn't overflow its container */
+            height: auto; /* Adjust the height to fit the content */
+            box-sizing: border-box; /* Include padding in the width and height calculation */
+            text-align: center; /* Center text within the button */
+            border-radius: 5px; /* Rounded corners for the button */
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Add smooth transitions */
+        }
+
+        .play-pause-button:hover {
+            background-color: #007bff; /* Change background color on hover */
+            transform: scale(1.05); /* Slightly scale the button on hover */
+        }
+
+        /* Adjust button size for smaller screens */
+        @media (max-width: 768px) {
+            .play-pause-button {
+                font-size: 14px; /* Smaller font size on smaller screens */
+                padding: 8px 16px; /* Smaller padding for compact screens */
+            }
+        }
+
+        /* Adjust for very small screens like mobile */
+        @media (max-width: 480px) {
+            .play-pause-button {
+                font-size: 12px; /* Further reduce font size */
+                padding: 6px 12px; /* Further reduce padding */
+                width: 100%; /* Make the button take full width on very small screens */
+            }
+        }
 
 
         .artist-container {
@@ -264,6 +342,15 @@
             margin-right: auto; /* Center alignment */
         }
 
+        .top-song-photo1 {
+            width: 50vh;
+            height: auto;
+            margin-top: 15px; /* Space between the image and the text */
+            display: block; /* Ensure that the image is a block element */
+            margin-left: auto; /* Center alignment */
+            margin-right: auto; /* Center alignment */
+        }
+
 
         .glance-info {
             display: flex; /* Align items in a row */
@@ -299,12 +386,42 @@
             border-radius: 5px;
         }
 
+        body.dark-mode .quiz-options p.selected {
+            background-color: #3F665E;
+        }
+
         .quiz-options p.incorrect {
             background-color: #a2455e;
             color: white;
             padding: 5px;
             border-radius: 5px;
         }
+
+
+        .adjustable-button {
+            padding: 0.5em 1.5em; /* Reduced padding for a smaller height */
+            background-color: #3F665E;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1vw; /* Responsive font size (relative to viewport width) */
+            min-width: 50px; /* Minimum width for small screens */
+            max-width: 200px; /* Maximum width to prevent it from getting too large */
+            width: 50%; /* Button width adjusts based on container */
+            height: auto; /* Adjust height automatically based on padding */
+        }
+
+        /* Optional: Add responsiveness for smaller screens */
+        @media (max-width: 250px) {
+            .adjustable-button {
+                font-size: 5vw; /* Increase font size on smaller screens */
+                padding: 0.8em 1.8em; /* Slightly reduced padding for better readability */
+                width: 20%; /* Adjust width to fill more space on smaller screens */
+                max-width: 50px;
+            }
+        }
+
 
         /* Dots and Arrow Button Styling */
         .dots-container {
@@ -320,8 +437,13 @@
             font-size: 18px;
             user-select: none;
             border-radius: 50%;
-            background-color: #3F665E;
-            margin: 0 10px;
+            background-color: #3F665E !important;
+            margin: 2vh 10px;
+            text-decoration: none; /* Remove underline */
+        }
+
+        body.dark-mode .prev, .next {
+            background-color: #576385;
         }
         .prev:hover, .next:hover {
             background-color: #1E1E1E;
@@ -342,6 +464,148 @@
         .dot.active {
             background-color: #3F665E;
         }
+
+        /* Hover State for Log Out Button in Navbar for Dark Mode */
+        body.dark-mode .navbar .btn:hover {
+            background-color: #8692b5 !important; /* Slightly lighter blue for hover */
+            color: #ffffff !important; /* Ensure text remains white */
+        }
+
+        body.dark-mode .main-content {
+            background-color: var(--dark-background);
+            box-shadow: none;
+        }
+
+        /* Optional: Add hover effects */
+        body.dark-mode .btn-secondary:hover,
+        body.dark-mode .btn-primary:hover,
+        body.dark-mode .btn-danger:hover {
+            opacity: 0.9; /* Slight dimming on hover */
+            background-color: #232f3c !important;
+        }
+
+        .btn-primary, .btn-secondary {
+            background-color: #7ba39a !important;
+        }
+
+        .btn-primary:hover, .btn-secondary:hover {
+            background-color: #3F665E !important;
+        }
+
+        body.dark-mode .slide, .slide quiz, .slide active {
+            background-color: var(--background-dark-grey);
+        }
+
+        body.dark-mode .dot.active {
+            background-color: white;
+        }
+        body.dark-mode .dot {
+            background-color: #8692b5;
+        }
+
+        .song-details1 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+
+        .song-stats {
+            font-family: 'DM Sans', sans-serif;
+            color: #3F665E;
+            margin-bottom: 10px;
+        }
+
+        .popularity-bar-container {
+            width: 100%; /* Full width of the container */
+            height: 1vh; /* Height of the bar */
+            background-color: #A5CBC3; /* Light gray background */
+            border-radius: 5px; /* Rounded corners */
+            margin-top: 5px; /* Space above the bar */
+        }
+
+        .popularity-bar {
+            height: 100%; /* Full height of the container */
+            background-color: #3F665E; /* Color of the bar */
+            border-radius: 5px; /* Rounded corners */
+            transition: width 0.5s ease; /* Smooth transition for width change */
+        }
+
+        .chart-wrapper {
+            display: flex;
+            align-items: center;
+            height: 40vh;
+            margin: 0;
+            gap: min(1vw, 30px);
+        }
+
+        .chart-container {
+            width: 50vh;
+            max-width: 70%;
+            height: 100%;
+            margin-left: 15%;
+            position: relative;
+        }
+
+        #genrePieChart {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%; /* Keep the chart circular */
+            display: block;
+        }
+
+        .chart-key {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-family: 'DM Sans', sans-serif;
+            color: #3F665E;
+            font-size: 1.3vw;
+            line-height: 1.1;
+            margin-top: 2vw;
+            margin-right: 3vw;
+            font-weight: bold;
+            min-width: 350px; /* Ensure a minimum width for the key area */
+        }
+
+        .chart-key div {
+            margin-bottom: 1vw;
+            text-transform: capitalize;
+        }
+
+
+        .vibes-details {
+            margin: 2vh 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px; /* Height of the progress bar */
+            background-color: #A5CBC3; /* Light background for the bar */
+            border-radius: 10px; /* Rounded corners */
+            margin-top: 5px;
+            margin-left: 5vh;
+        }
+
+        .progress {
+            height: 100%;
+            border-radius: 10px; /* Rounded corners for the filled part */
+            background-color: #3F665E; /* Color of the filled part */
+            text-align: left;
+            line-height: 20px; /* Align text vertically inside the bar */
+            color: white;
+            font-weight: bold;
+        }
+
+        h4 {
+            margin-bottom: 5px;
+        }
+
+
+        body.dark-mode .chart-key {
+            color: #E5E5E5; /* Dark mode text color */
+        }
+
 
         /* Slide In & Out Animation */
         @keyframes slide-out-left {
@@ -476,8 +740,11 @@
                     </div>
                     <div class="artist-stats">
                         <h4>Genre: {{ top_five_artists.0.genres|join:", " }}</h4> <!-- the join gets rid of the [' '] -->
-                        <h4>Popularity: {{ top_five_artists.0.popularity }}</h4>
-<!--                        <h4>Top Songs: </h4>-->
+                        <h4>Popularity: </h4>
+                        <div class="popularity-bar-container" style="margin-left: 10%; max-width: 70%; margin-top: 1vh">
+                            <div class="popularity-bar" style="width: {{ top_five_artists.0.popularity }}%"></div>
+                        </div>
+                        <!-- <h4>Top Songs: </h4>-->
                     </div>
                 </div>
             </div>
@@ -510,10 +777,10 @@
             <!-- Slide 4 -->
             <div class="slide">
                 <h2>Your top song is...</h2>
+                <h6>{{ top_five_songs.0.name }}</h6>
                 <div class="song-info">
-                    <div class="song-details1" style="display: flex; flex-direction: column; align-items: center;">
-                        <h6>{{ top_five_songs.0.name }}</h6>
-                        <img src="{{ top_five_songs.0.image_url }}" alt="top song image" class="top-song-photo">
+                    <div class="song-details1">
+                        <img src="{{ top_five_songs.0.image_url }}" alt="top song image" class="top-song-photo1">
                         {% if top_five_songs.0.preview_url %}
                             <audio id="audio-top-song">
                                 <source src="{{ top_five_songs.0.preview_url }}" type="audio/mpeg">
@@ -531,8 +798,10 @@
                         </div>
                     </div>
                     <div class="song-stats">
-                        <h5>Popularity: {{ top_five_songs.0.popularity }}</h5>
-<!--                        <h5>Dance Vibes: {{ top_five_songs.0.average_danceability }}</h5>-->
+                        <h5>Popularity: </h5>
+                           <div class="popularity-bar-container" style="max-width: 70%; margin-top: 1vh">
+                                <div class="popularity-bar" style="width: {{ top_five_songs.0.popularity }}%"></div>
+                            </div>
                     </div>
                 </div>
             </div>
@@ -566,15 +835,14 @@
             <!-- Slide 6 -->
             <div class="slide">
                 <h2>Your top 5 genres are...</h2>
-                <div class="artist-container">
-                    {% for genre, count in top_genres.items %}
-                        <div class="artist">
-                            <p1>#{{ forloop.counter }}. {{ genre }}</p1>
-                            <p>Count: {{ count }}</p> <!-- Display how often each genre appears -->
-                        </div>
-                    {% endfor %}
+                <div class="chart-wrapper">
+                    <div class="chart-container">
+                        <canvas id="genrePieChart"></canvas>
+                    </div>
+                    <div class="chart-key" id="chartKey"></div>
                 </div>
             </div>
+
 
             <!-- Slide 7 -->
             <div class="slide">
@@ -582,11 +850,23 @@
                 <div class="artist-info">
                     <div class="vibes-details">
                         <h4>Danceability: {{ vibe_data.average_danceability|floatformat:2 }}%</h4>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: {{ vibe_data.average_danceability }}%"></div>
+                        </div>
+
                         <h4>Valence: {{ vibe_data.average_valence|floatformat:2 }}%</h4>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: {{ vibe_data.average_valence }}%"></div>
+                        </div>
+
                         <h4>Energy: {{ vibe_data.average_energy|floatformat:2 }}%</h4>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: {{ vibe_data.average_energy }}%"></div>
+                        </div>
                     </div>
                 </div>
             </div>
+
 
             <!-- Slide 8 -->
             <div class="slide">
@@ -598,11 +878,11 @@
                     </div>
                     <div class="glance-details">
                         <h7>Top Song: {{top_five_songs.0.name}} </h7>
-                        <img src="{{ top_five_artists.1.image_url }}" alt="top artist image" class="artist-photo">
+                        <img src="{{ top_five_songs.0.image_url }}" alt="top song image" class="artist-photo">
                     </div>
                     <div class="glance-details">
                         <h7>Top Genre: {{top_1_genre}} </h7>
-                        <img src="{{ top_five_artists.2.image_url }}" alt="top artist image" class="artist-photo">
+                        <img src="{{ top_five_songs.1.image_url }}" alt="top song image" class="artist-photo">
                     </div>
                 </div>
                 <div style="text-align: center; margin-top: 50px;">
@@ -619,7 +899,7 @@
                         <form method="post" action="{% url 'save_spotify_profile' %}">
                         {% csrf_token %}
                         <input type="hidden" name="temporary_profile_id" value="{{ temp_profile_id }}">
-                        <button type="submit" style="padding: 10px 20px; background-color: #3F665E; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        <button type="submit" class="adjustable-button">
                             Save this Profile
                         </button>
                         </form>
@@ -807,6 +1087,107 @@
 
 <script src="{% static 'darkmode.js' %}"></script>
 <script src="{% static 'summary.js' %}"></script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const topGenres = JSON.parse('{{ top_genres|safe|escapejs }}');
+
+        if (!topGenres || Object.keys(topGenres).length === 0) {
+            console.error("Top genres data is missing or empty.");
+            return;
+        }
+
+        const labels = Object.keys(topGenres);
+        const data = Object.values(topGenres);
+
+        const total = data.reduce((sum, value) => sum + value, 0);
+        const percentages = data.map(value => ((value / total) * 100).toFixed(1));
+
+        const sortedGenres = labels.map((label, index) => ({
+            label,
+            percentage: percentages[index]
+        })).sort((a, b) => b.percentage - a.percentage);
+
+        const sortedLabels = sortedGenres.map(item => item.label);
+        const sortedPercentages = sortedGenres.map(item => item.percentage);
+
+        const mutedColors = [
+            '#A6CEE3', '#B2DF8A', '#FB9A99', '#FDBF6F', '#CAB2D6',
+            '#FFFF99', '#1F78B4', '#33A02C', '#E31A1C', '#FF7F00'
+        ];
+
+        const ctx = document.getElementById('genrePieChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: sortedLabels,
+                datasets: [{
+                    data: sortedPercentages,
+                    backgroundColor: mutedColors.slice(0, sortedPercentages.length),
+                    borderColor: '#ffffff',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                const index = context.dataIndex;
+                                return `${sortedLabels[index]}: ${sortedPercentages[index]}%`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        const chartKey = document.getElementById('chartKey');
+
+        // Helper function to capitalize the first letter of each word
+        const capitalizeWords = (text) => text.replace(/\b\w/g, char => char.toUpperCase());
+
+        sortedGenres.slice(0, 5).forEach((item, index) => {
+            const keyItem = document.createElement('div');
+            keyItem.innerHTML = `<strong>${index + 1}.</strong> ${capitalizeWords(item.label)}: ${item.percentage}%`;
+
+            // Apply the corresponding color to each key item
+            keyItem.style.color = mutedColors[index];
+
+            chartKey.appendChild(keyItem);
+        });
+    });
+
+
+</script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const slides = document.querySelectorAll('.slide h6');
+
+        slides.forEach(slide => {
+            const textLength = slide.textContent.length;
+            let fontSize;
+
+            // Define font size based on text length
+            if (textLength < 20) {
+                fontSize = '4vw';  // Larger font for shorter text
+            } else if (textLength < 30) {
+                fontSize = '3.5vw'; // Medium font for moderately long text
+            } else {
+                fontSize = '2vw';  // Smaller font for longer text
+            }
+
+            slide.style.fontSize = fontSize;
+        });
+    });
+</script>
+
+
+
 
 </body>
 </html>
