@@ -113,19 +113,23 @@
             margin-top: 40px; /* Reduced margin */
             background: linear-gradient(-45deg, #A5CBC3, #576385);
             width: 100%;
-            max-width: 600px; /* Set max width */
-            height: 70vh;
+            max-width: 80vh; /* You can adjust the width to be rectangular */
+            height: 45vh; /* Set a fixed height to make it rectangular */
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
             border-radius: 5%;
             margin-bottom: 20px; /* Added margin for spacing */
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Ensures content is centered */
         }
 
         .wrapped-history-icon {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
+            width: 80%; /* Decrease the size of the image */
+            height: auto; /* Maintain the aspect ratio */
+            object-fit: cover; /* Ensures the image is cropped */
+            object-position: center; /* Keeps the image centered */
         }
+
 
         .subheading {
             margin-top: 30px;
