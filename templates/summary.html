@@ -1040,8 +1040,12 @@
     dots.forEach((dot, index) => {
         dot.addEventListener('click', () => currentSlide(index));
     });
+    /**
+     * This function checks if the answer a user selected is right or wrong and
+     * provides the user with feedback
+     * @param event when one of the options is clicked
+     */
 
-    // Quiz functionality
     function handleQuizOptionClick(event) {
         const selectedOption = event.target;
 
@@ -1067,7 +1071,9 @@
     const observer = new MutationObserver(() => updateLink());
     slides.forEach(slide => observer.observe(slide, { attributes: true, attributeFilter: ['class'] }));
 
-    // Initial link setup for Wrapped Summary logic
+   /**
+     * This function confirms a user is login in
+     */
     function updateLink() {
         const activeSlide = document.querySelector('.slide.active');
         const slideshowContainer = document.getElementById('slideshow-container');
