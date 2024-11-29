@@ -740,7 +740,7 @@
                     </div>
                     <div class="artist-stats">
                         <h4>Genre: {{ top_five_artists.0.genres|join:", " }}</h4> <!-- the join gets rid of the [' '] -->
-                        <h4>Popularity: </h4>
+                        <h4>Popularity: {{ top_five_artists.0.popularity }}%</h4>
                         <div class="popularity-bar-container" style="margin-left: 10%; max-width: 70%; margin-top: 1vh">
                             <div class="popularity-bar" style="width: {{ top_five_artists.0.popularity }}%"></div>
                         </div>
@@ -798,7 +798,7 @@
                         </div>
                     </div>
                     <div class="song-stats">
-                        <h5>Popularity: </h5>
+                        <h5>Popularity: {{top_five_songs.0.popularity}}%</h5>
                            <div class="popularity-bar-container" style="max-width: 70%; margin-top: 1vh">
                                 <div class="popularity-bar" style="width: {{ top_five_songs.0.popularity }}%"></div>
                             </div>
