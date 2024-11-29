@@ -1,8 +1,9 @@
-document.addEventListener('DOMContentLoaded', function () {
+ document.addEventListener('DOMContentLoaded', function () {
     let slideIndex = 0; // curr index
     const slides = document.querySelectorAll('.slide');
     const dots = document.querySelectorAll('.dot');
     const animationDuration = 1500; // Duration in ms matching CSS animation
+    const quizOptions = document.querySelectorAll('.quiz-options p');
 
     // Event listener for Start button
     const startButton = document.getElementById('start-button');
@@ -81,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /**
      * This function displays the current slide
-     * @param index
+     * @param index The index of the current slide
      */
     function currentSlide(index) {
         const direction = index > slideIndex ? 'next' : 'prev';
@@ -111,35 +112,47 @@ document.addEventListener('DOMContentLoaded', function () {
         dot.addEventListener('click', () => currentSlide(index));
     });
 
-    // Add event listeners to play/pause buttons
-    const playPauseButtons = document.querySelectorAll('.play-pause-button');
-    playPauseButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const audioId = this.getAttribute('data-audio-id');
-            const audioElement = document.getElementById(audioId);
+    // Quiz functionality
+    function handleQuizOptionClick(event) {
+        const selectedOption = event.target;
 
-            // Pause any other playing audio
-            const allAudios = document.querySelectorAll('audio');
-            allAudios.forEach(audio => {
-                if (audio !== audioElement) {
-                    audio.pause();
-                    audio.currentTime = 0;
-                    // Reset other play/pause buttons
-                    const otherButton = document.querySelector(`.play-pause-button[data-audio-id="${audio.id}"]`);
-                    if (otherButton) {
-                        otherButton.textContent = 'Play';
-                    }
-                }
-            });
+        if (selectedOption.dataset.correct === 'true') {
+            // Highlight the correct answer
+            selectedOption.classList.add('selected');
+            setTimeout(() => {
+                // Transition to the next slide
+                changeSlide(1); // Move to the next slide
+            }, 500); // Wait for feedback before sliding
+        } else {
+            // Highlight incorrect answer
+            selectedOption.classList.add('incorrect');
+        }
+    }
 
-            // Play or pause the audio
-            if (audioElement.paused) {
-                audioElement.play();
-                this.textContent = 'Pause';
-            } else {
-                audioElement.pause();
-                this.textContent = 'Play';
-            }
-        });
+    // Add event listeners to quiz options
+    quizOptions.forEach(option => {
+        option.addEventListener('click', handleQuizOptionClick);
     });
+
+    // Set up a MutationObserver to detect class changes in slides for Wrapped Summary logic
+    const observer = new MutationObserver(() => updateLink());
+    slides.forEach(slide => observer.observe(slide, { attributes: true, attributeFilter: ['class'] }));
+
+    // Initial link setup for Wrapped Summary logic
+    function updateLink() {
+        const activeSlide = document.querySelector('.slide.active');
+        const slideshowContainer = document.getElementById('slideshow-container');
+
+        if (activeSlide && activeSlide.querySelector('h2').innerText === 'Wrapped Summary') {
+            slideshowContainer.onclick = () => {
+                window.location.href = "{% url 'spotify_login' %}";
+            };
+        } else {
+            slideshowContainer.onclick = null; // Remove click event if not on "Wrapped Summary"
+        }
+    }
+
+    // Initial link setup
+    updateLink();
 });
+
