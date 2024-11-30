@@ -607,6 +607,20 @@
         }
 
 
+        .feedback {
+            margin-left: 10px; /* Space between the option and the feedback mark */
+            font-size: 1.2em;  /* Slightly larger than text size for visibility */
+            font-weight: bold; /* Bold feedback */
+        }
+
+        .correct-feedback {
+            color: white; /* Check mark color */
+        }
+
+        .incorrect-feedback {
+            color: white; /* Make the X white */
+        }
+
         /* Slide In & Out Animation */
         @keyframes slide-out-left {
             0% {
@@ -1052,6 +1066,13 @@
         if (selectedOption.dataset.correct === 'true') {
             // Highlight the correct answer
             selectedOption.classList.add('selected');
+
+            // Append a check mark
+            const checkMark = document.createElement('span');
+            checkMark.classList.add('feedback', 'correct-feedback'); // Add feedback class for styling
+            checkMark.innerHTML = ' ✔'; // Use check mark symbol
+            selectedOption.appendChild(checkMark);
+
             setTimeout(() => {
                 // Transition to the next slide
                 changeSlide(1); // Move to the next slide
@@ -1059,6 +1080,12 @@
         } else {
             // Highlight incorrect answer
             selectedOption.classList.add('incorrect');
+
+            // Append an "X" mark
+            const crossMark = document.createElement('span');
+            crossMark.classList.add('feedback', 'incorrect-feedback'); // Add feedback class for styling
+            crossMark.innerHTML = '✖'; // Use "X" mark symbol
+            selectedOption.appendChild(crossMark);
         }
     }
 
