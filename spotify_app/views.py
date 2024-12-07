@@ -130,6 +130,11 @@ def display_summary_content(request):
 
             top_genre = list(temp_profile.genre_data.keys())[0]
 
+            # number of slides in summary wrapped
+            num_slides = 10
+            # Create a list of slide indices to pass to the template
+            slide_range = list(range(num_slides))
+
             context = {
                 "user_name": user_name,
                 "top_five_artists": temp_profile.top_five_artists,
@@ -138,7 +143,8 @@ def display_summary_content(request):
                 "top_1_genre": top_genre,
                 "vibe_data": temp_profile.vibe_data,
                 "temp_profile_id": temp_profile_id,
-                "is_saved": False
+                "is_saved": False,
+                "slide_range": slide_range
             }
 
             return render(request, 'summary.html', context)
@@ -219,6 +225,10 @@ def display_saved_summary_content(request, created_at):
 
     top_genre = list(temp_profile.genre_data.keys())[0]
 
+    # number of slides in summary wrapped
+    num_slides = 10
+    # Create a list of slide indices to pass to the template
+    slide_range = list(range(num_slides))
     context = {
         "user_name": user_name,
         "top_songs": temp_profile.top_songs,
@@ -227,7 +237,8 @@ def display_saved_summary_content(request, created_at):
         "top_genres": json.dumps(temp_profile.genre_data),
         "top_1_genre": top_genre,
         "vibe_data": temp_profile.vibe_data,  # Pass vibe data
-        "is_saved": True
+        "is_saved": True,
+        "slide_range": slide_range
     }
 
     return render(request, 'summary.html', context)

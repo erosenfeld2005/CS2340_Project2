@@ -925,16 +925,9 @@
         <div class="dots-container">
             <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
             <div class="dots">
-                <span class="dot active" onclick="currentSlide(0)"></span>
-                <span class="dot" onclick="currentSlide(1)"></span>
-                <span class="dot" onclick="currentSlide(2)"></span>
-                <span class="dot" onclick="currentSlide(3)"></span>
-                <span class="dot" onclick="currentSlide(4)"></span>
-                <span class="dot" onclick="currentSlide(5)"></span>
-                <span class="dot" onclick="currentSlide(6)"></span>
-                <span class="dot" onclick="currentSlide(7)"></span>
-                <span class="dot" onclick="currentSlide(8)"></span>
-                <span class="dot" onclick="currentSlide(9)"></span>
+                {% for i in slide_range %}
+                    <span class="dot {% if i == 0 %}active{% endif %}" onclick="currentSlide({{ i }})"></span>
+                {% endfor %}
             </div>
             <a class="next" onclick="changeSlide(1)">&#10095;</a>
         </div>
