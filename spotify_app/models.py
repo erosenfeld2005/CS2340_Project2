@@ -33,25 +33,32 @@ class TemporarySpotifyProfile(models.Model):
                                 params={"time_range":time_range,"limit": 50}, timeout=15)
         if response.status_code == 200:
             top_tracks_data = response.json().get("items", [])
-            top_tracks = [{
-                "name": track.get("name"),
-                "artist": track["artists"][0]["name"] if track.get("artists") else "Unknown Artist",
-                "popularity": track.get("popularity"),
-                "image_url": track["album"]["images"][0]["url"] if track.get("album") and
-                                                                   track["album"].get(
-                    "images") else None,
-                "preview_url": track.get("preview_url")
-            } for track in top_tracks_data]
-            self.top_songs = top_tracks
-            self.calculate_vibe_data(top_tracks_data, headers)  # Update vibe data
-            self.time_range = time_range
-            self.save()
-
-            #Top Five Songs
-            self.top_five_songs = top_tracks[0:5]
-            self.save()
+            top_tracks = self.process_data(top_tracks_data)
+            self.store_data(top_tracks, top_tracks_data, time_range, headers)
             return top_tracks
         return []
+
+    def process_data(self, top_tracks_data):
+        top_tracks = [{
+            "name": track.get("name"),
+            "artist": track["artists"][0]["name"] if track.get("artists") else "Unknown Artist",
+            "popularity": track.get("popularity"),
+            "image_url": track["album"]["images"][0]["url"] if track.get("album") and
+                                                               track["album"].get(
+                                                                   "images") else None,
+            "preview_url": track.get("preview_url")
+        } for track in top_tracks_data]
+        return top_tracks
+
+    def store_data(self, top_tracks, top_tracks_data, time_range, headers):
+        self.top_songs = top_tracks
+        self.calculate_vibe_data(top_tracks_data, headers)  # Update vibe data
+        self.time_range = time_range
+        self.save()
+
+        # Top Five Songs
+        self.top_five_songs = top_tracks[0:5]
+        self.save()
 
     def calculate_vibe_data(self, top_tracks_data, headers):
         """
