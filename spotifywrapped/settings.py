@@ -45,7 +45,10 @@ INSTALLED_APPS = [
     'userAuthentication',
     'spotify_app',
 ]
-SPOTIFY_CLIENT_ID = config('SPOTIFY_CLIENT_ID')
+# SPOTIFY_CLIENT_ID = config('SPOTIFY_CLIENT_ID')
+SPOTIFY_CLIENT_ID = config('SPOTIFY_CLIENT_ID', default='')
+if not SPOTIFY_CLIENT_ID:
+    raise ValueError("SPOTIFY_CLIENT_ID is required and not set.")
 SPOTIFY_CLIENT_SECRET = config('SPOTIFY_CLIENT_SECRET')
 SPOTIFY_REDIRECT_URI = 'http://127.0.0.1:8000/spotify/callback'
 
